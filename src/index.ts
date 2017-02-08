@@ -41,11 +41,7 @@ async function onLine(line: string) {
   if (COMMANDS[cmd[0]]) {
     COMMANDS[cmd[0]](mesh, cmd, state).then((newState) => {
       state = newState;
-      let breadcrumb = state.current.fields.name || '/';
-      if (state.current.breadcrumb.length) {
-        breadcrumb = state.current.breadcrumb.reduce((str, cur) => `${str}/${cur.displayName}`, '/') + state.current.fields.name;
-      }
-      state.rl.setPrompt(`${state.project}:${breadcrumb}> `);
+      state.rl.setPrompt(`${state.project}:${state.current.uuid}$ `);
       state.rl.prompt();
     }).catch((e) => {
       console.error(e);
