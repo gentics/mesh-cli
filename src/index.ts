@@ -47,5 +47,8 @@ async function onLine(line: string) {
       console.error(e);
       state.rl.prompt();
     });
+  } else {
+    console.error('Unknown command ' + cmd[0]);
+    state.rl.prompt();
   }
 }
