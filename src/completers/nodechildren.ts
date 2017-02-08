@@ -3,7 +3,7 @@ import { State } from '../index';
 import * as readline from 'readline';
 
 export interface MeshQuery {
-    (state: State, mesh: MeshAPI): { get: () => Promise<any> }
+    (state: State, mesh: MeshAPI): { get: (options?: any) => Promise<any> }
 }
 
 export default function nodeChildrenCompleter<T>(
@@ -13,20 +13,24 @@ export default function nodeChildrenCompleter<T>(
 ) {
     return async (mesh: MeshAPI, line: string, cmd: string[], state: State): Promise<readline.CompleterResult> => {
         return new Promise<readline.CompleterResult>(async (resolve, reject) => {
-            // let nodes = await mesh.api.project(state.project).nodes.nodeUuid(state.current.uuid).children.get();
-            let nodes = await query(state, mesh).get();
-            if (cmd.length === 1) {
-                resolve([
-                    nodes.data.reduce((prev, curr) => {
-                        return prev.concat(curr.uuid).concat(curr.fields.name);
-                    }, []),
-                    ''
-                ]);
-            }
-            let found: string[] = nodes.data.filter((node) => {
-                return filter(node, cmd);
-            }).reduce(reducer, []);
-            resolve([found, cmd[1]]);
+            query(state, mesh).get({ version: 'draft' })
+                .then((nodes) => {
+                    if (cmd.length === 1) {
+                        resolve([
+                            nodes.data.reduce((prev, curr) => {
+                                return prev.concat(curr.uuid).concat(curr.fields.name);
+                            }, []),
+                            ''
+                        ]);
+                    }
+                    let found: string[] = nodes.data.filter((node) => {
+                        return filter(node, cmd);
+                    }).reduce(reducer, []);
+                    resolve([found, cmd[1]]);
+                })
+                .catch((e) => {
+                    reject(e);
+                });
         });
     }
 }
