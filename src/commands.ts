@@ -2,6 +2,7 @@ import { State } from './index';
 import { MeshAPI } from 'mesh-api-client';
 import cd from './commands/cd';
 import create from './commands/create';
+import deleteNode from './commands/delete';
 import ls from './commands/ls';
 import project from './commands/project';
 import projects from './commands/projects';
@@ -14,6 +15,7 @@ interface CommandTable { [key: string]: Command }
 export const COMMANDS: CommandTable = {
     cd: cd,
     create: create,
+    delete: deleteNode,
     ls: ls,
     project: project,
     projects: projects,

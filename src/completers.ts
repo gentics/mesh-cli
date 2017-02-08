@@ -17,6 +17,11 @@ export const COMPLETERS: CompleterTable = {
         (node, cmd) => node.container && (node.uuid.indexOf(cmd[1]) === 0 || node.fields.name.indexOf(cmd[1]) === 0),
         uuidReducer
     ),
+    delete: nodeChildrenCompleter(
+        defaultNodeChildrenQuery,
+        (node, cmd) => node.uuid.indexOf(cmd[1]) === 0,
+        uuidReducer
+    ),
     project: nodeChildrenCompleter<ProjectsProjectUuidGetResponse>(
         (state, mesh) => mesh.api.projects,
         (node, cmd) => node.name.indexOf(cmd[1]) === 0,
