@@ -1,6 +1,6 @@
 import { MeshAPI, ProjectNodesNodeUuidGetResponse } from 'mesh-api-client';
 import { State } from '../index';
-export default async function ls(mesh: MeshAPI, cmd: string[], state: State): Promise<State> {
+export default async function ls(mesh: MeshAPI, line: string, cmd: string[], state: State): Promise<State> {
     return new Promise<State>(async (resolve, reject) => {
         let nodes = await mesh.api.project(state.project).nodes.nodeUuid(state.current.uuid).children.get({ version: 'draft'});
         console.log(nodes.data.reduce((out, node) => {

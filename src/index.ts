@@ -44,7 +44,7 @@ function completer(line: string, callback?: (err: any, result: readline.Complete
 async function onLine(line: string) {
   let cmd = line.split(' ');
   if (COMMANDS[cmd[0]]) {
-    COMMANDS[cmd[0]](mesh, cmd, state)
+    COMMANDS[cmd[0]](mesh, line, cmd, state)
       .then((newState) => {
         state = newState;
         state.rl.setPrompt(`${state.project}:${state.current.uuid}$ `);

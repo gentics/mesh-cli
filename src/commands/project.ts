@@ -1,7 +1,7 @@
 import { MeshAPI } from 'mesh-api-client';
 import { State } from '../index';
 
-export default async function project(mesh: MeshAPI, cmd: string[], state: State): Promise<State> {
+export default async function project(mesh: MeshAPI, line: string, cmd: string[], state: State): Promise<State> {
   return new Promise<State>(async (resolve, reject) => {
     let projects = await mesh.api.projects.get();
     let p = projects.data.filter((p) => p.name === cmd[1]);

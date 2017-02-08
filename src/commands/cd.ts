@@ -1,6 +1,6 @@
 import { MeshAPI } from 'mesh-api-client';
 import { State } from '../index';
-export default async function cd(mesh: MeshAPI, cmd: string[], state: State): Promise<State> {
+export default async function cd(mesh: MeshAPI, line: string, cmd: string[], state: State): Promise<State> {
     return new Promise<State>(async (resolve, reject) => {
         if (cmd[1] === '..') {
             let parent = await mesh.api.project(state.project).nodes.nodeUuid(state.current.parentNode.uuid).get({ version: 'draft'});

@@ -1,5 +1,5 @@
 import { State } from './index';
-import { MeshAPI, ProjectsProjectUuidGetResponse } from 'mesh-api-client';
+import { MeshAPI, ProjectsProjectUuidGetResponse, ProjectSchemasSchemaUuidGetResponse } from 'mesh-api-client';
 import defaultCompleter from './completers/default';
 import nodeChildrenCompleter from './completers/nodechildren';
 
@@ -24,6 +24,11 @@ export const COMPLETERS: CompleterTable = {
     ),
     read: nodeChildrenCompleter(
         defaultNodeChildrenQuery,
+        (node, cmd) => node.uuid.indexOf(cmd[1]) === 0,
+        uuidReducer
+    ),
+    schema: nodeChildrenCompleter<ProjectSchemasSchemaUuidGetResponse>(
+        (state, mesh) => mesh.api.project(state.project).schemas,
         (node, cmd) => node.uuid.indexOf(cmd[1]) === 0,
         uuidReducer
     )
