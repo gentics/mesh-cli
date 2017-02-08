@@ -1,0 +1,15 @@
+{
+  "name": "mesh-cli",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@types/node": "^7.0.5",
+    "mesh-api-client": "file:///Users/clemens/git/mesh-api-client"
+  }
+}
