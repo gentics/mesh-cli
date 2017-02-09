@@ -15,5 +15,8 @@
   },
   "bin": {
     "mesh-cli": "./build/mesh-cli.js"
+  },
+  "devDependencies": {
+    "typescript": "^2.1.6"
   }
 }

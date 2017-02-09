@@ -3,35 +3,32 @@
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator.throw(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
         function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments)).next());
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-const readline = require('readline');
-const mesh_api_client_1 = require('mesh-api-client');
-const commands_1 = require('./commands');
-const completers_1 = require('./completers');
-class State {
-    constructor(rl, project, current) {
-        this.rl = rl;
-        this.project = project;
-        this.current = current;
-    }
-}
-exports.State = State;
+const readline = require("readline");
+const mesh_api_client_1 = require("mesh-api-client");
+const commands_1 = require("./commands");
+const completers_1 = require("./completers");
 let mesh = new mesh_api_client_1.MeshAPI({ debug: false });
-let state = new State(null, '', null);
+let state;
 let rl;
-mesh.api.auth.login.post({ username: 'admin', password: 'admin' }).then(() => {
+mesh.api.auth.login.post({ username: 'admin', password: 'admin' })
+    .then(() => {
     rl = readline.createInterface({
         input: process.stdin,
         output: process.stdout,
         completer: completer
     });
     rl.on('line', onLine);
-    state = new State(rl, '', null);
+    rl.on('close', onClose);
+    state = { project: '', current: null };
     onLine('project demo');
+})
+    .catch((e) => {
+    console.error(e);
 });
 function completer(line, callback) {
     let cmd = line.split(' ');
@@ -58,16 +55,21 @@ function onLine(line) {
             commands_1.COMMANDS[cmd[0]](mesh, line, cmd, state)
                 .then((newState) => {
                 state = newState;
-                state.rl.setPrompt(`${state.project}:${state.current.uuid}$ `);
-                state.rl.prompt();
+                rl.setPrompt(`${state.project}:${state.current.uuid}$ `);
+                rl.prompt();
             }).catch((e) => {
                 console.error('ERROR', e);
-                state.rl.prompt();
+                rl.prompt();
             });
         }
         else {
             console.error('Unknown command ' + cmd[0]);
-            state.rl.prompt();
+            rl.prompt();
         }
     });
+}
+function onClose() {
+    rl.write('close!');
+    return false;
+    // rl.close();
 }

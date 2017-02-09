@@ -1,14 +1,14 @@
 "use strict";
-const cd_1 = require('./commands/cd');
-const create_1 = require('./commands/create');
-const delete_1 = require('./commands/delete');
-const ls_1 = require('./commands/ls');
-const project_1 = require('./commands/project');
-const projects_1 = require('./commands/projects');
-const read_1 = require('./commands/read');
-const schema_1 = require('./commands/schema');
-const schemas_1 = require('./commands/schemas');
-const update_1 = require('./commands/update');
+const cd_1 = require("./commands/cd");
+const create_1 = require("./commands/create");
+const delete_1 = require("./commands/delete");
+const ls_1 = require("./commands/ls");
+const project_1 = require("./commands/project");
+const projects_1 = require("./commands/projects");
+const read_1 = require("./commands/read");
+const schema_1 = require("./commands/schema");
+const schemas_1 = require("./commands/schemas");
+const update_1 = require("./commands/update");
 exports.COMMANDS = {
     cd: cd_1.default,
     create: create_1.default,

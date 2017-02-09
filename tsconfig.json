@@ -5,8 +5,7 @@
     "sourceMap": false,
     "moduleResolution": "node",
     "declaration": false,
-    "outDir": "./build",
-    "lib": ["dom", "es2015.promise", "es5"]
+    "outDir": "./build"
   },
   "exclude": [
     "build",

@@ -10,7 +10,7 @@ export default async function project(mesh: MeshAPI, line: string, cmd: string[]
         } else {
             mesh.api.project(p[0].name).nodes.nodeUuid(p[0].rootNodeUuid).get({ version: 'draft' })
             .then((node) => {
-                resolve(new State(state.rl, cmd[1], node));
+                resolve({ ...state, project: cmd[1], current: node });
             })
             .catch((e) => {
                 reject(e);
