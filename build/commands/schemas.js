@@ -9,14 +9,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 function schemas(mesh, line, cmd, state) {
     return __awaiter(this, void 0, void 0, function* () {
-        return new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
-            mesh.api.project(state.project).schemas.get().then((schemas) => {
-                console.log(schemas.data.reduce((out, schema) => {
-                    return `${out}${schema.uuid} ${schema.name}\n`;
-                }, ''));
-                resolve(state);
-            });
-        }));
+        let schemas = yield mesh.api.project(state.project).schemas.get();
+        console.log(schemas.data.reduce((out, schema) => {
+            return `${out}${schema.uuid} ${schema.name}\n`;
+        }, ''));
+        return state;
     });
 }
 Object.defineProperty(exports, "__esModule", { value: true });

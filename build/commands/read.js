@@ -9,18 +9,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 function read(mesh, line, cmd, state) {
     return __awaiter(this, void 0, void 0, function* () {
-        return new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
-            let uuid = cmd.length === 1 ? state.current.uuid : cmd[1];
-            mesh.api.project(state.project).nodes.nodeUuid(uuid).get({ version: 'draft' })
-                .then((node) => {
-                console.log(JSON.stringify(node, null, 4));
-                resolve(state);
-            })
-                .catch((reason) => {
-                console.error(reason);
-                resolve(state);
-            });
-        }));
+        let uuid = cmd.length === 1 ? state.current.uuid : cmd[1];
+        let node = yield mesh.api.project(state.project).nodes.nodeUuid(uuid).get({ version: 'draft' });
+        console.log(JSON.stringify(node, null, 4));
+        return state;
     });
 }
 Object.defineProperty(exports, "__esModule", { value: true });

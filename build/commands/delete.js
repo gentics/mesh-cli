@@ -9,15 +9,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 function deleteNode(mesh, line, cmd, state) {
     return __awaiter(this, void 0, void 0, function* () {
-        return new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
-            mesh.api.project(state.project).nodes.nodeUuid(cmd[2]).delete()
-                .then(() => {
-                resolve(state);
-            })
-                .catch((e) => {
-                reject(e);
-            });
-        }));
+        yield mesh.api.project(state.project).nodes.nodeUuid(cmd[1]).delete();
+        return state;
     });
 }
 Object.defineProperty(exports, "__esModule", { value: true });

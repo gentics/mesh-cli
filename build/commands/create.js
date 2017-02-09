@@ -20,15 +20,12 @@ function create(mesh, line, cmd, state) {
         if (!state.buffer.length) {
             return __assign({}, state, { buffer: state.buffer.concat(line) });
         }
-        else if (state.buffer.length) {
+        else {
             let input = state.buffer.join('\n');
             let data = JSON.parse(input.substr(input.indexOf('{')));
             const msg = yield mesh.api.project(state.project).nodes.post(data);
             console.log(msg);
             return __assign({}, state, { buffer: [] });
-        }
-        else {
-            throw new Error('Unknown operation ' + cmd[1]);
         }
     });
 }

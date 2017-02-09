@@ -9,14 +9,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 function projects(mesh, line, cmd, state) {
     return __awaiter(this, void 0, void 0, function* () {
-        return new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
-            yield mesh.api.projects.get().then((ps) => {
-                console.log(ps.data.reduce((out, p) => {
-                    return `${out} ${p.name}`;
-                }, ''));
-                resolve(state);
-            });
-        }));
+        let projects = yield mesh.api.projects.get();
+        projects.data.reduce((out, p) => {
+            return `${out} ${p.name}`;
+        }, '');
+        return state;
     });
 }
 Object.defineProperty(exports, "__esModule", { value: true });

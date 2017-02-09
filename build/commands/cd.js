@@ -17,24 +17,22 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 function cd(mesh, line, cmd, state) {
     return __awaiter(this, void 0, void 0, function* () {
-        return new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
-            if (cmd[1] === '..') {
-                let parent = yield mesh.api.project(state.project).nodes.nodeUuid(state.current.parentNode.uuid).get({ version: 'draft' });
-                resolve(__assign({}, state, { current: parent }));
+        if (cmd[1] === '..') {
+            let parent = yield mesh.api.project(state.project).nodes.nodeUuid(state.current.parentNode.uuid).get({ version: 'draft' });
+            return __assign({}, state, { current: parent });
+        }
+        else {
+            let nodes = yield mesh.api.project(state.project).nodes.nodeUuid(state.current.uuid).children.get({ version: 'draft' });
+            let found = nodes.data.filter((val) => {
+                return val.container && (val.uuid === cmd[1] || val.fields.name === cmd[1]);
+            });
+            if (found.length === 1) {
+                return __assign({}, state, { current: found[0] });
             }
             else {
-                let nodes = yield mesh.api.project(state.project).nodes.nodeUuid(state.current.uuid).children.get({ version: 'draft' });
-                let found = nodes.data.filter((val) => {
-                    return val.container && (val.uuid === cmd[1] || val.fields.name === cmd[1]);
-                });
-                if (found.length === 1) {
-                    resolve(__assign({}, state, { current: found[0] }));
-                }
-                else {
-                    resolve(state);
-                }
+                return state;
             }
-        }));
+        }
     });
 }
 Object.defineProperty(exports, "__esModule", { value: true });

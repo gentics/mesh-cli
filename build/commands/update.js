@@ -1,4 +1,12 @@
 "use strict";
+var __assign = (this && this.__assign) || Object.assign || function(t) {
+    for (var s, i = 1, n = arguments.length; i < n; i++) {
+        s = arguments[i];
+        for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+            t[p] = s[p];
+    }
+    return t;
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
@@ -9,19 +17,16 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 function update(mesh, line, cmd, state) {
     return __awaiter(this, void 0, void 0, function* () {
-        return new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
-            if (cmd[1] === 'node') {
-                let data = JSON.parse(line.substr(line.indexOf('{')));
-                mesh.api.project(state.project).nodes.nodeUuid(data.uuid).post(data)
-                    .then((msg) => {
-                    console.log(msg);
-                    resolve(state);
-                })
-                    .catch((e) => {
-                    reject(e);
-                });
-            }
-        }));
+        if (!state.buffer.length) {
+            return __assign({}, state, { buffer: state.buffer.concat(line) });
+        }
+        else {
+            let input = state.buffer.join('\n');
+            let data = JSON.parse(input.substr(input.indexOf('{')));
+            let msg = yield mesh.api.project(state.project).nodes.nodeUuid(data.uuid).post(data);
+            console.log(msg);
+            return __assign({}, state, { buffer: [] });
+        }
     });
 }
 Object.defineProperty(exports, "__esModule", { value: true });
