@@ -17,13 +17,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 const readline = require("readline");
-const mesh_api_client_1 = require("mesh-api-client");
+const mesh_api_1 = require("mesh-api");
 const commands_1 = require("./commands");
 const completers_1 = require("./completers");
 class State {
 }
 exports.State = State;
-let mesh = new mesh_api_client_1.MeshAPI({ debug: false });
+let mesh = new mesh_api_1.MeshAPI({ debug: false });
 let state;
 let rl;
 mesh.api.auth.login.post({ username: 'admin', password: 'admin' })

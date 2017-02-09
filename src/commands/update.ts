@@ -1,4 +1,4 @@
-import { MeshAPI, ProjectNodesNodeUuidGetResponse } from 'mesh-api-client';
+import { MeshAPI, ProjectNodesNodeUuidGetResponse } from 'mesh-api';
 import { State } from '../mesh-cli';
 
 export default async function update(mesh: MeshAPI, line: string, cmd: string[], state: State): Promise<State> {

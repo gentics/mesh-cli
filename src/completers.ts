@@ -1,5 +1,5 @@
 import { State } from './mesh-cli';
-import { MeshAPI, ProjectsProjectUuidGetResponse, ProjectSchemasSchemaUuidGetResponse } from 'mesh-api-client';
+import { MeshAPI, ProjectsProjectUuidGetResponse, ProjectSchemasSchemaUuidGetResponse } from 'mesh-api';
 import defaultCompleter from './completers/default';
 import nodeChildrenCompleter from './completers/nodechildren';
 

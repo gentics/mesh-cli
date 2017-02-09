@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 import * as readline from 'readline';
-import { MeshAPI, ProjectNodesNodeUuidGetResponse } from 'mesh-api-client'
+import { MeshAPI, ProjectNodesNodeUuidGetResponse } from 'mesh-api';
 import cd from './commands/cd';
 import { COMMANDS } from './commands';
 import { COMPLETERS } from './completers';

@@ -10,7 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "@types/node": "^7.0.5",
-    "mesh-api-client": "file:///Users/clemens/git/mesh-api-client",
+    "mesh-api": "0.0.0",
     "text-table": "^0.2.0"
   },
   "bin": {

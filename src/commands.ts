@@ -1,5 +1,5 @@
 import { State } from './mesh-cli';
-import { MeshAPI } from 'mesh-api-client';
+import { MeshAPI } from 'mesh-api';
 import cd from './commands/cd';
 import create from './commands/create';
 import deleteNode from './commands/delete';

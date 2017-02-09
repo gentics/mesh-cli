@@ -1,4 +1,4 @@
-import { MeshAPI } from 'mesh-api-client';
+import { MeshAPI } from 'mesh-api';
 import { State } from '../mesh-cli';
 let table = require('text-table');
 
