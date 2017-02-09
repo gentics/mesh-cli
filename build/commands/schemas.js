@@ -7,12 +7,21 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+let table = require('text-table');
 function schemas(mesh, line, cmd, state) {
     return __awaiter(this, void 0, void 0, function* () {
         let schemas = yield mesh.api.project(state.project).schemas.get();
-        console.log(schemas.data.reduce((out, schema) => {
-            return `${out}${schema.uuid} ${schema.name}\n`;
-        }, ''));
+        let data = schemas.data.reduce((out, schema) => {
+            out.push([
+                schema.uuid,
+                schema.name,
+                schema.displayField,
+                schema.segmentField,
+                schema.container ? 'true' : 'false'
+            ]);
+            return out;
+        }, [['uuid', 'name', 'displayField', 'segmentField', 'container']]);
+        console.log(table(data), '\n');
         return state;
     });
 }

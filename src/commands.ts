@@ -15,7 +15,7 @@ type Command = (mesh: MeshAPI, line: string, cmd: string[], state: State) => Pro
 interface CommandTable { [key: string]: Command }
 export const COMMANDS: CommandTable = {
     cd: cd,
-    create: create,
+    create: buffered(create),
     delete: deleteNode,
     ls: ls,
     project: project,
@@ -23,5 +23,16 @@ export const COMMANDS: CommandTable = {
     read: read,
     schema: schema,
     schemas: schemas,
-    update: update
+    update: buffered(update)
+}
+
+function buffered(func: Command): Command {
+    return async (mesh: MeshAPI, line: string, cmd: string[], state: State): Promise<State> => {
+        if (!state.buffer.length) {
+            return { ...state, buffer: state.buffer.concat(line) };
+        } else {
+            let s = await func(mesh, line, cmd, state);
+            return { ...s, buffer: [] };
+        }
+    }
 }

@@ -7,13 +7,13 @@ export default async function ls(mesh: MeshAPI, line: string, cmd: string[], sta
     let data = nodes.data.reduce((out, node) => {
         let type = node.container ? 'DIR ' : 'NODE';
         out.push([
-            node.schema.name,
             node.uuid,
+            node.schema.name,
             node.edited,
             node.fields ? node.fields[Object.keys(node.fields)[0]] : '...'
         ]);
         return out;
-    }, [['schema', 'uuid', 'edited', 'displayField']]);
-    console.log(table(data));
+    }, [['uuid', 'schema', 'edited', 'displayField']]);
+    console.log(table(data), '\n');
     return state;
 }
