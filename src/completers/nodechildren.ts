@@ -1,5 +1,5 @@
 import { MeshAPI, ProjectNodesNodeUuidGetResponse } from 'mesh-api-client';
-import { State } from '../index';
+import { State } from '../mesh-cli';
 import * as readline from 'readline';
 
 export interface MeshQuery {

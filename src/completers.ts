@@ -1,4 +1,4 @@
-import { State } from './index';
+import { State } from './mesh-cli';
 import { MeshAPI, ProjectsProjectUuidGetResponse, ProjectSchemasSchemaUuidGetResponse } from 'mesh-api-client';
 import defaultCompleter from './completers/default';
 import nodeChildrenCompleter from './completers/nodechildren';

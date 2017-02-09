@@ -1,4 +1,4 @@
-import { State } from './index';
+import { State } from './mesh-cli';
 import { MeshAPI } from 'mesh-api-client';
 import cd from './commands/cd';
 import create from './commands/create';
@@ -9,6 +9,7 @@ import projects from './commands/projects';
 import read from './commands/read';
 import schema from './commands/schema';
 import schemas from './commands/schemas';
+import update from './commands/update';
 
 type Command = (mesh: MeshAPI, line: string, cmd: string[], state: State) => Promise<State>;
 interface CommandTable { [key: string]: Command }
@@ -21,5 +22,6 @@ export const COMMANDS: CommandTable = {
     projects: projects,
     read: read,
     schema: schema,
-    schemas: schemas
+    schemas: schemas,
+    update: update
 }

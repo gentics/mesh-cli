@@ -1,5 +1,5 @@
 import { MeshAPI } from 'mesh-api-client';
-import { State } from '../index';
+import { State } from '../mesh-cli';
 import { COMMANDS } from '../commands'
 import * as readline from 'readline';
 export default async function defaultCompleter(mesh: MeshAPI, line: string, cmd: string[], state: State): Promise<readline.CompleterResult> {
