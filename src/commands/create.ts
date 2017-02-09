@@ -2,19 +2,15 @@ import { MeshAPI, ProjectNodesNodeUuidGetResponse } from 'mesh-api-client';
 import { State } from '../mesh-cli';
 
 export default async function create(mesh: MeshAPI, line: string, cmd: string[], state: State): Promise<State> {
-    return new Promise<State>(async (resolve, reject) => {
-        if (cmd[1] === 'node') {
-            let data = JSON.parse(line.substr(line.indexOf('{')));
-            mesh.api.project(state.project).nodes.post(data)
-                .then((msg) => {
-                    console.log(msg)
-                    resolve(state);
-                })
-                .catch((e) => {
-                    reject(e);
-                })
-        } else {
-            reject('Unknown operation ' + cmd[1]);
-        }
-    });
+    if (!state.buffer.length) {
+        return { ...state, buffer: state.buffer.concat(line) };
+    } else if (state.buffer.length) {
+        let input = state.buffer.join('\n');
+        let data = JSON.parse(input.substr(input.indexOf('{')));
+        const msg = await mesh.api.project(state.project).nodes.post(data)
+        console.log(msg);
+        return { ...state, buffer: [] };
+    } else {
+        throw new Error('Unknown operation ' + cmd[1]);
+    }
 }

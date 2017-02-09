@@ -10,18 +10,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 function deleteNode(mesh, line, cmd, state) {
     return __awaiter(this, void 0, void 0, function* () {
         return new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
-            if (cmd[1] === 'node') {
-                mesh.api.project(state.project).nodes.nodeUuid(cmd[2]).delete()
-                    .then(() => {
-                    resolve(state);
-                })
-                    .catch((e) => {
-                    reject(e);
-                });
-            }
-            else {
-                reject('Unknown operation ' + cmd[1]);
-            }
+            mesh.api.project(state.project).nodes.nodeUuid(cmd[2]).delete()
+                .then(() => {
+                resolve(state);
+            })
+                .catch((e) => {
+                reject(e);
+            });
         }));
     });
 }
