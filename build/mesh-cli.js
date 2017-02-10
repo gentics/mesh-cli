@@ -20,13 +20,24 @@ const readline = require("readline");
 const mesh_api_1 = require("mesh-api");
 const commands_1 = require("./commands");
 const completers_1 = require("./completers");
+const url = require("url");
 class State {
 }
 exports.State = State;
-let mesh = new mesh_api_1.MeshAPI({ debug: false });
+let config = {};
+let auth = ['admin', 'admin'];
+if (process.argv[2]) {
+    let parts = url.parse(process.argv[2]);
+    config.url = `${parts.protocol}//${parts.host}`;
+    config.apibase = parts.path;
+    config.debug = true;
+    if (parts.auth !== null)
+        auth = parts.auth.split(':');
+}
+let mesh = new mesh_api_1.MeshAPI(config);
 let state;
 let rl;
-mesh.api.auth.login.post({ username: 'admin', password: 'admin' })
+mesh.api.auth.login.post({ username: auth[0], password: auth[1] })
     .then(() => {
     rl = readline.createInterface({
         input: process.stdin,
@@ -35,7 +46,7 @@ mesh.api.auth.login.post({ username: 'admin', password: 'admin' })
     });
     rl.on('line', onLine);
     state = { project: '', current: null, buffer: [] };
-    onLine('project demo');
+    // onLine('project demo');
 })
     .catch((e) => {
     console.error(e);
@@ -76,12 +87,7 @@ function onLine(line) {
             commands_1.COMMANDS[cmd[0]](mesh, line, cmd, state)
                 .then((newState) => {
                 state = newState;
-                if (state.buffer.length) {
-                    rl.setPrompt('> ');
-                }
-                else {
-                    rl.setPrompt(`${state.project}:${state.current.uuid}$ `);
-                }
+                rl.setPrompt(prompt(state));
                 if (state.buffer.length === 1) {
                     console.log('Multiline input: terminate with ";;⏎"');
                 }
@@ -89,7 +95,7 @@ function onLine(line) {
             }).catch((e) => {
                 console.error('ERROR', e);
                 state = __assign({}, state, { buffer: [] });
-                rl.setPrompt(`${state.project}:${state.current.uuid}$ `);
+                rl.setPrompt(prompt(state));
                 rl.prompt();
             });
         }
@@ -98,4 +104,15 @@ function onLine(line) {
             rl.prompt();
         }
     });
+}
+function prompt(state) {
+    if (state.buffer.length) {
+        return '> ';
+    }
+    else if (state.project && state.current) {
+        return `${state.project}:${state.current.uuid}$ `;
+    }
+    else {
+        return '$ ';
+    }
 }

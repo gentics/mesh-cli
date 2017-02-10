@@ -5,6 +5,7 @@ import { MeshAPI, ProjectNodesNodeUuidGetResponse } from 'mesh-api';
 import cd from './commands/cd';
 import { COMMANDS } from './commands';
 import { COMPLETERS } from './completers';
+import * as url from 'url';
 
 export class State {
     public readonly project: string;
@@ -12,11 +13,20 @@ export class State {
     public readonly buffer: string[];
 }
 
-let mesh = new MeshAPI({ debug: false });
+let config: any = {};
+let auth = ['admin', 'admin']
+if (process.argv[2]) {
+    let parts = url.parse(process.argv[2]);
+    config.url = `${parts.protocol}//${parts.host}`;
+    config.apibase = parts.path;
+    config.debug = true;
+    if (parts.auth !== null) auth = parts.auth.split(':');
+}
+let mesh = new MeshAPI(config);
 let state: State;
 let rl: readline.ReadLine;
 
-mesh.api.auth.login.post({ username: 'admin', password: 'admin' })
+mesh.api.auth.login.post({ username: auth[0], password: auth[1] })
     .then(() => {
         rl = readline.createInterface({
             input: process.stdin,
@@ -25,7 +35,7 @@ mesh.api.auth.login.post({ username: 'admin', password: 'admin' })
         });
         rl.on('line', onLine);
         state = { project: '', current: null, buffer: [] };
-        onLine('project demo');
+        // onLine('project demo');
     })
     .catch((e) => {
         console.error(e);
@@ -65,11 +75,7 @@ async function onLine(line: string) {
         COMMANDS[cmd[0]](mesh, line, cmd, state)
             .then((newState) => {
                 state = newState;
-                if (state.buffer.length) {
-                    rl.setPrompt('> ');
-                } else {
-                    rl.setPrompt(`${state.project}:${state.current.uuid}$ `);
-                }
+                rl.setPrompt(prompt(state));
                 if (state.buffer.length === 1) {
                     console.log('Multiline input: terminate with ";;⏎"');
                 }
@@ -77,11 +83,21 @@ async function onLine(line: string) {
             }).catch((e) => {
                 console.error('ERROR', e);
                 state = { ...state, buffer: [] };
-                rl.setPrompt(`${state.project}:${state.current.uuid}$ `);
+                rl.setPrompt(prompt(state));
                 rl.prompt();
             });
     } else {
         console.error('Unknown command ' + cmd[0]);
         rl.prompt();
+    }
+}
+
+function prompt(state): string {
+    if (state.buffer.length) {
+        return '> ';
+    } else if (state.project && state.current) {
+        return `${state.project}:${state.current.uuid}$ `;
+    } else {
+        return '$ ';
     }
 }

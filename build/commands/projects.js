@@ -7,12 +7,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+let table = require('text-table');
 function projects(mesh, line, cmd, state) {
     return __awaiter(this, void 0, void 0, function* () {
         let projects = yield mesh.api.projects.get();
-        projects.data.reduce((out, p) => {
-            return `${out} ${p.name}`;
-        }, '');
+        let data = projects.data.reduce((out, p) => {
+            out.push([p.uuid, p.name, p.created, p.rootNodeUuid]);
+            return out;
+        }, [['uuid', 'name', 'created', 'rootNodeUuid']]);
+        console.log(table(data));
         return state;
     });
 }
