@@ -10,17 +10,19 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 let table = require('text-table');
 function ls(mesh, line, cmd, state) {
     return __awaiter(this, void 0, void 0, function* () {
+        if (!state.project || !state.current.uuid)
+            return state;
         let nodes = yield mesh.api.project(state.project).nodes.nodeUuid(state.current.uuid).children.get({ version: 'draft' });
         let data = nodes.data.reduce((out, node) => {
-            let type = node.container ? 'DIR ' : 'NODE';
             out.push([
                 node.uuid,
                 node.schema.name,
                 node.edited,
-                node.fields ? node.fields[Object.keys(node.fields)[0]] : '...'
+                node.fields ? node.fields[Object.keys(node.fields)[0]] : '...',
+                node.container ? 'true' : 'false'
             ]);
             return out;
-        }, [['uuid', 'schema', 'edited', 'displayField']]);
+        }, [['uuid', 'schema', 'edited', 'displayField', 'container']]);
         console.log(table(data), '\n');
         return state;
     });

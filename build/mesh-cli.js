@@ -28,9 +28,8 @@ let config = {};
 let auth = ['admin', 'admin'];
 if (process.argv[2]) {
     let parts = url.parse(process.argv[2]);
-    config.url = `${parts.protocol}//${parts.host}`;
-    config.apibase = parts.path;
-    config.debug = true;
+    config.url = `${parts.protocol}//${parts.host}${parts.path}`;
+    config.debug = false;
     if (parts.auth !== null)
         auth = parts.auth.split(':');
 }
@@ -47,6 +46,8 @@ mesh.api.auth.login.post({ username: auth[0], password: auth[1] })
     rl.on('line', onLine);
     state = { project: '', current: null, buffer: [] };
     // onLine('project demo');
+    rl.setPrompt(prompt(state));
+    rl.prompt();
 })
     .catch((e) => {
     console.error(e);
