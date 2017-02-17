@@ -14,7 +14,7 @@ export const COMPLETERS: CompleterTable = {
     defaultCompleter: defaultCompleter,
     cd: nodeChildrenCompleter(
         defaultNodeChildrenQuery,
-        (node, cmd) => node.container && (node.uuid.indexOf(cmd[1]) === 0 || node.fields.name.indexOf(cmd[1]) === 0),
+        (node, cmd) => node.container && node.uuid.indexOf(cmd[1]) === 0,
         uuidReducer
     ),
     delete: nodeChildrenCompleter(

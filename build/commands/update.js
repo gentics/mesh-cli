@@ -9,6 +9,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 function update(mesh, line, cmd, state) {
     return __awaiter(this, void 0, void 0, function* () {
+        if (!state.project)
+            throw (new Error('Cannot create without an active project.'));
         let input = state.buffer.join('\n');
         let data = JSON.parse(input.substr(input.indexOf('{')));
         let msg = yield mesh.api.project(state.project).nodes.nodeUuid(data.uuid).post(data);
