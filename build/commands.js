@@ -25,6 +25,7 @@ const read_1 = require("./commands/read");
 const schema_1 = require("./commands/schema");
 const schemas_1 = require("./commands/schemas");
 const update_1 = require("./commands/update");
+const users_1 = require("./commands/users");
 exports.COMMANDS = {
     cd: cd_1.default,
     create: buffered(create_1.default),
@@ -35,7 +36,8 @@ exports.COMMANDS = {
     read: read_1.default,
     schema: schema_1.default,
     schemas: schemas_1.default,
-    update: buffered(update_1.default)
+    update: buffered(update_1.default),
+    users: users_1.default
 };
 function buffered(func) {
     return (mesh, line, cmd, state) => __awaiter(this, void 0, void 0, function* () {

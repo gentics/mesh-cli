@@ -10,6 +10,7 @@ import read from './commands/read';
 import schema from './commands/schema';
 import schemas from './commands/schemas';
 import update from './commands/update';
+import users from './commands/users';
 
 type Command = (mesh: MeshAPI, line: string, cmd: string[], state: State) => Promise<State>;
 interface CommandTable { [key: string]: Command }
@@ -23,7 +24,8 @@ export const COMMANDS: CommandTable = {
     read: read,
     schema: schema,
     schemas: schemas,
-    update: buffered(update)
+    update: buffered(update),
+    users: users
 }
 
 function buffered(func: Command): Command {
