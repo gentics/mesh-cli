@@ -7,7 +7,7 @@ export default async function project(mesh: MeshAPI, line: string, cmd: string[]
     if (p.length === 0) {
         throw new Error('No such project.');
     } else {
-        let node = await mesh.api.project(p[0].name).nodes.nodeUuid(p[0].rootNodeUuid).get({ version: 'draft' })
+        let node = await mesh.api.project(p[0].name).nodes.nodeUuid(p[0].rootNode.uuid).get({ version: 'draft' })
         return { ...state, project: cmd[1], current: node };
     }
 }

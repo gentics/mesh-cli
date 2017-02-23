@@ -12,9 +12,9 @@ function projects(mesh, line, cmd, state) {
     return __awaiter(this, void 0, void 0, function* () {
         let projects = yield mesh.api.projects.get();
         let data = projects.data.reduce((out, p) => {
-            out.push([p.uuid, p.name, p.created, p.rootNodeUuid]);
+            out.push([p.uuid, p.name, p.created, p.rootNode.uuid]);
             return out;
-        }, [['uuid', 'name', 'created', 'rootNodeUuid']]);
+        }, [['uuid', 'name', 'created', 'rootNode.uuid']]);
         console.log(table(data));
         return state;
     });

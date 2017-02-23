@@ -23,7 +23,7 @@ function project(mesh, line, cmd, state) {
             throw new Error('No such project.');
         }
         else {
-            let node = yield mesh.api.project(p[0].name).nodes.nodeUuid(p[0].rootNodeUuid).get({ version: 'draft' });
+            let node = yield mesh.api.project(p[0].name).nodes.nodeUuid(p[0].rootNode.uuid).get({ version: 'draft' });
             return __assign({}, state, { project: cmd[1], current: node });
         }
     });
