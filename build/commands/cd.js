@@ -11,8 +11,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 function cd(mesh, line, cmd, state) {
     return __awaiter(this, void 0, void 0, function* () {
         if (cmd[1] === '..') {
-            let parent = yield mesh.api.project(state.project).nodes.nodeUuid(state.current.parentNode.uuid).get({ version: 'draft' });
-            return Object.assign({}, state, { current: parent });
+            if (state.current && state.current.parentNode) {
+                let parent = yield mesh.api.project(state.project).nodes.nodeUuid(state.current.parentNode.uuid).get({ version: 'draft' });
+                return Object.assign({}, state, { current: parent });
+            }
+            else {
+                return state;
+            }
         }
         else {
             let nodes = yield mesh.api.project(state.project).nodes.nodeUuid(state.current.uuid).children.get({ version: 'draft' });
