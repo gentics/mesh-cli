@@ -16,8 +16,8 @@ function schemas(mesh, line, cmd, state) {
             out.push([
                 schema.uuid,
                 schema.name,
-                schema.displayField,
-                schema.segmentField,
+                schema.displayField || '-',
+                schema.segmentField || '-',
                 schema.container ? 'true' : 'false'
             ]);
             return out;

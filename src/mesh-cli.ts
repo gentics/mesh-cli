@@ -11,16 +11,23 @@ export class State {
     public readonly project?: string;
     public readonly current?: ProjectNodesNodeUuidGetResponse;
     public readonly buffer?: string[];
+    public readonly lang: string;
 }
 
 let config: any = {};
 let auth = ['admin', 'admin']
+let initProject;
 if (process.argv[2]) {
     let parts = url.parse(process.argv[2]);
     config.url = `${parts.protocol}//${parts.host}${parts.path}`;
     config.debug = false;
     if (parts.auth !== null) auth = parts.auth.split(':');
 }
+
+if (process.argv[3]) {
+    initProject = process.argv[3];
+}
+
 let mesh = new MeshAPI(config);
 let state: State;
 let rl: readline.ReadLine;
@@ -33,10 +40,13 @@ mesh.api.auth.login.post({ username: auth[0], password: auth[1] })
             completer: completer
         });
         rl.on('line', onLine);
-        state = { project: '', current: null, buffer: [] };
-        // onLine('project demo');
-        rl.setPrompt(prompt(state));
-        rl.prompt();
+        state = { project: '', current: null, buffer: [], lang: 'en' };
+        if (initProject) {
+            onLine(`project ${initProject}`);
+        } else {
+            rl.setPrompt(prompt(state));
+            rl.prompt();
+        }
     })
     .catch((e) => {
         console.error(e);
@@ -97,7 +107,7 @@ function prompt(state): string {
     if (state.buffer.length) {
         return '> ';
     } else if (state.project && state.current) {
-        return `${state.project}:${state.current.uuid}$ `;
+        return `${state.project}:${state.current.uuid} (${state.lang})$ `;
     } else {
         return '$ ';
     }

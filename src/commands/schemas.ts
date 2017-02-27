@@ -8,8 +8,8 @@ export default async function schemas(mesh: MeshAPI, line: string, cmd: string[]
         out.push([
             schema.uuid,
             schema.name,
-            schema.displayField,
-            schema.segmentField,
+            schema.displayField || '-',
+            schema.segmentField || '-',
             schema.container ? 'true' : 'false'
         ]);
         return out;

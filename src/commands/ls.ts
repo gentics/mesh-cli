@@ -4,7 +4,7 @@ let table = require('text-table');
 
 export default async function ls(mesh: MeshAPI, line: string, cmd: string[], state: State): Promise<State> {
     if (!state.project || !state.current.uuid) return state;
-    let nodes = await mesh.api.project(state.project).nodes.nodeUuid(state.current.uuid).children.get({ version: 'draft' });
+    let nodes = await mesh.api.project(state.project).nodes.nodeUuid(state.current.uuid).children.get({ version: 'draft', lang: state.lang });
     let data = nodes.data.reduce((out, node) => {
         out.push([
             node.uuid,
@@ -16,14 +16,22 @@ export default async function ls(mesh: MeshAPI, line: string, cmd: string[], sta
         ]);
         return out;
     }, [['uuid', 'schema', 'edited', 'displayField', 'availableLanguages', 'container']]);
-    console.log(table(data), '\n');
+    console.log(
+        table(data),
+        '\n',
+        `${data.length ? data.length - 1 : 0} nodes`,
+        '\n'
+    );
     return state;
 }
 
 function fields(node: any): string {
-    if (node.fields && node.fields.length) {
-        return node.fields[Object.keys(node.fields)[0]];
+    if (!node.fields || Object.keys(node.fields).length === 0) return '-';
+    let displayField;
+    if (node['displayField']) {
+        displayField = node['displayField'];
     } else {
-        return '-';
+        displayField = Object.keys(node.fields)[0];
     }
+    return node.fields[displayField];
 }

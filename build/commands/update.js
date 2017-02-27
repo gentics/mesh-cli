@@ -14,7 +14,7 @@ function update(mesh, line, cmd, state) {
             throw (new Error('Cannot create without an active project.'));
         let input = state.buffer.join('\n');
         let data = JSON.parse(input.substr(input.indexOf('{')));
-        let msg = yield mesh.api.project(state.project).nodes.nodeUuid(data.uuid).post(data);
+        let msg = yield mesh.api.project(state.project).nodes.nodeUuid(data.uuid).post(data, { lang: state.lang });
         console.log(msg);
         return state;
     });

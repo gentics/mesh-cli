@@ -12,7 +12,7 @@ function create(mesh, line, cmd, state) {
     return __awaiter(this, void 0, void 0, function* () {
         let input = state.buffer.join('\n');
         let data = JSON.parse(input.substr(input.indexOf('{')));
-        const msg = yield mesh.api.project(state.project).nodes.post(data);
+        const msg = yield mesh.api.project(state.project).nodes.post(data, { lang: state.lang });
         console.log(msg);
         return state;
     });

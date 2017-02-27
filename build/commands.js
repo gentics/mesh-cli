@@ -11,6 +11,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const cd_1 = require("./commands/cd");
 const create_1 = require("./commands/create");
 const delete_1 = require("./commands/delete");
+const lang_1 = require("./commands/lang");
 const ls_1 = require("./commands/ls");
 const project_1 = require("./commands/project");
 const projects_1 = require("./commands/projects");
@@ -25,6 +26,7 @@ exports.COMMANDS = {
     create: buffered(create_1.default),
     delete: delete_1.default,
     groups: groups_1.default,
+    lang: lang_1.default,
     ls: ls_1.default,
     project: project_1.default,
     projects: projects_1.default,

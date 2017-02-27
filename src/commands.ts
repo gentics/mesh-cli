@@ -3,6 +3,7 @@ import { MeshAPI } from 'mesh-api';
 import cd from './commands/cd';
 import create from './commands/create';
 import deleteNode from './commands/delete';
+import lang from './commands/lang';
 import ls from './commands/ls';
 import project from './commands/project';
 import projects from './commands/projects';
@@ -20,6 +21,7 @@ export const COMMANDS: CommandTable = {
     create: buffered(create),
     delete: deleteNode,
     groups: groups,
+    lang: lang,
     ls: ls,
     project: project,
     projects: projects,
