@@ -1,6 +1,6 @@
 {
   "name": "mesh-cli",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "A command line interface for Gentics Mesh, an API-first CMS",
   "main": "./build/mesh-cli.js",
   "scripts": {
