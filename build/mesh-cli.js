@@ -1,13 +1,5 @@
 #!/usr/bin/env node
 "use strict";
-var __assign = (this && this.__assign) || Object.assign || function(t) {
-    for (var s, i = 1, n = arguments.length; i < n; i++) {
-        s = arguments[i];
-        for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-            t[p] = s[p];
-    }
-    return t;
-};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
@@ -16,6 +8,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+Object.defineProperty(exports, "__esModule", { value: true });
 const readline = require("readline");
 const mesh_api_1 = require("mesh-api");
 const commands_1 = require("./commands");
@@ -75,7 +68,7 @@ function onLine(line) {
     return __awaiter(this, void 0, void 0, function* () {
         if (state.buffer.length) {
             if (line !== ';;') {
-                state = __assign({}, state, { buffer: state.buffer.concat(line) });
+                state = Object.assign({}, state, { buffer: state.buffer.concat(line) });
                 rl.prompt();
                 return;
             }
@@ -95,7 +88,7 @@ function onLine(line) {
                 rl.prompt();
             }).catch((e) => {
                 console.error('ERROR', e);
-                state = __assign({}, state, { buffer: [] });
+                state = Object.assign({}, state, { buffer: [] });
                 rl.setPrompt(prompt(state));
                 rl.prompt();
             });

@@ -7,6 +7,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+Object.defineProperty(exports, "__esModule", { value: true });
 function read(mesh, line, cmd, state) {
     return __awaiter(this, void 0, void 0, function* () {
         let uuid = cmd.length === 1 ? state.current.uuid : cmd[1];
@@ -15,5 +16,4 @@ function read(mesh, line, cmd, state) {
         return state;
     });
 }
-Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = read;

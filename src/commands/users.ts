@@ -2,7 +2,7 @@ import { MeshAPI, UsersGetResponse } from 'mesh-api';
 import { State } from '../mesh-cli';
 let table = require('text-table');
 
-export default async function ls(mesh: MeshAPI, line: string, cmd: string[], state: State): Promise<State> {
+export default async function users(mesh: MeshAPI, line: string, cmd: string[], state: State): Promise<State> {
     let users = await mesh.api.users.get();
     let data = users.data.reduce((out, user) => {
         out.push([
@@ -16,7 +16,6 @@ export default async function ls(mesh: MeshAPI, line: string, cmd: string[], sta
         ]);
         return out;
     }, [['uuid', 'emailAddress', 'firstname', 'lastname', 'nodeReference', 'enabled', 'groups']]);
-    console.log(data);
     console.log(table(data), '\n');
     return state;
 }

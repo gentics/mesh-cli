@@ -9,21 +9,19 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 let table = require('text-table');
-function schemas(mesh, line, cmd, state) {
+function groups(mesh, line, cmd, state) {
     return __awaiter(this, void 0, void 0, function* () {
-        let schemas = yield mesh.api.project(state.project).schemas.get();
-        let data = schemas.data.reduce((out, schema) => {
+        let groups = yield mesh.api.groups.get();
+        let data = groups.data.reduce((out, group) => {
             out.push([
-                schema.uuid,
-                schema.name,
-                schema.displayField,
-                schema.segmentField,
-                schema.container ? 'true' : 'false'
+                group.uuid,
+                group.name,
+                group.roles.reduce((p, c) => p.concat(c.name), []).join(', ')
             ]);
             return out;
-        }, [['uuid', 'name', 'displayField', 'segmentField', 'container']]);
+        }, [['uuid', 'name', 'roles']]);
         console.log(table(data), '\n');
         return state;
     });
 }
-exports.default = schemas;
+exports.default = groups;

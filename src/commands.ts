@@ -11,6 +11,7 @@ import schema from './commands/schema';
 import schemas from './commands/schemas';
 import update from './commands/update';
 import users from './commands/users';
+import groups from './commands/groups';
 
 type Command = (mesh: MeshAPI, line: string, cmd: string[], state: State) => Promise<State>;
 interface CommandTable { [key: string]: Command }
@@ -18,6 +19,7 @@ export const COMMANDS: CommandTable = {
     cd: cd,
     create: buffered(create),
     delete: deleteNode,
+    groups: groups,
     ls: ls,
     project: project,
     projects: projects,

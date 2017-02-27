@@ -7,6 +7,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+Object.defineProperty(exports, "__esModule", { value: true });
 let table = require('text-table');
 function ls(mesh, line, cmd, state) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -27,5 +28,4 @@ function ls(mesh, line, cmd, state) {
         return state;
     });
 }
-Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = ls;

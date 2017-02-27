@@ -9,21 +9,23 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 let table = require('text-table');
-function schemas(mesh, line, cmd, state) {
+function ls(mesh, line, cmd, state) {
     return __awaiter(this, void 0, void 0, function* () {
-        let schemas = yield mesh.api.project(state.project).schemas.get();
-        let data = schemas.data.reduce((out, schema) => {
+        let users = yield mesh.api.users.get();
+        let data = users.data.reduce((out, user) => {
             out.push([
-                schema.uuid,
-                schema.name,
-                schema.displayField,
-                schema.segmentField,
-                schema.container ? 'true' : 'false'
+                user.uuid,
+                user.emailAddress || '-',
+                user.firstname || '-',
+                user.lastname || '-',
+                user.nodeReference ? user.nodeReference.uuid : '-',
+                user.enabled ? 'true' : 'false',
+                user.groups.reduce((p, c) => p.concat(c.name), []).join(', ')
             ]);
             return out;
-        }, [['uuid', 'name', 'displayField', 'segmentField', 'container']]);
+        }, [['uuid', 'emailAddress', 'firstname', 'lastname', 'nodeReference', 'enabled', 'groups']]);
         console.log(table(data), '\n');
         return state;
     });
 }
-exports.default = schemas;
+exports.default = ls;

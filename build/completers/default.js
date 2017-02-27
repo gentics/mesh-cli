@@ -7,6 +7,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+Object.defineProperty(exports, "__esModule", { value: true });
 const commands_1 = require("../commands");
 function defaultCompleter(mesh, line, cmd, state) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -17,5 +18,4 @@ function defaultCompleter(mesh, line, cmd, state) {
         }));
     });
 }
-Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = defaultCompleter;

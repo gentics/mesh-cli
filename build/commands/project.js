@@ -1,12 +1,4 @@
 "use strict";
-var __assign = (this && this.__assign) || Object.assign || function(t) {
-    for (var s, i = 1, n = arguments.length; i < n; i++) {
-        s = arguments[i];
-        for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-            t[p] = s[p];
-    }
-    return t;
-};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
@@ -15,6 +7,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+Object.defineProperty(exports, "__esModule", { value: true });
 function project(mesh, line, cmd, state) {
     return __awaiter(this, void 0, void 0, function* () {
         let projects = yield mesh.api.projects.get();
@@ -24,9 +17,8 @@ function project(mesh, line, cmd, state) {
         }
         else {
             let node = yield mesh.api.project(p[0].name).nodes.nodeUuid(p[0].rootNode.uuid).get({ version: 'draft' });
-            return __assign({}, state, { project: cmd[1], current: node });
+            return Object.assign({}, state, { project: cmd[1], current: node });
         }
     });
 }
-Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = project;
