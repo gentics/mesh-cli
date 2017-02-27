@@ -11,24 +11,21 @@ Object.defineProperty(exports, "__esModule", { value: true });
 function nodeChildrenCompleter(query, filter, reducer) {
     return (mesh, line, cmd, state) => __awaiter(this, void 0, void 0, function* () {
         return new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
-            query(state, mesh).get({ version: 'draft' })
-                .then((nodes) => {
-                if (cmd.length === 1) {
-                    resolve([
-                        nodes.data.reduce((prev, curr) => {
-                            return prev.concat(curr.uuid).concat(curr.fields.name);
-                        }, []),
-                        ''
-                    ]);
-                }
+            let nodes = yield query(state, mesh).get({ version: 'draft', lang: state.lang });
+            if (cmd.length === 1) {
+                resolve([
+                    nodes.data.reduce((prev, curr) => {
+                        return prev.concat(curr.uuid);
+                    }, []),
+                    ''
+                ]);
+            }
+            else {
                 let found = nodes.data.filter((node) => {
                     return filter(node, cmd);
                 }).reduce(reducer, []);
                 resolve([found, cmd[1]]);
-            })
-                .catch((e) => {
-                reject(e);
-            });
+            }
         }));
     });
 }

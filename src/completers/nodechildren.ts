@@ -13,24 +13,20 @@ export default function nodeChildrenCompleter<T>(
 ) {
     return async (mesh: MeshAPI, line: string, cmd: string[], state: State): Promise<readline.CompleterResult> => {
         return new Promise<readline.CompleterResult>(async (resolve, reject) => {
-            query(state, mesh).get({ version: 'draft' })
-                .then((nodes) => {
-                    if (cmd.length === 1) {
-                        resolve([
-                            nodes.data.reduce((prev, curr) => {
-                                return prev.concat(curr.uuid).concat(curr.fields.name);
-                            }, []),
-                            ''
-                        ]);
-                    }
-                    let found: string[] = nodes.data.filter((node) => {
-                        return filter(node, cmd);
-                    }).reduce(reducer, []);
-                    resolve([found, cmd[1]]);
-                })
-                .catch((e) => {
-                    reject(e);
-                });
+            let nodes = await query(state, mesh).get({ version: 'draft', lang: state.lang });
+            if (cmd.length === 1) {
+                resolve([
+                    nodes.data.reduce((prev, curr) => {
+                        return prev.concat(curr.uuid);
+                    }, []),
+                    ''
+                ]);
+            } else {
+                let found: string[] = nodes.data.filter((node) => {
+                    return filter(node, cmd);
+                }).reduce(reducer, []);
+                resolve([found, cmd[1]]);
+            }
         });
     }
 }
