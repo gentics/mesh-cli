@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 let table = require('text-table');
-function ls(mesh, line, cmd, state) {
+function ls(cmd, state, mesh) {
     return __awaiter(this, void 0, void 0, function* () {
         if (!state.project || !state.current.uuid)
             return state;
@@ -29,7 +29,7 @@ function ls(mesh, line, cmd, state) {
         return state;
     });
 }
-exports.default = ls;
+exports.ls = ls;
 function fields(node) {
     if (!node.fields || Object.keys(node.fields).length === 0)
         return '-';
@@ -42,3 +42,4 @@ function fields(node) {
     }
     return node.fields[displayField];
 }
+//# sourceMappingURL=ls.js.map

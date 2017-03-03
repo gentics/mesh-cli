@@ -8,17 +8,19 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-function project(mesh, line, cmd, state) {
+function project(cmd, state, mesh) {
     return __awaiter(this, void 0, void 0, function* () {
+        let opts = { version: 'draft', lang: state.lang, resolveLinks: 'short' };
         let projects = yield mesh.api.projects.get();
-        let p = projects.data.filter((p) => p.name === cmd[1]);
+        let p = projects.data.filter((p) => p.name === cmd.params[0]);
         if (p.length === 0) {
             throw new Error('No such project.');
         }
         else {
-            let node = yield mesh.api.project(p[0].name).nodes.nodeUuid(p[0].rootNode.uuid).get({ version: 'draft' });
-            return Object.assign({}, state, { project: cmd[1], current: node });
+            let node = yield mesh.api.project(p[0].name).nodes.nodeUuid(p[0].rootNode.uuid).get(opts);
+            return Object.assign({}, state, { project: cmd.params[0], current: node });
         }
     });
 }
-exports.default = project;
+exports.project = project;
+//# sourceMappingURL=project.js.map

@@ -29,4 +29,5 @@ function nodeChildrenCompleter(query, filter, reducer) {
         }));
     });
 }
-exports.default = nodeChildrenCompleter;
+exports.nodeChildrenCompleter = nodeChildrenCompleter;
+//# sourceMappingURL=nodechildren.js.map

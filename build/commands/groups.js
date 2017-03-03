@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 let table = require('text-table');
-function groups(mesh, line, cmd, state) {
+function groups(cmd, state, mesh) {
     return __awaiter(this, void 0, void 0, function* () {
         let groups = yield mesh.api.groups.get();
         let data = groups.data.reduce((out, group) => {
@@ -24,4 +24,5 @@ function groups(mesh, line, cmd, state) {
         return state;
     });
 }
-exports.default = groups;
+exports.groups = groups;
+//# sourceMappingURL=groups.js.map

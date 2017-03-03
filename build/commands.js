@@ -1,12 +1,4 @@
 "use strict";
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 const cd_1 = require("./commands/cd");
 const create_1 = require("./commands/create");
@@ -21,29 +13,60 @@ const schemas_1 = require("./commands/schemas");
 const update_1 = require("./commands/update");
 const users_1 = require("./commands/users");
 const groups_1 = require("./commands/groups");
-exports.COMMANDS = {
-    cd: cd_1.default,
-    create: buffered(create_1.default),
-    delete: delete_1.default,
-    groups: groups_1.default,
-    lang: lang_1.default,
-    ls: ls_1.default,
-    project: project_1.default,
-    projects: projects_1.default,
-    read: read_1.default,
-    schema: schema_1.default,
-    schemas: schemas_1.default,
-    update: buffered(update_1.default),
-    users: users_1.default
-};
-function buffered(func) {
-    return (mesh, line, cmd, state) => __awaiter(this, void 0, void 0, function* () {
-        if (!state.buffer.length) {
-            return Object.assign({}, state, { buffer: state.buffer.concat(line) });
+class Command {
+    constructor(buffer) {
+        let parts = lineToCmdParts(buffer[0]);
+        this.name = parts[0];
+        this.params = parts.filter((v, i) => i > 0);
+        this.buffer = [];
+        if (buffer.length > 1) {
+            this.buffer = buffer.filter((v, i) => i > 0);
         }
-        else {
-            let s = yield func(mesh, line, cmd, state);
-            return Object.assign({}, s, { buffer: [] });
-        }
-    });
+    }
 }
+exports.Command = Command;
+const COMMANDS = {
+    cd: cd_1.cd,
+    create: create_1.create,
+    delete: delete_1.deleteNode,
+    groups: groups_1.groups,
+    lang: lang_1.lang,
+    ls: ls_1.ls,
+    project: project_1.project,
+    projects: projects_1.projects,
+    read: read_1.read,
+    schema: schema_1.schema,
+    schemas: schemas_1.schemas,
+    update: update_1.update,
+    users: users_1.users
+};
+const MULTILINE_COMMANDS = ['create', 'update'];
+function commandNames() {
+    return Object.keys(COMMANDS);
+}
+exports.commandNames = commandNames;
+function isMultilineCmd(cmd) {
+    return MULTILINE_COMMANDS.indexOf(cmd) !== -1;
+}
+exports.isMultilineCmd = isMultilineCmd;
+function isBufferEndCmd(cmd) {
+    return cmd.length === 1 && cmd[0] === ';;';
+}
+exports.isBufferEndCmd = isBufferEndCmd;
+function lineToCmdParts(line) {
+    return line.split(' ').map((v) => v.trim());
+}
+exports.lineToCmdParts = lineToCmdParts;
+function isValidCommand(cmd) {
+    return !!COMMANDS[cmd.name];
+}
+exports.isValidCommand = isValidCommand;
+function isEmptyCommand(cmd) {
+    return cmd.name === '';
+}
+exports.isEmptyCommand = isEmptyCommand;
+function execute(cmd, state, mesh) {
+    return COMMANDS[cmd.name](cmd, state, mesh);
+}
+exports.execute = execute;
+//# sourceMappingURL=commands.js.map

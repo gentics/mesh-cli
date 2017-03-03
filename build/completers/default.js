@@ -12,10 +12,11 @@ const commands_1 = require("../commands");
 function defaultCompleter(mesh, line, cmd, state) {
     return __awaiter(this, void 0, void 0, function* () {
         return new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
-            let completions = Object.keys(commands_1.COMMANDS);
+            let completions = commands_1.commandNames();
             let hits = completions.filter((c) => { return c.indexOf(line) === 0; });
             resolve([hits.length ? hits : completions, line]);
         }));
     });
 }
-exports.default = defaultCompleter;
+exports.defaultCompleter = defaultCompleter;
+//# sourceMappingURL=default.js.map

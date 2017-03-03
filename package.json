@@ -11,7 +11,9 @@
   "license": "MIT",
   "dependencies": {
     "@types/node": "^7.0.5",
+    "dashdash": "^1.14.1",
     "mesh-api": "^0.0.14",
+    "rxjs": "^5.2.0",
     "text-table": "^0.2.0"
   },
   "repository": {

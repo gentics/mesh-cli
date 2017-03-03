@@ -2,112 +2,99 @@
 
 import * as readline from 'readline';
 import { MeshAPI, ProjectNodesNodeUuidGetResponse } from 'mesh-api';
-import cd from './commands/cd';
-import { COMMANDS } from './commands';
-import { COMPLETERS } from './completers';
-import * as url from 'url';
+import { lineToCmdParts, isMultilineCmd, isBufferEndCmd, Command, isValidCommand, execute, isEmptyCommand } from './commands';
+import { complete } from './completers';
+import { Observable, Subject } from 'rxjs';
+import { options } from './options';
 
 export class State {
-    public readonly project?: string;
-    public readonly current?: ProjectNodesNodeUuidGetResponse;
-    public readonly buffer?: string[];
+    public readonly project: string;
+    public readonly current: ProjectNodesNodeUuidGetResponse;
     public readonly lang: string;
 }
 
-let config: any = {};
-let auth = ['admin', 'admin']
-let initProject;
-if (process.argv[2]) {
-    let parts = url.parse(process.argv[2]);
-    config.url = `${parts.protocol}//${parts.host}${parts.path}`;
-    config.debug = false;
-    if (parts.auth !== null) auth = parts.auth.split(':');
-}
-
-if (process.argv[3]) {
-    initProject = process.argv[3];
-}
-
-let mesh = new MeshAPI(config);
-let state: State;
+const opts = options();
+const mesh = new MeshAPI({
+    url: opts.url,
+    debug: opts.debug
+});
+let state: State = { project: '', current: null, lang: 'en' };
 let rl: readline.ReadLine;
 
-mesh.api.auth.login.post({ username: auth[0], password: auth[1] })
-    .then(() => {
-        rl = readline.createInterface({
-            input: process.stdin,
-            output: process.stdout,
-            completer: completer
-        });
-        rl.on('line', onLine);
-        state = { project: '', current: null, buffer: [], lang: 'en' };
-        if (initProject) {
-            onLine(`project ${initProject}`);
-        } else {
-            rl.setPrompt(prompt(state));
-            rl.prompt();
-        }
-    })
-    .catch((e) => {
-        console.error(e);
-        process.exit(1);
-    });
+const login$ = Observable.fromPromise(mesh.api.auth.login.post({ username: opts.username, password: opts.password }).catch((reason) => {
+    console.error(reason);
+    console.log('Maybe you forgot to specify the full api endpoint path, which includes "/api/v1"?');
+    process.exit(1);
+}));
 
-function completer(line: string, callback?: (err: any, result: readline.CompleterResult) => void): any {
-    let cmd = line.split(' ');
-    if (COMPLETERS[cmd[0]]) {
-        COMPLETERS[cmd[0]](mesh, line, cmd, state)
-            .then((result) => {
-                callback(null, result);
-            }).catch((err) => {
-                callback(err, [[], line]);
-            });
-    } else {
-        COMPLETERS['defaultCompleter'](mesh, line, cmd, state).then((result) => {
-            callback(null, result);
-        }).catch((err) => {
-            callback(err, [[], line]);
-        });
-    }
+type CompleterResultCallback = (err: any, result: readline.CompleterResult) => void;
+
+class AutoCompleteRequest {
+    constructor(public readonly line: string, public readonly callback: CompleterResultCallback) { };
 }
 
-async function onLine(line: string) {
-    if (state.buffer.length) {
-        if (line !== ';;') {
-            state = { ...state, buffer: state.buffer.concat(line) };
-            rl.prompt();
-            return;
-        } else {
-            line = state.buffer[0];
-        }
+const completer$ = new Subject<AutoCompleteRequest>();
+rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout,
+    completer: (line: string, callback?: CompleterResultCallback): any => {
+        completer$.next(new AutoCompleteRequest(line, callback));
     }
-    let cmd = line.split(' ');
-    if (COMMANDS[cmd[0]]) {
-        COMMANDS[cmd[0]](mesh, line, cmd, state)
-            .then((newState) => {
-                state = newState;
-                rl.setPrompt(prompt(state));
-                if (state.buffer.length === 1) {
-                    console.log('Multiline input: terminate with ";;⏎"');
-                }
-                rl.prompt();
-            }).catch((e) => {
-                console.error('ERROR', e);
-                state = { ...state, buffer: [] };
-                rl.setPrompt(prompt(state));
-                rl.prompt();
-            });
+});
+
+const lines$ = login$.switchMap(() => {
+    return new Observable<string>((subscriber) => {
+        rl.on('line', (line) => subscriber.next(line));
+    });
+}).startWith('');
+
+const command$ = new Observable<Command>((subscriber) => {
+    let buffer: string[] = [];
+    const subscription = lines$.subscribe(line => {
+        let cmd = lineToCmdParts(line);
+        if ((isMultilineCmd(cmd[0]) || buffer.length) && !isBufferEndCmd(cmd)) {
+            buffer = buffer.concat(line);
+        } else if (isBufferEndCmd(cmd)) {
+            subscriber.next(new Command(buffer));
+            buffer = [];
+        } else {
+            subscriber.next(new Command([line]));
+        }
+    });
+    return subscription;
+});
+
+const state$ = command$.flatMap((cmd: Command) => {
+    if (isValidCommand(cmd)) {
+        return Observable.fromPromise(execute(cmd, state, mesh));
+    } else if (isEmptyCommand(cmd)) {
+        return [state];
     } else {
-        console.error('Unknown command ' + cmd[0]);
+        console.error(`Unknown command ${cmd.name}`);
+        return [state];
+    }
+}).catch((err, caught) => {
+    console.error('Error:', err);
+    return caught;
+}).share();
+
+state$.subscribe((newState) => {
+    state = newState;
+    if (rl) {
+        rl.setPrompt(prompt(state));
         rl.prompt();
     }
-}
+});
+
+completer$.withLatestFrom(state$).subscribe(([req, state]) => {
+    let line = req.line;
+    let callback = req.callback;
+    complete(mesh, state, req.line, req.callback);
+});
 
 function prompt(state): string {
-    if (state.buffer.length) {
-        return '> ';
-    } else if (state.project && state.current) {
-        return `${state.project}:${state.current.uuid} (${state.lang})$ `;
+    if (state.project && state.current) {
+        return `${state.project}${decodeURI(state.current.path)}:${state.current.uuid} (${state.lang})$ `;
     } else {
         return '$ ';
     }

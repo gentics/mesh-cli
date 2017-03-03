@@ -1,8 +1,9 @@
 import { MeshAPI, UsersGetResponse } from 'mesh-api';
 import { State } from '../mesh-cli';
+import { Command } from '../commands';
 let table = require('text-table');
 
-export default async function groups(mesh: MeshAPI, line: string, cmd: string[], state: State): Promise<State> {
+export async function groups(cmd: Command, state: State, mesh: MeshAPI): Promise<State> {
     let groups = await mesh.api.groups.get();
     let data = groups.data.reduce((out, group) => {
         out.push([

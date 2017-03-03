@@ -8,9 +8,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-function project(mesh, line, cmd, state) {
+function lang(cmd, state, mesh) {
     return __awaiter(this, void 0, void 0, function* () {
-        return Object.assign({}, state, { lang: cmd[1] });
+        return Object.assign({}, state, { lang: cmd.params[0] });
     });
 }
-exports.default = project;
+exports.lang = lang;
+//# sourceMappingURL=lang.js.map

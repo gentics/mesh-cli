@@ -8,11 +8,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-function cd(mesh, line, cmd, state) {
+function cd(cmd, state, mesh) {
     return __awaiter(this, void 0, void 0, function* () {
-        if (cmd[1] === '..') {
+        const opts = { version: 'draft', lang: state.lang, resolveLinks: 'short' };
+        if (cmd.params[0] === '..') {
             if (state.current && state.current.parentNode) {
-                let parent = yield mesh.api.project(state.project).nodes.nodeUuid(state.current.parentNode.uuid).get({ version: 'draft' });
+                let parent = yield mesh.api
+                    .project(state.project).nodes
+                    .nodeUuid(state.current.parentNode.uuid)
+                    .get(opts);
                 return Object.assign({}, state, { current: parent });
             }
             else {
@@ -20,9 +24,11 @@ function cd(mesh, line, cmd, state) {
             }
         }
         else {
-            let nodes = yield mesh.api.project(state.project).nodes.nodeUuid(state.current.uuid).children.get({ version: 'draft' });
+            let nodes = yield mesh.api.project(state.project).nodes
+                .nodeUuid(state.current.uuid)
+                .children.get(opts);
             let found = nodes.data.filter((val) => {
-                return val.container && (val.uuid === cmd[1] || val.fields.name === cmd[1]);
+                return val.container && (val.uuid === cmd.params[0] || val.fields.name === cmd.params[0]);
             });
             if (found.length === 1) {
                 return Object.assign({}, state, { current: found[0] });
@@ -33,4 +39,5 @@ function cd(mesh, line, cmd, state) {
         }
     });
 }
-exports.default = cd;
+exports.cd = cd;
+//# sourceMappingURL=cd.js.map

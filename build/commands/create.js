@@ -8,13 +8,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-function create(mesh, line, cmd, state) {
+function create(cmd, state, mesh) {
     return __awaiter(this, void 0, void 0, function* () {
-        let input = state.buffer.join('\n');
+        let input = cmd.buffer.join('\n');
         let data = JSON.parse(input.substr(input.indexOf('{')));
         const msg = yield mesh.api.project(state.project).nodes.post(data, { lang: state.lang });
         console.log(msg);
         return state;
     });
 }
-exports.default = create;
+exports.create = create;
+//# sourceMappingURL=create.js.map

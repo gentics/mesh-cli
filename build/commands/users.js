@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 let table = require('text-table');
-function users(mesh, line, cmd, state) {
+function users(cmd, state, mesh) {
     return __awaiter(this, void 0, void 0, function* () {
         let users = yield mesh.api.users.get();
         let data = users.data.reduce((out, user) => {
@@ -28,4 +28,5 @@ function users(mesh, line, cmd, state) {
         return state;
     });
 }
-exports.default = users;
+exports.users = users;
+//# sourceMappingURL=users.js.map

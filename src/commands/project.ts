@@ -1,13 +1,15 @@
 import { MeshAPI } from 'mesh-api';
 import { State } from '../mesh-cli';
+import { Command } from '../commands';
 
-export default async function project(mesh: MeshAPI, line: string, cmd: string[], state: State): Promise<State> {
+export async function project(cmd: Command, state: State, mesh: MeshAPI): Promise<State> {
+    let opts = { version: 'draft', lang: state.lang, resolveLinks: 'short' };
     let projects = await mesh.api.projects.get();
-    let p = projects.data.filter((p) => p.name === cmd[1]);
+    let p = projects.data.filter((p) => p.name === cmd.params[0]);
     if (p.length === 0) {
         throw new Error('No such project.');
     } else {
-        let node = await mesh.api.project(p[0].name).nodes.nodeUuid(p[0].rootNode.uuid).get({ version: 'draft' })
-        return { ...state, project: cmd[1], current: node };
+        let node = await mesh.api.project(p[0].name).nodes.nodeUuid(p[0].rootNode.uuid).get(opts);
+        return { ...state, project: cmd.params[0], current: node };
     }
 }

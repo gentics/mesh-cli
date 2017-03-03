@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 let table = require('text-table');
-function projects(mesh, line, cmd, state) {
+function projects(cmd, state, mesh) {
     return __awaiter(this, void 0, void 0, function* () {
         let projects = yield mesh.api.projects.get();
         let data = projects.data.reduce((out, p) => {
@@ -20,4 +20,5 @@ function projects(mesh, line, cmd, state) {
         return state;
     });
 }
-exports.default = projects;
+exports.projects = projects;
+//# sourceMappingURL=projects.js.map

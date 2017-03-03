@@ -6,7 +6,7 @@ export interface MeshQuery {
     (state: State, mesh: MeshAPI): { get: (options?: any) => Promise<any> }
 }
 
-export default function nodeChildrenCompleter<T>(
+export function nodeChildrenCompleter<T>(
     query: MeshQuery,
     filter: (node: T, cmd: string[]) => boolean,
     reducer: (prev: string[], node: T) => string[]

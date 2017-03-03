@@ -1,8 +1,9 @@
 import { MeshAPI, ProjectNodesNodeUuidGetResponse } from 'mesh-api';
 import { State } from '../mesh-cli';
+import { Command } from '../commands';
 let table = require('text-table');
 
-export default async function ls(mesh: MeshAPI, line: string, cmd: string[], state: State): Promise<State> {
+export async function ls(cmd: Command, state: State, mesh: MeshAPI): Promise<State> {
     if (!state.project || !state.current.uuid) return state;
     let nodes = await mesh.api.project(state.project).nodes.nodeUuid(state.current.uuid).children.get({ version: 'draft', lang: state.lang });
     let data = nodes.data.reduce((out, node) => {

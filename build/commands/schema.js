@@ -8,11 +8,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-function project(mesh, line, cmd, state) {
+function schema(cmd, state, mesh) {
     return __awaiter(this, void 0, void 0, function* () {
-        let schema = yield mesh.api.schemas.schemaUuid(cmd[1]).get();
+        let schema = yield mesh.api.schemas.schemaUuid(cmd.params[0]).get();
         console.log(JSON.stringify(schema, null, 4));
         return state;
     });
 }
-exports.default = project;
+exports.schema = schema;
+//# sourceMappingURL=schema.js.map

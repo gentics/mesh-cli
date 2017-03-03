@@ -8,10 +8,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-function deleteNode(mesh, line, cmd, state) {
+function deleteNode(cmd, state, mesh) {
     return __awaiter(this, void 0, void 0, function* () {
-        yield mesh.api.project(state.project).nodes.nodeUuid(cmd[1]).delete();
+        yield mesh.api.project(state.project).nodes.nodeUuid(cmd.params[0]).delete();
         return state;
     });
 }
-exports.default = deleteNode;
+exports.deleteNode = deleteNode;
+//# sourceMappingURL=delete.js.map

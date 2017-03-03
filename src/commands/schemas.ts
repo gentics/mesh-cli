@@ -1,8 +1,9 @@
 import { MeshAPI } from 'mesh-api';
 import { State } from '../mesh-cli';
+import { Command } from '../commands';
 let table = require('text-table');
 
-export default async function schemas(mesh: MeshAPI, line: string, cmd: string[], state: State): Promise<State> {
+export async function schemas(cmd: Command, state: State, mesh: MeshAPI): Promise<State> {
     let schemas = await mesh.api.project(state.project).schemas.get();
     let data = schemas.data.reduce((out, schema) => {
         out.push([

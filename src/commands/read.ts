@@ -1,7 +1,8 @@
 import { MeshAPI } from 'mesh-api';
 import { State } from '../mesh-cli';
-export default async function read(mesh: MeshAPI, line: string, cmd: string[], state: State): Promise<State> {
-    let uuid = cmd.length === 1 ? state.current.uuid : cmd[1];
+import { Command } from '../commands';
+export async function read(cmd: Command, state: State, mesh: MeshAPI): Promise<State> {
+    let uuid = cmd.params.length ? cmd.params[0] : state.current.uuid;
     let node = await mesh.api.project(state.project).nodes.nodeUuid(uuid).get({ version: 'draft', lang: state.lang })
     console.log(JSON.stringify(node, null, 4));
     return state;
