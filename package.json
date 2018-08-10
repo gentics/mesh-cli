@@ -1,0 +1,20 @@
+{
+  "name": "mesh-cli",
+  "version": "1.0.0",
+  "description": "Gentics Mesh CLI",
+  "main": "index.js",
+  "scripts": {
+    "main": "node index.js"
+  },
+  "repository": "git@github.com:gentics/mesh-cli.git",
+  "author": "Johannes Schüth <git@jotschi.de>",
+  "license": "MIT",
+  "dependencies": {
+    "chalk": "^2.4.1",
+    "clear": "^0.1.0",
+    "clui": "^0.3.6",
+    "commander": "^2.17.1",
+    "docker-cli-js": "^2.4.0",
+    "minimalist": "^1.0.0"
+  }
+}
