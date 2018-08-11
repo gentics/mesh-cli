@@ -5,7 +5,7 @@ const inquirer = require('inquirer');
 const homeConfig = require('home-config');
 const homedir = require('os').homedir();
 const path = require('path');
-const unirest = require('unirest');
+const rest = require("./rest");
 
 const dirName = '.genticsmesh';
 const cfg = loadConfig();
@@ -107,13 +107,10 @@ function storeKey(key) {
 }
 
 function gen(username, password) {
-  var u = unirest.post('http://localhost:8888/api/v1/auth/login')
-    .headers({ 'Accept': 'application/json', 'Content-Type': 'application/json' })
-    .send({ "username": username, "password": password })
+  rest.post(cfg, "/api/v1/auth/login", { "username": username, "password": password })
     .end(function (response) {
       storeKey(response.body.token);
     });
 }
-
 
 module.exports = { register }
