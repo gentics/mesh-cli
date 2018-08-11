@@ -3,10 +3,14 @@
 const program = require('commander');
 const clui = require('clui');
 
-function listJobs() {
-
+function clearJob() {
+    var id = null;
+    rest.delete(cfg, "/api/v1/admin/jobs/" + id + "/error");
 }
 
+function listJobs() {
+    rest.get(cfg, "/api/v1/admin/jobs");
+}
 
 program
     .version('0.0.1')

@@ -16,7 +16,7 @@ function start(env) {
 
 async function startDocker(port) {
     console.log("Starting Gentics Mesh...");
-    var e = docker.command('start gentics-mesh').then(function(data) {
+    var e = docker.command('start gentics-mesh').then(function (data) {
         console.dir(data);
     });
     var p = docker.command('run -p ' + port + ':8080 -d --name gentics-mesh gentics/mesh:latest')
@@ -27,7 +27,9 @@ async function startDocker(port) {
 }
 
 function restart(env, options) {
-
+    docker.command('restart gentics-mesh').then(function (data) {
+        console.dir(data);
+    });
 }
 
 function stop(env, options) {

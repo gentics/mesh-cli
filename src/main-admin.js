@@ -3,15 +3,15 @@
 const program = require('commander');
 
 function status() {
-
+    rest.get(cfg, "/api/v1/admin/status");
 }
 
 function indexSync(env, options) {
-
+    rest.post(cfg, "/api/v1/search/sync");
 }
 
 function backup(env, options) {
-
+    rest.post(cfg, "/api/v1/admin/backup");
 }
 
 program

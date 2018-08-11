@@ -8,24 +8,25 @@ const clui = require('clui');
 const clc = require('cli-color');
 const Line = clui.Line;
 
-function addUser() {
-    rest.post(cfg, "/api/v1/users");
+function addTagFamily() {
+    var project = null;
+    rest.post(cfg, "/api/v1/" + project + "/tagfamily");
 }
 
-function removeUser(env) {
+function removeTagFamily(env) {
     var id = null;
-    rest.delete(cfg, "/api/v1/users/" + id);
+    var project = null;
+    rest.delete(cfg, "/api/v1/" + project + "/tagfamily/" + id);
 }
 
-function passwd(env) {
-    var body = {
-        password: "pass"
-    };
-    rest.post(cfg, "/api/v1/users/" + id, body);
-}
-
-function listUsers(env) {
-    rest.get("/api/v1/users").end(r => {
+function listTagFamilies(env) {
+    var project = null;
+    var path = "/api/v1/" + project + "/tagfamiles";
+    rest.get(path).end(r => {
+        if (r.code != 200) {
+            console.error("Could not find endpoint for path " + path);
+            return;
+        }
 
         var json = r.body;
         var buffer = lists.buffer();
@@ -60,10 +61,6 @@ function listUsers(env) {
     });
 }
 
-function apiKey(env, options) {
-    rest.post(cfg, "/api/v1/users/" + id + "/token");
-}
-
 program
     .version('1.0.0')
     .usage("user [options] [command]")
@@ -71,31 +68,18 @@ program
 
 program
     .command('add [name]')
-    .description("Add a new user.")
-    .action(addUser);
+    .description("Add a new tagfamily.")
+    .action(addTagFamily);
 
 program
     .command('remove [name/uuid]')
-    .description("Remove the user.")
-    .action(removeUser);
+    .description("Remove the tagfamily.")
+    .action(removeTagFamily);
 
 program
     .command('list')
-    .description("List all users.")
-    .action(listUsers);
-
-program
-    .command('passwd [name/uuid]')
-    .description("Change the password.")
-    .option("-u, --user [username]", "Username")
-    .option("-p, --pass [password]", "Password")
-    .action(passwd);
-
-program
-    .command("key [name/uuid]")
-    .description("Generate a new API key.")
-    //. Note that generating a new API key will invalidate the existing API key of the user.")
-    .action(apiKey);
+    .description("List all tag families.")
+    .action(listTagFamilies);
 
 program.parse(process.argv);
 
