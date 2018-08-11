@@ -2,9 +2,9 @@
   "name": "mesh-cli",
   "version": "1.0.0",
   "description": "Gentics Mesh CLI",
-  "main": "index.js",
+  "main": "main.js",
   "scripts": {
-    "main": "node index.js"
+    "main": "node main.js"
   },
   "repository": "git@github.com:gentics/mesh-cli.git",
   "author": "Johannes Schüth <git@jotschi.de>",
