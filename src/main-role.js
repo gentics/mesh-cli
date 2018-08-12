@@ -6,6 +6,10 @@ const debug = require('debug');
 const rest = require("./rest");
 
 function addRole(env) {
+  if (typeof env === 'undefined') {
+    console.error("No name specified");
+    process.exit(1);
+  }
   var body = {
     name: env
   };
@@ -41,8 +45,8 @@ function listRoles() {
     if (rest.check(r, 200, "Could not load roles")) {
       var json = r.body;
       var table = new Table({
-        head: ['UUID', 'Name', 'Groups']
-        , colWidths: [34, 15, 20]
+        head: ['UUID', 'Name', 'Groups'],
+        colWidths: [34, 15, 20]
       });
 
       json.data.forEach((element) => {
@@ -52,7 +56,6 @@ function listRoles() {
         });
 
         var groupsStr = "[" + groups.join() + "]";
-
         table.push([element.uuid, element.name, groupsStr]);
       });
       console.log(table.toString());
@@ -63,13 +66,18 @@ function listRoles() {
 function withIdFallback(env, action) {
   rest.get("/api/v1/roles").end(ur => {
     if (rest.check(ur, 200, "Could not load roles")) {
-      var id = env;
+      var id = null;
       ur.body.data.forEach(element => {
-        if (element.name == env) {
+        if (element.name == env || element.uuid == env) {
           id = element.uuid;
         }
       });
-      action(id);
+      if (id == null) {
+        console.error("Could not find role '" + env + "'");
+        process.exit(1);
+      } else {
+        action(id);
+      }
     }
   });
 }
@@ -81,22 +89,26 @@ program
 
 program
   .command("add [name]")
+  .alias("a")
   .description("Add a new role.")
   .action(addRole);
 
 program
   .command("remove [name/uuid]")
+  .alias("r")
   .description("Remove the role.")
   .action(removeRole);
 
 program
   .command("chmod [path]")
+  .alias("c")
   .description("Change permissions on the given path.")
   .option("-r, --recursive", "Apply permission changes recursively")
   .action(chmod);
 
 program
   .command("list")
+  .alias("l")
   .description("List all roles.")
   .action(listRoles);
 

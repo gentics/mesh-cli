@@ -8,14 +8,14 @@ const debug = require('debug');
 
 function addProject(env, options) {
   var name = options.name;
-  if (name === 'undefined') {
-    log.error("You need to specifiy the name of the project.")
+  if (typeof name === 'undefined') {
+    console.error("No name specified");
     process.exit(1);
   }
   var body = {
     name: env,
     schema: {
-      name: "folder"
+      name: options.schema || "folder"
     }
   };
   rest.post("/api/v1/projects", body).end(r => {
@@ -29,7 +29,7 @@ function removeProject(env) {
   withIdFallback(env, id => {
     rest.del("/api/v1/projects/" + id).end(r => {
       if (rest.check(r, 204, "Could remove project " + id)) {
-        console.log("Project " + id + " removed");
+        console.log("Project '" + id + "' removed");
       }
     });
   });
@@ -41,8 +41,8 @@ function listSchemas(env, options) {
     if (rest.check(r, 200, "Could not load schemas of project '" + project + "'")) {
       var json = r.body;
       var table = new Table({
-        head: ['UUID', 'Name', 'Version']
-        , colWidths: [34, 15, 8]
+        head: ['UUID', 'Name', 'Version'],
+        colWidths: [34, 15, 8]
       });
 
       json.data.forEach((element) => {
@@ -94,22 +94,26 @@ program
 
 program
   .command("add [name]")
+  .alias("a")
   .description("Add a new project.")
   .option("-s, --schema", "Use the given schema for the root node.")
   .action(addProject);
 
 program
   .command("remove [name/uuid]")
+  .alias("r")
   .description("Remove the project.")
   .action(removeProject);
 
 program
   .command("schemas [name/uuid]")
+  .alias("s")
   .description("List project schemas")
   .action(listSchemas);
 
 program
   .command("list")
+  .alias("l")
   .description("List projects.")
   .action(listProjects);
 

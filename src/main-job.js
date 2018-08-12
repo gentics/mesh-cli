@@ -18,8 +18,8 @@ function listJobs() {
         if (rest.check(r, 200, "Could not load jobs")) {
             var json = r.body;
             var table = new Table({
-                head: ['UUID', 'Name']
-                , colWidths: [34, 15]
+                head: ['UUID', 'Name'],
+                colWidths: [34, 15]
             });
 
             json.data.forEach((element) => {

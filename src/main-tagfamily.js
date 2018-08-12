@@ -6,13 +6,17 @@ const rest = require("./rest");
 const Table = require('cli-table');
 
 function addTagFamily(env) {
+    if (typeof env === 'undefined') {
+        console.error("No name specified");
+        process.exit(1);
+      }
     var project = null;
     var body = {
         name: env
     };
     rest.post("/api/v1/" + project + "/tagfamily", body).end(r => {
         if (rest.check(r, 201, "Could not create tagfamily '" + env + "' in project '" + project + "'")) {
-            console.log("Created tagfamily '" + r.body.uuid);
+            console.log("Created tagfamily '" + r.body.uuid + "'");
         }
     });
 }
@@ -22,7 +26,7 @@ function removeTagFamily(env) {
     withIdFallback(env, id => {
         rest.del("/api/v1/" + project + "/tagfamily/" + id).end(r => {
             if (rest.check(r, 200, "Could not delete tagfamily of project " + project)) {
-                console.log("Removed tag family " + id);
+                console.log("Removed tag family '" + id + "'");
             }
         });
     });
@@ -35,8 +39,8 @@ function listTagFamilies(env) {
         if (rest.check(r, 200, "Could not load tagfamilies of project " + project)) {
             var json = r.body;
             var table = new Table({
-                head: ['UUID', 'Name']
-                , colWidths: [34, 15]
+                head: ['UUID', 'Name'],
+                colWidths: [34, 15]
             });
 
             json.data.forEach((element) => {
@@ -50,13 +54,18 @@ function listTagFamilies(env) {
 function withIdFallback(env, action) {
     rest.get("/api/v1/" + project + "/tagfamilies").end(ur => {
         if (rest.check(ur, 200, "Could not load tagfamilies of project " + project)) {
-            var id = env;
+            var id = null;
             ur.body.data.forEach(element => {
-                if (element.name == env) {
+                if (element.name == env || element.uuid == env) {
                     id = element.uuid;
                 }
             });
-            action(id);
+            if (id == null) {
+                console.error("Could not find tag family '" + env + "'");
+                process.exit(1);
+            } else {
+                action(id);
+            }
         }
     });
 }

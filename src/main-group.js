@@ -8,7 +8,7 @@ const debug = require('debug');
 function addGroup(env, options) {
   if (typeof env === 'undefined') {
     console.error("No name specified");
-    return;
+    process.exit(1);
   }
   var body = {
     name: env
@@ -57,13 +57,18 @@ function listGroups() {
 function withIdFallback(env, action) {
   rest.get("/api/v1/groups").end(ur => {
     if (rest.check(ur, 200, "Could not list groups")) {
-      var id = env;
+      var id = null;
       ur.body.data.forEach(element => {
-        if (element.name == env) {
+        if (element.name == env || element.uuid == env) {
           id = element.uuid;
         }
       });
-      action(id);
+      if (id == null) {
+        console.error("Could not find group '" + env + "'");
+        process.exit(1);
+      } else {
+        action(id);
+      }
     }
   });
 }
@@ -75,16 +80,19 @@ program
 
 program
   .command("add [name]")
+  .alias("a")
   .description("Add a new group.")
   .action(addGroup);
 
 program
   .command("remove [name/uuid]")
+  .alias("r")
   .description("Remove the group.")
   .action(removeGroup);
 
 program
   .command("list")
+  .alias("l")
   .description("List all groups.")
   .action(listGroups);
 
