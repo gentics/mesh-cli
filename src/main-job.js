@@ -1,7 +1,8 @@
 'use strict';
 
 const program = require('commander');
-const clui = require('clui');
+const Table = require('cli-table');
+const rest = require("./rest");
 
 function clearJob() {
     var id = null;
@@ -9,7 +10,18 @@ function clearJob() {
 }
 
 function listJobs() {
-    rest.get(cfg, "/api/v1/admin/jobs");
+    rest.get("/api/v1/admin/jobs").end(r => {
+        var json = r.body;
+        var table = new Table({
+            head: ['UUID', 'Name']
+            , colWidths: [34, 15]
+        });
+
+        json.data.forEach((element) => {
+            table.push([element.uuid, element.name]);
+        });
+        console.log(table.toString());
+    });
 }
 
 program
@@ -26,8 +38,6 @@ program
     .command("list")
     .description("List jobs.")
     .action(listJobs);
-
-
 
 program.parse(process.argv);
 

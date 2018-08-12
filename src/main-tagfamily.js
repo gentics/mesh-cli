@@ -3,20 +3,25 @@
 
 const program = require('commander');
 const rest = require("./rest");
-const lists = require("./lists");
-const clui = require('clui');
-const clc = require('cli-color');
-const Line = clui.Line;
+const Table = require('cli-table');
 
-function addTagFamily() {
+function addTagFamily(env) {
     var project = null;
-    rest.post(cfg, "/api/v1/" + project + "/tagfamily");
+    var body = {
+        name: env
+    };
+    rest.post("/api/v1/" + project + "/tagfamily", body).end(r => {
+        console.dir(r.body);
+    });
 }
 
 function removeTagFamily(env) {
-    var id = null;
     var project = null;
-    rest.delete(cfg, "/api/v1/" + project + "/tagfamily/" + id);
+    withIdFallback(env, id => {
+        rest.del("/api/v1/" + project + "/tagfamily/" + id).end(r => {
+            console.dir(r.body);
+        });
+    });
 }
 
 function listTagFamilies(env) {
@@ -29,35 +34,28 @@ function listTagFamilies(env) {
         }
 
         var json = r.body;
-        var buffer = lists.buffer();
-
-        var header = new Line(buffer)
-            .column('UUID', 34, [clc.cyan])
-            .column('Username', 15, [clc.cyan])
-            .column('Firstname', 30, [clc.cyan])
-            .column('Lastname', 30, [clc.cyan])
-            .column('Groups', 30, [clc.cyan])
-            .fill()
-            .store();
-
-        json.data.forEach((element) => {
-            var groups = new Array();
-            element.groups.forEach(group => {
-                groups.push(group.name);
-            });
-            var groupsStr = "[" + groups.join() + "]";
-            new Line(buffer)
-                .column(element.uuid, 34)
-                .column(element.username || "-", 15)
-                .column(element.firstname || "-", 30)
-                .column(element.lastname || "-", 30)
-                .column(groupsStr, 30)
-                .fill()
-                .store();
+        var table = new Table({
+            head: ['UUID', 'Name']
+            , colWidths: [34, 15]
         });
 
-        buffer.output();
+        json.data.forEach((element) => {
+            table.push([element.uuid, element.name]);
+        });
+        console.log(table.toString());
 
+    });
+}
+
+function withIdFallback(env, action) {
+    rest.get("/api/v1/" + project + "/tagfamilies").end(ur => {
+        var id = env;
+        ur.body.data.forEach(element => {
+            if (element.name == env) {
+                id = element.uuid;
+            }
+        });
+        action(id);
     });
 }
 

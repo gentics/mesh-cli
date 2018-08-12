@@ -2,39 +2,41 @@
 
 const program = require('commander');
 const rest = require("./rest");
-const lists = require("./lists");
-const clui = require('clui');
-const clc = require('cli-color');
-const Line = clui.Line;
+const Table = require('cli-table');
+const debug = require('debug');
 
-function addRole() {
-  rest.post(cfg, "/api/v1/roles");
+function addRole(env) {
+  var body = {
+    name: env
+  };
+  rest.post("/api/v1/roles", body).end(r => {
+    console.dir(r.body);
+  });
 }
 
 function removeRole(env) {
-  var id = null;
-  rest.delete(cfg, "/api/v1/roles/" + id);
+  withIdFallback(env, id => {
+    rest.del("/api/v1/roles/" + id).end(r => {
+      console.dir(r);
+    });
+  });
 }
 
-
-function chmod() {
+function chmod(env) {
   var id = null;
   var path = null;
-  rest.post(cfg, "/api/v1/roles/" + id + "/permissions/" + path);
+  rest.post("/api/v1/roles/" + id + "/permissions/" + path).end(r => {
+    console.dir(r.body);
+  });
 }
 
 function listRoles() {
   rest.get("/api/v1/roles").end(r => {
-
     var json = r.body;
-    var buffer = lists.buffer();
-
-    var header = new Line(buffer)
-      .column('UUID', 34, [clc.cyan])
-      .column('Name', 15, [clc.cyan])
-      .column('Groups', 20, [clc.cyan])
-      .fill()
-      .store();
+    var table = new Table({
+      head: ['UUID', 'Name', 'Groups']
+      , colWidths: [34, 15, 20]
+    });
 
     json.data.forEach((element) => {
       var groups = new Array();
@@ -44,15 +46,21 @@ function listRoles() {
 
       var groupsStr = "[" + groups.join() + "]";
 
-      new Line(buffer)
-        .column(element.uuid, 34)
-        .column(element.name || "-", 15)
-        .column(groupsStr)
-        .fill()
-        .store();
+      table.push([element.uuid, element.name, groupsStr]);
     });
+    console.log(table.toString());
+  });
+}
 
-    buffer.output();
+function withIdFallback(env, action) {
+  rest.get("/api/v1/roles").end(ur => {
+    var id = env;
+    ur.body.data.forEach(element => {
+      if (element.name == env) {
+        id = element.uuid;
+      }
+    });
+    action(id);
   });
 }
 

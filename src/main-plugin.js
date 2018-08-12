@@ -2,41 +2,29 @@
 
 const program = require('commander');
 const rest = require("./rest");
-const lists = require("./lists");
-const clui = require('clui');
-const clc = require('cli-color');
-const Line = clui.Line;
+const Table = require('cli-table');
 
 function install(env) {
-    rest.post(cfg, "/api/v1/admin/plugins");
+    rest.post("/api/v1/admin/plugins");
 }
 
 function uninstall(env) {
     var id = null;
-    rest.delete(cfg, "/api/v1/admin/plugins/" + id);
+    rest.delete("/api/v1/admin/plugins/" + id);
 }
 
 function listPlugins() {
     rest.get("/api/v1/admin/plugins").end(r => {
-
         var json = r.body;
-        var buffer = lists.buffer();
-
-        var header = new Line(buffer)
-            .column('UUID', 34, [clc.cyan])
-            .column('Name', 15, [clc.cyan])
-            .fill()
-            .store();
-
-        json.data.forEach((element) => {
-            new Line(buffer)
-                .column(element.uuid, 34)
-                .column(element.name || "-", 15)
-                .fill()
-                .store();
+        var table = new Table({
+            head: ['UUID', 'Name']
+            , colWidths: [34, 15]
         });
 
-        buffer.output();
+        json.data.forEach((element) => {
+            table.push([element.uuid, element.name]);
+        });
+        console.log(table.toString());
     });
 }
 

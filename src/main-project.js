@@ -2,11 +2,9 @@
 
 const program = require('commander');
 const rest = require("./rest");
-const lists = require("./lists");
-const clui = require('clui');
-const clc = require('cli-color');
+const Table = require('cli-table');
 const debug = require('debug');
-const Line = clui.Line;
+
 
 function addProject(env, options) {
   var name = options.name;
@@ -29,27 +27,18 @@ function listSchemas(env, options) {
   var path = "/api/v1/" + env + "/schemas";
   debug("Loading project schema list via {}", path);
   rest.get(path).end(r => {
-    
+
     var json = r.body;
-    var buffer = lists.buffer();
-
-    var header = new Line(buffer)
-      .column('UUID', 34, [clc.cyan])
-      .column('Name', 20, [clc.cyan])
-      .column('Version', 15, [clc.cyan])
-      .fill()
-      .store();
-
-    json.data.forEach((element) => {
-      new Line(buffer)
-        .column(element.uuid, 34)
-        .column(element.name || "-", 20)
-        .column(element.version || "-", 15)
-        .fill()
-        .store();
+    var table = new Table({
+      head: ['UUID', 'Name', 'Version']
+      , colWidths: [34, 15, 8]
     });
 
-    buffer.output();
+    json.data.forEach((element) => {
+      table.push([element.uuid, element.name, element.version])
+    });
+    console.log(table.toString());
+
   });
 }
 
@@ -58,25 +47,28 @@ function listProjects() {
   rest.get("/api/v1/projects").end(r => {
 
     var json = r.body;
-    var buffer = lists.buffer();
-
-    var header = new Line(buffer)
-      .column('UUID', 34, [clc.cyan])
-      .column('Name', 15, [clc.cyan])
-      .column('Base UUID', 34, [clc.cyan])
-      .fill()
-      .store();
-
-    json.data.forEach((element) => {
-      new Line(buffer)
-        .column(element.uuid, 34)
-        .column(element.name || "-", 15)
-        .column(element.rootNode.uuid, 30)
-        .fill()
-        .store();
+    var table = new Table({
+      head: ['UUID', 'Name', 'Base UUID']
+      , colWidths: [34, 15, 34]
     });
 
-    buffer.output();
+    json.data.forEach((element) => {
+      table.push([element.uuid, element.name, element.rootNode.uuid])
+    });
+    console.log(table.toString());
+
+  });
+}
+
+function withIdFallback(env, action) {
+  rest.get("/api/v1/projects").end(ur => {
+    var id = env;
+    ur.body.data.forEach(element => {
+      if (element.name == env) {
+        id = element.uuid;
+      }
+    });
+    action(id);
   });
 }
 

@@ -25,4 +25,14 @@ function get(path) {
         .send();
 }
 
-module.exports = { post, get }
+function del(path) {
+    var headers = {
+        'Accept': 'application/json',
+        'Authorization': "Bearer " + cfg.auth.key
+    }
+    return unirest.delete(cfg.server.endpoint + path)
+        .headers(headers)
+        .send();
+}
+
+module.exports = { post, get, del }

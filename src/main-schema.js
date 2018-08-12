@@ -2,9 +2,7 @@
 
 const program = require('commander');
 const rest = require("./rest");
-const lists = require("./lists");
-const clui = require('clui');
-const clc = require('cli-color');
+const Table = require('cli-table');
 const Line = clui.Line;
 
 
@@ -24,27 +22,16 @@ function linkSchema() {
 
 function listSchemas(env) {
     rest.get("/api/v1/schemas").end(r => {
-
         var json = r.body;
-        var buffer = lists.buffer();
-
-        var header = new Line(buffer)
-            .column('UUID', 34, [clc.cyan])
-            .column('Name', 20, [clc.cyan])
-            .column('Version', 15, [clc.cyan])
-            .fill()
-            .store();
-
-        json.data.forEach((element) => {
-            new Line(buffer)
-                .column(element.uuid, 34)
-                .column(element.name || "-", 20)
-                .column(element.version || "-", 15)
-                .fill()
-                .store();
+        var table = new Table({
+            head: ['UUID', 'Name', 'Version']
+            , colWidths: [34, 15, 8]
         });
 
-        buffer.output();
+        json.data.forEach((element) => {
+            table.push([element.uuid, element.name, element.version])
+        });
+        console.log(table.toString());
     });
 }
 
