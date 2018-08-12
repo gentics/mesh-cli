@@ -4,8 +4,9 @@
 const program = require('commander');
 const inquirer = require('inquirer');
 const Table = require('cli-table');
-const debug = require('debug');
+const debug = require('debug')('app');
 const rest = require("./rest");
+const common = require("./common");
 
 function addUser(env, options) {
     var questions = new Array();
@@ -143,6 +144,8 @@ program
     .usage("user [options] [command]")
     .name("mesh-cli");
 
+common.register();
+
 program
     .command('add [name]')
     .alias("a")
@@ -177,7 +180,10 @@ program
     //. Note that generating a new API key will invalidate the existing API key of the user.")
     .action(apiKey);
 
+
+debug("Parsing arguments");
 program.parse(process.argv);
+
 
 var noSubCommand = program.args.length === 0;
 if (noSubCommand) {

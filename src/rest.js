@@ -1,37 +1,45 @@
 'use strict';
 
 const unirest = require('unirest');
-const debug = require("debug");
+const debug = require("debug")("app");
 const config = require("./config");
-const cfg = config.get();
 
 function post(path, body) {
+    var cfg = config.get();
     var headers = {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
         'Authorization': "Bearer " + cfg.auth.key
     }
-    return unirest.post(cfg.server.endpoint + path)
+    var url = cfg.server.endpoint + path;
+    debug("POST " + url);
+    return unirest.post(url)
         .headers(headers)
         .send(body);
 }
 
 function get(path) {
+    var cfg = config.get();
     var headers = {
         'Accept': 'application/json',
         'Authorization': "Bearer " + cfg.auth.key
     }
-    return unirest.get(cfg.server.endpoint + path)
+    var url = cfg.server.endpoint + path;
+    debug("GET " + url);
+    return unirest.get(url)
         .headers(headers)
         .send();
 }
 
 function del(path) {
+    var cfg = config.get();
     var headers = {
         'Accept': 'application/json',
         'Authorization': "Bearer " + cfg.auth.key
     }
-    return unirest.delete(cfg.server.endpoint + path)
+    var url = cfg.server.endpoint + path;
+    debug("DELETE " + url);
+    return unirest.delete(url)
         .headers(headers)
         .send();
 }

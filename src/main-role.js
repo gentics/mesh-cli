@@ -4,6 +4,7 @@ const program = require('commander');
 const Table = require('cli-table');
 const debug = require('debug');
 const rest = require("./rest");
+const common = require("./common");
 
 function addRole(env) {
   if (typeof env === 'undefined') {
@@ -86,6 +87,8 @@ program
   .version('1.0.0')
   .usage("role [options] [command]")
   .name("mesh-cli");
+
+common.register();
 
 program
   .command("add [name]")

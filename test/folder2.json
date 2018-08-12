@@ -1,0 +1,27 @@
+{
+    "name": "folder2",
+    "displayField": "name",
+    "segmentField": "slug",
+    "container": true,
+    "description": "Folder schema to create containers for other nodes.",
+    "fields": [
+        {
+            "name": "slug",
+            "label": "Slug",
+            "required": false,
+            "type": "string"
+        },
+        {
+            "name": "slug1",
+            "label": "Slug1",
+            "required": false,
+            "type": "string"
+        },
+        {
+            "name": "name",
+            "label": "Name",
+            "required": false,
+            "type": "string"
+        }
+    ]
+}

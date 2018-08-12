@@ -7,7 +7,8 @@ const clear = require('clear');
 const debug = require('debug');
 const program = require('commander');
 const configure = require("./configure");
-
+const config = require("./config");
+const common = require("./common");
 
 function main() {
   program
@@ -16,11 +17,8 @@ function main() {
 
   configure.register();
 
-  program
-    .option("-e, --endpoint", "API endpoint. Default: http://localhost:8080")
-    .option("-k, --key", "API Key to be used")
-    .option("-d, --debug", "Turn on debug logging")
-
+  common.register();
+    program
     .command('docker', 'Docker specific commands')
     .alias("d")
     .command('user', 'User specific commands')
@@ -43,11 +41,6 @@ function main() {
     .command('admin', 'Administration specific commands')
     .alias("a");
 
-  program.on('--debug', function () {
-    console.log("DEBUG");
-    debug.enable;
-  });
-
   program.on('--help', function () {
     console.log('  Examples:');
     console.log('');
@@ -57,8 +50,8 @@ function main() {
     console.log('');
   });
 
-
   program.parse(process.argv);
+
 }
 
 main();

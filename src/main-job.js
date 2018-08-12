@@ -4,7 +4,7 @@ const program = require('commander');
 const Table = require('cli-table');
 const rest = require("./rest");
 
-function clearJob() {
+function clearJob(env, options) {
     var id = null;
     rest.delete("/api/v1/admin/jobs/" + id + "/error").end(r => {
         if (rest.check(r, 200, "Could not clear errors of job " + id)) {

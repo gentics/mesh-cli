@@ -1,0 +1,45 @@
+{
+    "uuid": "208d6a8f8bc845dd8d6a8f8bc8b5dd25",
+    "creator": {
+        "uuid": "1b352ecf6aeb4df7b52ecf6aeb7df781"
+    },
+    "created": "2018-08-11T02:35:54Z",
+    "editor": {
+        "uuid": "1b352ecf6aeb4df7b52ecf6aeb7df781"
+    },
+    "edited": "2018-08-11T02:35:54Z",
+    "displayField": "name",
+    "segmentField": "slug",
+    "container": true,
+    "version": "1.0",
+    "description": "Folder schema to create containers for other nodes.",
+    "name": "folder",
+    "fields": [
+        {
+            "name": "slug",
+            "label": "Slug",
+            "required": false,
+            "type": "string"
+        },
+        {
+            "name": "slug1",
+            "label": "Slug1",
+            "required": false,
+            "type": "string"
+        },
+        {
+            "name": "name",
+            "label": "Name",
+            "required": false,
+            "type": "string"
+        }
+    ],
+    "permissions": {
+        "create": true,
+        "read": true,
+        "update": true,
+        "delete": true,
+        "publish": true,
+        "readPublished": true
+    }
+}

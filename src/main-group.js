@@ -1,9 +1,10 @@
 'use strict';
 
 const program = require('commander');
-const rest = require("./rest");
 const Table = require('cli-table');
 const debug = require('debug');
+const common = require("./common");
+const rest = require("./rest");
 
 function addGroup(env, options) {
   if (typeof env === 'undefined') {
@@ -77,6 +78,8 @@ program
   .version('0.0.1')
   .usage("group [options] [command]")
   .name("mesh-cli");
+
+common.register();
 
 program
   .command("add [name]")

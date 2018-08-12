@@ -4,7 +4,7 @@ const program = require('commander');
 const homeConfig = require('home-config');
 const homedir = require('os').homedir();
 const path = require('path');
-const debug = require("debug");
+const debug = require("debug")("app");
 const fs = require('fs');
 
 const dirName = '.genticsmesh';
@@ -33,6 +33,10 @@ function storeKey(key) {
 }
 
 function get() {
+  if (program.endpoint) {
+    debug("Found endpoint option", program.endpoint)
+    cfg.server.endpoint = program.endpoint;
+  }
   return cfg;
 }
 

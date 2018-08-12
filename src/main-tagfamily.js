@@ -2,14 +2,15 @@
 'use strict';
 
 const program = require('commander');
-const rest = require("./rest");
 const Table = require('cli-table');
+const rest = require("./rest");
+const common = require("./common");
 
 function addTagFamily(env) {
     if (typeof env === 'undefined') {
         console.error("No name specified");
         process.exit(1);
-      }
+    }
     var project = null;
     var body = {
         name: env
@@ -74,6 +75,9 @@ program
     .version('1.0.0')
     .usage("user [options] [command]")
     .name("mesh-cli");
+
+common.register();
+
 
 program
     .command('add [name]')
