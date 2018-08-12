@@ -13,21 +13,34 @@ function addProject(env, options) {
     process.exit(1);
   }
   var body = {
-    name: name
+    name: env,
+    schema: {
+      name: "folder"
+    }
   };
-  rest.post(cfg, "/api/v1/projects", body);
+  rest.post("/api/v1/projects", body).end(r => {
+    console.dir(r.body);
+  });
 }
 
-function removeProject() {
-  var id = null;
-  rest.delete(cfg, "/api/v1/projects/" + id);
+function removeProject(env) {
+  withIdFallback(env, id => {
+    rest.del("/api/v1/projects/" + id).end(r => {
+      if (r.code == 204) {
+        console.log("Project " + env + " removed");
+      } else {
+        console.error("Error while removing project", r.code);
+        console.error(r.body);
+      }
+    });
+  });
 }
 
 function listSchemas(env, options) {
-  var path = "/api/v1/" + env + "/schemas";
+  var project = env;
+  var path = "/api/v1/" + project + "/schemas";
   debug("Loading project schema list via {}", path);
   rest.get(path).end(r => {
-
     var json = r.body;
     var table = new Table({
       head: ['UUID', 'Name', 'Version']
@@ -45,7 +58,6 @@ function listSchemas(env, options) {
 
 function listProjects() {
   rest.get("/api/v1/projects").end(r => {
-
     var json = r.body;
     var table = new Table({
       head: ['UUID', 'Name', 'Base UUID']
@@ -88,7 +100,6 @@ program
   .command("remove [name/uuid]")
   .description("Remove the project.")
   .action(removeProject);
-
 
 program
   .command("schemas [name/uuid]")
