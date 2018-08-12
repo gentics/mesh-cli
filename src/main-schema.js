@@ -6,18 +6,34 @@ const Table = require('cli-table');
 const Line = clui.Line;
 
 
-function addSchema() {
-    rest.post(cfg, "/api/v1/schemas");
+function addSchema(env, options) {
+    var body = {
+
+    };
+    rest.post("/api/v1/schemas", body).end(r => {
+        if (rest.check(r, 201, "Could not create schema")) {
+            console.log("Created schema '" + env + "'");
+        }
+    });
 }
 
-function updateSchema() {
-    rest.post(cfg, "/api/v1/schemas");
+function updateSchema(env, options) {
+    var body = {
+
+    };
+    rest.post("/api/v1/schemas", body).end(r => {
+        if (rest.check(r, 200, "Could not update schema")) {
+            console.log("Updated schema '" + env + "'");
+        }
+    });
 }
 
 function linkSchema() {
     var project = null;
     var uuid = null;
-    rest.post(cfg, "/api/v1/" + project + "/schemas/" + uuid);
+    rest.post("/api/v1/" + project + "/schemas/" + uuid).end(r => {
+
+    });
 }
 
 function listSchemas(env) {

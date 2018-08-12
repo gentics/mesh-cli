@@ -1,6 +1,7 @@
 'use strict';
 
 const unirest = require('unirest');
+const debug = require("debug");
 const config = require("./config");
 const cfg = config.get();
 
@@ -35,4 +36,22 @@ function del(path) {
         .send();
 }
 
-module.exports = { post, get, del }
+function check(r, expectedCode, message) {
+    if (r.body) {
+        debug("Response:", r.body);
+    }
+    if (r.error || r.code != expectedCode) {
+        var info = "";
+        if (r.body && r.body.message) {
+            info = ": " + r.body.message;
+        }
+        console.error(message + info);
+        if (r.error.code) {
+            console.error("Error: ", r.error.code);
+        }
+        return false;
+    }
+    return true;
+}
+
+module.exports = { post, get, del, check }

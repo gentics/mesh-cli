@@ -14,11 +14,8 @@ function addGroup(env, options) {
     name: env
   };
   rest.post("/api/v1/groups", body).end(r => {
-    if (r.code === 201) {
-      console.log("Created group " + env);
-    } else {
-      console.error("Error while creating group", r.code);
-      console.error(r.body);
+    if (rest.check(r, 201, "Could not create group")) {
+      console.log("Created group '" + env + "'");
     }
   });
 }
@@ -26,42 +23,48 @@ function addGroup(env, options) {
 function removeGroup(env) {
   withIdFallback(env, id => {
     rest.del("/api/v1/groups/" + id).end(r => {
-      console.dir(r.body);
+      if (rest.check(r, 200, "Could not remove group '" + id + "'")) {
+        console.log("Removed group '" + id + "'");
+      }
     });
   });
 }
 
 function listGroups() {
   rest.get("/api/v1/groups").end(r => {
-    var json = r.body;
-    var table = new Table({
-      head: ['UUID', 'Name', 'Roles']
-      , colWidths: [34, 15, 20]
-    });
-
-    json.data.forEach((element) => {
-      var roles = new Array();
-      element.roles.forEach(role => {
-        roles.push(role.name);
+    if (rest.check(r, 200, "Could not list groups")) {
+      var json = r.body;
+      var table = new Table({
+        head: ['UUID', 'Name', 'Roles'],
+        colWidths: [34, 15, 20]
       });
 
-      var rolesStr = "[" + roles.join() + "]";
+      json.data.forEach((element) => {
+        var roles = new Array();
+        element.roles.forEach(role => {
+          roles.push(role.name);
+        });
 
-      table.push([element.uuid, element.name, rolesStr]);
-    });
-    console.log(table.toString());
+        var rolesStr = "[" + roles.join() + "]";
+
+        table.push([element.uuid, element.name, rolesStr]);
+      });
+      console.log(table.toString());
+    }
   });
 }
 
 function withIdFallback(env, action) {
   rest.get("/api/v1/groups").end(ur => {
-    var id = env;
-    ur.body.data.forEach(element => {
-      if (element.name == env) {
-        id = element.uuid;
-      }
-    });
-    action(id);
+    if (rest.check(ur, 200, "Could not list groups")) {
+      var id = env;
+      ur.body.data.forEach(element => {
+        if (element.name == env) {
+          id = element.uuid;
+        }
+      });
+      action(id);
+    }
   });
 }
 

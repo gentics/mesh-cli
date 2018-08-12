@@ -89,19 +89,21 @@ function register() {
  */
 function gen(username, password) {
   var body = { "username": username, "password": password };
-  rest.post("/api/v1/auth/login", body)
-    .end(loginResponse => {
-      debug("Response:", loginResponse.body);
+  rest.post("/api/v1/auth/login", body).end(loginResponse => {
+    if (rest.check(loginResponse, 200, "Login failed")) {
       config.storeKey(loginResponse.body.token);
       rest.get("/api/v1/auth/me").end(meResponse => {
-        debug("Response:", meResponse.body);
-        var id = meResponse.body.uuid;
-        rest.post("/api/v1/users/" + id + "/token").end(response => {
-          debug("Response:", response.body);
-          config.storeKey(response.body.token);
-        });
-      })
-    });
+        if (rest.check(meResponse, 200, "Could not load user information")) {
+          var id = meResponse.body.uuid;
+          rest.post("/api/v1/users/" + id + "/token").end(response => {
+            if (rest.check(response, 200, "Could not generate API token")) {
+              config.storeKey(response.body.token);
+            }
+          });
+        }
+      });
+    }
+  });
 }
 
 

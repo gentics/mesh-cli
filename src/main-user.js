@@ -30,11 +30,8 @@ function addUser(env, options) {
             password: options.pass || answers.password
         };
         rest.post("/api/v1/users", body).end(r => {
-            if (r.code === 201) {
-                console.log("Created group " + body.username);
-            } else {
-                console.error("Error while creating group", r.code);
-                console.error(r.body);
+            if (rest.check(r, 201, "Could not create user")) {
+                console.log("Created user '" + body.username + "'");
             }
         });
 

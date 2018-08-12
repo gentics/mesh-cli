@@ -22,16 +22,26 @@ function main() {
     .option("-d, --debug", "Turn on debug logging")
 
     .command('docker', 'Docker specific commands')
+    .alias("d")
     .command('user', 'User specific commands')
+    .alias("u")
     .command('role', 'Role specific commands')
+    .alias("r")
     .command('group', 'Group specific commands')
+    .alias("g")
     .command('project', 'Project specific commands')
+    .alias("p")
     .command('tagfamily', 'TagFamily specific commands')
+    .alias("tf")
     .command('plugin', 'Plugin specific commands')
+    .alias("pl")
     .command('job', 'Job specific commands')
+    .alias("j")
     .command('schema', 'Schema specific commands')
     .command('sync', 'Sync specific commands')
-    .command('admin', 'Administration specific commands');
+    .alias("s")
+    .command('admin', 'Administration specific commands')
+    .alias("a");
 
   program.on('--debug', function () {
     console.log("DEBUG");

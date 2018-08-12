@@ -1,17 +1,32 @@
 'use strict';
 
 const program = require('commander');
+const Table = require('cli-table');
+const debug = require('debug');
+const rest = require("./rest");
 
 function status() {
-    rest.get(cfg, "/api/v1/admin/status");
+    rest.get("/api/v1/admin/status").end(r => {
+        if (rest.check(r, 200, "Could invoke backup")) {
+            console.dir(r.body);
+        }
+    });
 }
 
 function indexSync(env, options) {
-    rest.post(cfg, "/api/v1/search/sync");
+    rest.post("/api/v1/search/sync").end(r => {
+        if (rest.check(r, 200, "Could invoke index sync")) {
+            console.log("Invoked index sync");
+        }
+    });
 }
 
 function backup(env, options) {
-    rest.post(cfg, "/api/v1/admin/backup");
+    rest.post("/api/v1/admin/backup").end(r => {
+        if (rest.check(r, 200, "Could invoke backup")) {
+            console.log("Invoked server side backup process.");
+        }
+    });
 }
 
 program

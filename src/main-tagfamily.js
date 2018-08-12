@@ -11,7 +11,9 @@ function addTagFamily(env) {
         name: env
     };
     rest.post("/api/v1/" + project + "/tagfamily", body).end(r => {
-        console.dir(r.body);
+        if (rest.check(r, 201, "Could not create tagfamily '" + env + "' in project '" + project + "'")) {
+            console.log("Created tagfamily '" + r.body.uuid);
+        }
     });
 }
 
@@ -19,7 +21,9 @@ function removeTagFamily(env) {
     var project = null;
     withIdFallback(env, id => {
         rest.del("/api/v1/" + project + "/tagfamily/" + id).end(r => {
-            console.dir(r.body);
+            if (rest.check(r, 200, "Could not delete tagfamily of project " + project)) {
+                console.log("Removed tag family " + id);
+            }
         });
     });
 }
@@ -28,34 +32,32 @@ function listTagFamilies(env) {
     var project = null;
     var path = "/api/v1/" + project + "/tagfamiles";
     rest.get(path).end(r => {
-        if (r.code != 200) {
-            console.error("Could not find endpoint for path " + path);
-            return;
+        if (rest.check(r, 200, "Could not load tagfamilies of project " + project)) {
+            var json = r.body;
+            var table = new Table({
+                head: ['UUID', 'Name']
+                , colWidths: [34, 15]
+            });
+
+            json.data.forEach((element) => {
+                table.push([element.uuid, element.name]);
+            });
+            console.log(table.toString());
         }
-
-        var json = r.body;
-        var table = new Table({
-            head: ['UUID', 'Name']
-            , colWidths: [34, 15]
-        });
-
-        json.data.forEach((element) => {
-            table.push([element.uuid, element.name]);
-        });
-        console.log(table.toString());
-
     });
 }
 
 function withIdFallback(env, action) {
     rest.get("/api/v1/" + project + "/tagfamilies").end(ur => {
-        var id = env;
-        ur.body.data.forEach(element => {
-            if (element.name == env) {
-                id = element.uuid;
-            }
-        });
-        action(id);
+        if (rest.check(ur, 200, "Could not load tagfamilies of project " + project)) {
+            var id = env;
+            ur.body.data.forEach(element => {
+                if (element.name == env) {
+                    id = element.uuid;
+                }
+            });
+            action(id);
+        }
     });
 }
 
