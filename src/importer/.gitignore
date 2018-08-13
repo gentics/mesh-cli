@@ -1,0 +1,10 @@
+localconfig.json
+node_modules
+
+# we want to ignore the content of the directories but not the directories themselves
+data/microschemas/*
+!data/microschemas/.keep
+data/schemas/*
+!data/schemas/.keep
+data/nodes/*
+!data/nodes/.keep

@@ -1,0 +1,17 @@
+{
+  "name": "mesh-import",
+  "version": "1.0.0",
+  "description": "",
+  "main": "config.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "format-json-pretty": "^1.0.1",
+    "mesh-api": "0.0.14",
+    "q": "^1.5.1"
+  }
+}

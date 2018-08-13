@@ -179,7 +179,7 @@ common.register();
 program
     .command("add [filename]")
     .alias("a")
-    .description("Add a new schema via stdin or via file.")
+    .description("Add a new schema via stdin or file.")
     .action(addSchema);
 
 program
@@ -194,11 +194,16 @@ program
     .description("Get the schema.")
     .action(getSchema);
 
+program
+    .command("validate [filename]")
+    .alias("v")
+    .description("Validate the schema via stdin or file.")
+    .action(getSchema);
 
 program
     .command("update [filename]")
     .alias("u")
-    .description("Update schema via stdin or via file.")
+    .description("Update schema via stdin or file.")
     .action(updateSchema);
 
 program
