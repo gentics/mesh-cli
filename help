@@ -1,0 +1,42 @@
+
+Usage:
+
+    mesh-cli [options] <type> <command> <args>
+
+Options:
+
+    -e, --endpoint [url]  API endpoint. (default: http://localhost:8080)
+    -k, --key [key]       API Key to be used
+    -d, --debug           Turn on debug logging
+    -v, --version         output the version number
+
+Commands:
+
+  Administrative
+
+    configure | config      Configure the CLI
+    shell     | sh          Start the interactive shell
+    docker    | d           Docker commands
+    admin     | a           Administration commands
+    plugin    | pl          Plugin commands
+    sync      | s           Sync commands
+    job       | j           Job commands
+  
+  Management
+
+    schema                  Schema commands
+    user      | u           User commands
+    role      | r           Role commands
+    group     | g           Group commands
+    project   | p           Project commands
+    tagfamily | tf          TagFamily commands
+  
+  Other
+
+    help [cmd]              display help for [cmd]
+
+  Examples:
+
+    $ mesh-cli project schemas demo
+    $ mesh-cli user list
+    $ mesh-cli user add
