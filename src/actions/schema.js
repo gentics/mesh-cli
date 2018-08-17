@@ -3,15 +3,17 @@
 const fs = require('fs');
 const program = require('commander');
 const Table = require('cli-table');
-const rest = require("./rest");
-const common = require("./common");
+const rest = require("../rest");
+const common = require("../common");
+
+
 
 /**
  * Handle the add schema command.
  * @param {string} env 
  * @param {object} options 
  */
-function addSchema(env, options) {
+function add(env, options) {
     // 1. Check whether a filename was specified
     if (env) {
         if (!fs.existsSync(env)) {
@@ -53,7 +55,7 @@ function addSchema(env, options) {
 }
 
 
-function updateSchema(env, options) {
+function update(env, options) {
     if (env) {
         if (!fs.existsSync(env)) {
             console.error("Could not find file '" + env + "'");
@@ -98,7 +100,7 @@ function updateSchema(env, options) {
     }
 }
 
-function removeSchema(env) {
+function remove(env) {
     if (typeof env === 'undefined') {
         console.error("No name specified");
         process.exit(1);
@@ -114,7 +116,7 @@ function removeSchema(env) {
 
 
 
-function getSchema(name, options) {
+function get(name, options) {
     if (typeof name === 'undefined') {
         console.error("No name specified");
         process.exit(1);
@@ -130,7 +132,7 @@ function getSchema(name, options) {
 
 
 
-function listSchemas(env, options) {
+function list(env, options) {
     rest.get("/api/v1/schemas").end(r => {
         if (rest.check(r, 200, "Could list schemas")) {
 
@@ -168,55 +170,4 @@ function withIdFallback(env, action) {
     });
 }
 
-
-program
-    .version('1.0.0')
-    .usage("schema [options] [command]")
-    .name("mesh-cli");
-
-common.register();
-
-program
-    .command("add [filename]")
-    .alias("a")
-    .description("Add a new schema via stdin or file.")
-    .action(addSchema);
-
-program
-    .command("remove [name]")
-    .alias("r")
-    .description("Remove schema.")
-    .action(removeSchema);
-
-program
-    .command("get [name]")
-    .alias("g")
-    .description("Get the schema.")
-    .action(getSchema);
-
-program
-    .command("validate [filename]")
-    .alias("v")
-    .description("Validate the schema via stdin or file.")
-    .action(getSchema);
-
-program
-    .command("update [filename]")
-    .alias("u")
-    .description("Update schema via stdin or file.")
-    .action(updateSchema);
-
-program
-    .command("list")
-    .alias("l")
-    .description("List all schemas.")
-    .action(listSchemas);
-
-
-
-program.parse(process.argv);
-
-var noSubCommand = program.args.length === 0;
-if (noSubCommand) {
-    program.help();
-}
+module.exports = { list, add, remove, get, update }

@@ -3,13 +3,6 @@
 const program = require('commander');
 
 
-function pull(env, options) {
-
-}
-
-function push() {
-
-}
 
 program
     .version('1.0.0')

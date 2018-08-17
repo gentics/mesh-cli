@@ -3,8 +3,8 @@
 const program = require('commander');
 const inquirer = require('inquirer');
 const debug = require("debug");
-const rest = require("./rest");
-const config = require("./config");
+const rest = require("../rest");
+const config = require("../config");
 const cfg = config.get();
 
 function configure() {
@@ -12,7 +12,11 @@ function configure() {
 }
 
 function checkEndpoint() {
-  var endpointValue = cfg.server.endpoint || "http://localhost:8080";
+
+  var endpointValue = "http://localhost:8080";
+  if (cfg.server && cfg.server.endpoint) {
+    endpointValue = cfg.server.endpoint;
+  }
   return inquirer.prompt([{
     name: 'endpoint',
     type: 'input',
@@ -76,8 +80,7 @@ function promptKey() {
 
 function register() {
   program
-    .command("configure")
-    .alias("config")
+    .command("configure", { noHelp: true })
     .description("Configure the CLI")
     .action(configure);
 }
@@ -88,15 +91,14 @@ function register() {
  * @param {string} password 
  */
 function gen(username, password) {
-  var body = { "username": username, "password": password };
-  rest.post("/api/v1/auth/login", body).end(loginResponse => {
+  rest.login(username, password).end(loginResponse => {
     if (rest.check(loginResponse, 200, "Login failed")) {
       config.storeKey(loginResponse.body.token);
       rest.get("/api/v1/auth/me").end(meResponse => {
         if (rest.check(meResponse, 200, "Could not load user information")) {
           var id = meResponse.body.uuid;
           rest.post("/api/v1/users/" + id + "/token").end(response => {
-            if (rest.check(response, 200, "Could not generate API token")) {
+            if (rest.check(response, 201, "Could not generate API token")) {
               config.storeKey(response.body.token);
             }
           });

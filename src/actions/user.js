@@ -1,14 +1,41 @@
-#!/usr/bin/env node
 'use strict';
 
-const program = require('commander');
 const inquirer = require('inquirer');
 const Table = require('cli-table');
 const debug = require('debug')('app');
-const rest = require("./rest");
-const common = require("./common");
+const rest = require("../rest");
+const common = require("../common");
 
-function addUser(env, options) {
+function list(env) {
+    rest.get("/api/v1/users").end(r => {
+        if (rest.check(r, 200, "Could not list users")) {
+            var json = r.body;
+            var table = new Table({
+                head: ['UUID', 'Username', 'Firstname', 'Lastname', 'Groups'],
+                colWidths: [34, 15, 20, 30, 30]
+            });
+
+            json.data.forEach((element) => {
+                var groups = new Array();
+                element.groups.forEach(group => {
+                    groups.push(group.name);
+                });
+                var groupsStr = "[" + groups.join() + "]";
+
+                table.push([element.uuid, element.username, element.firstname || "-", element.lastname || "-", groupsStr]);
+            });
+            console.log(table.toString());
+        }
+    });
+}
+
+/**
+ * Add a new user.
+ * 
+ * @param {string} env 
+ * @param {object} options 
+ */
+function add(env, options) {
     var questions = new Array();
     if (typeof env === 'undefined') {
         questions.push({
@@ -40,14 +67,14 @@ function addUser(env, options) {
 
 }
 
-function removeUser(env) {
+function remove(env) {
     if (typeof env === 'undefined') {
         console.error("No name/uuid specified");
         return;
     }
     withIdFallback(env, id => {
         rest.del("/api/v1/users/" + id).end(r => {
-            if (rest.check(r, 200, "Could remove user " + env)) {
+            if (rest.check(r, 204, "Could not remove user " + env)) {
                 console.log("Removed user '" + id + "'");
             }
         });
@@ -88,28 +115,6 @@ function passwd(env, options) {
     });
 }
 
-function listUsers(env) {
-    rest.get("/api/v1/users").end(r => {
-        if (rest.check(r, 200, "Could not list users")) {
-            var json = r.body;
-            var table = new Table({
-                head: ['UUID', 'Username', 'Firstname', 'Lastname', 'Groups'],
-                colWidths: [34, 15, 20, 30, 30]
-            });
-
-            json.data.forEach((element) => {
-                var groups = new Array();
-                element.groups.forEach(group => {
-                    groups.push(group.name);
-                });
-                var groupsStr = "[" + groups.join() + "]";
-
-                table.push([element.uuid, element.username, element.firstname || "-", element.lastname || "-", groupsStr]);
-            });
-            console.log(table.toString());
-        }
-    });
-}
 
 function apiKey(env, options) {
     withIdFallback(env, id => {
@@ -139,53 +144,4 @@ function withIdFallback(env, action) {
     });
 }
 
-program
-    .version('1.0.0')
-    .usage("user [options] [command]")
-    .name("mesh-cli");
-
-common.register();
-
-program
-    .command('add [name]')
-    .alias("a")
-    .option("-p, --pass [password]", "Password")
-    .description("Add a new user.")
-    .action(addUser);
-
-program
-    .command('remove [name/uuid]')
-    .alias("r")
-    .description("Remove the user.")
-    .action(removeUser);
-
-program
-    .command('list')
-    .alias("l")
-    .description("List all users.")
-    .action(listUsers);
-
-program
-    .command('passwd [name/uuid]')
-    .alias("p")
-    .description("Change the password.")
-    .option("-u, --user [username]", "Username")
-    .option("-p, --pass [password]", "Password")
-    .action(passwd);
-
-program
-    .command("key [name/uuid]")
-    .alias("k")
-    .description("Generate a new API key.")
-    //. Note that generating a new API key will invalidate the existing API key of the user.")
-    .action(apiKey);
-
-
-debug("Parsing arguments");
-program.parse(process.argv);
-
-
-var noSubCommand = program.args.length === 0;
-if (noSubCommand) {
-    program.help();
-}
+module.exports = { list, add, remove }

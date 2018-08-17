@@ -1,12 +1,10 @@
-#!/usr/bin/env node
 'use strict';
 
-const program = require('commander');
 const Table = require('cli-table');
-const rest = require("./rest");
-const common = require("./common");
+const rest = require("../rest");
+const common = require("../common");
 
-function addTagFamily(env) {
+function add(env) {
     if (typeof env === 'undefined') {
         console.error("No name specified");
         process.exit(1);
@@ -22,18 +20,18 @@ function addTagFamily(env) {
     });
 }
 
-function removeTagFamily(env) {
+function remove(env) {
     var project = null;
     withIdFallback(env, id => {
         rest.del("/api/v1/" + project + "/tagfamily/" + id).end(r => {
-            if (rest.check(r, 200, "Could not delete tagfamily of project " + project)) {
+            if (rest.check(r, 204, "Could not delete tagfamily of project " + project)) {
                 console.log("Removed tag family '" + id + "'");
             }
         });
     });
 }
 
-function listTagFamilies(env) {
+function list(env) {
     var project = null;
     var path = "/api/v1/" + project + "/tagfamiles";
     rest.get(path).end(r => {
@@ -71,32 +69,5 @@ function withIdFallback(env, action) {
     });
 }
 
-program
-    .version('1.0.0')
-    .usage("user [options] [command]")
-    .name("mesh-cli");
 
-common.register();
-
-
-program
-    .command('add [name]')
-    .description("Add a new tagfamily.")
-    .action(addTagFamily);
-
-program
-    .command('remove [name/uuid]')
-    .description("Remove the tagfamily.")
-    .action(removeTagFamily);
-
-program
-    .command('list')
-    .description("List all tag families.")
-    .action(listTagFamilies);
-
-program.parse(process.argv);
-
-var noSubCommand = program.args.length === 0;
-if (noSubCommand) {
-    program.help();
-}
+module.exports = { list, add, remove }
