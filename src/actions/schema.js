@@ -147,12 +147,9 @@ function update(path, options) {
     }
 }
 
-function remove(env) {
-    if (typeof env === 'undefined') {
-        console.error("No name specified");
-        process.exit(1);
-    }
-    withIdFallback(env, id => {
+function remove(name) {
+    common.isSet(name, "No name or uuid specified.")
+    withIdFallback(name, id => {
         rest.del("/api/v1/schemas/" + id).end(r => {
             if (rest.check(r, 204, "Could not remove schema " + id)) {
                 console.log("Schema '" + id + "' removed");
@@ -164,10 +161,7 @@ function remove(env) {
 
 
 function get(name, options) {
-    if (typeof name === 'object') {
-        console.error("No name specified");
-        process.exit(1);
-    }
+    common.isSet(name, "No name or uuid specified.")
     withIdFallback(name, id => {
         rest.get("/api/v1/schemas/" + id).end(r => {
             if (rest.check(r, 200, "Could not load schema")) {

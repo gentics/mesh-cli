@@ -6,7 +6,7 @@ const debug = require('debug')('app');
 const rest = require("../inc/rest");
 const common = require("../inc/common");
 
-function list(env) {
+function list() {
     rest.get("/api/v1/users").end(r => {
         if (rest.check(r, 200, "Could not list users")) {
             var json = r.body;
@@ -28,6 +28,23 @@ function list(env) {
         }
     });
 }
+
+/**
+ * Get the user.
+ * 
+ * @param {string} name 
+ */
+function get(name) {
+    common.isSet(name, "No name or uuid specified.")
+    withIdFallback(name, id => {
+        rest.get("/api/v1/users/" + id).end(r => {
+            if (rest.check(r, 200, "Could not load '" + id + "'")) {
+                console.log(JSON.stringify(r.body, null, 4));
+            }
+        });
+    });
+}
+
 
 /**
  * Add a new user.
@@ -142,4 +159,4 @@ function withIdFallback(env, action) {
     });
 }
 
-module.exports = { list, add, remove }
+module.exports = { list, add, remove, get }

@@ -16,6 +16,7 @@ const user = require('./actions/user');
 const role = require('./actions/role');
 const group = require('./actions/group');
 
+const node = require('./actions/node');
 const tagfamily = require('./actions/tagfamily');
 const schema = require('./actions/schema');
 
@@ -59,6 +60,12 @@ program
     .alias("s")
     .description("Remove schema.")
     .action(schema.remove);
+
+program
+    .command("node [project] [path|uuid]")
+    .alias("n")
+    .description("Remove node.")
+    .action(node.remove);
 
 program
     .command("tagfamily [name/uuid]")

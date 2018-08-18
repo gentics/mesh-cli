@@ -14,6 +14,7 @@ const group = require("./actions/group");
 const project = require("./actions/project");
 const tagfamily = require("./actions/tagfamily");
 const schema = require("./actions/schema");
+const node = require("./actions/node");
 
 const job = require("./actions/job");
 const plugin = require("./actions/plugin");
@@ -26,13 +27,13 @@ program
 
 program
     .command("schema [name]")
-    .alias("g")
+    .alias("s")
     .description("Get the schema.")
     .action(schema.get);
 
 program
     .command("project [name]")
-    .alias("g")
+    .alias("p")
     .description("Get the project.")
     .action(project.get);
 
@@ -53,6 +54,12 @@ program
     .alias("g")
     .description("Get the group.")
     .action(project.get);
+
+program
+    .command("node [project] [path|id]")
+    .alias("n")
+    .description("Get the node.")
+    .action(node.get);
 
 program
     .command("tagfamily [project] [name]")
