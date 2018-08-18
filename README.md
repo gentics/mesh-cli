@@ -100,8 +100,7 @@ mesh-cli configure
 * Add recursive options to delete
 * Add publish, unpublish commands
 * Add language, branch option to node get
-* Add error on invalid token
 * Document sub commands
 * Add examples to sub commands
 * Publish to NPM
-* Implement Link/Unlink
+

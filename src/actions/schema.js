@@ -32,7 +32,6 @@ function add(path, options) {
         }
         // Otherwise check stdin
     } else {
-
         var handled = false;
         process.stdin.resume();
         process.stdin.setEncoding('utf8');
@@ -42,7 +41,7 @@ function add(path, options) {
             var json = JSON.parse(data);
             rest.post("/api/v1/schemas", json).end(r => {
                 if (rest.check(r, 201, "Could not create schema")) {
-                    var json =  r.body;
+                    var json = r.body;
                     log("Created schema '" + json.name + "' UUID: " + json.uuid);
                 }
             });
@@ -169,7 +168,8 @@ function remove(name) {
 }
 
 /**
- * Load the schema
+ * Load the schema.
+ * 
  * @param {string} name 
  * @param {object} options 
  */
@@ -184,12 +184,46 @@ function get(name, options) {
     });
 }
 
-
-
 /**
  * List schemas (globally)
+ * 
+ * @param {string} projectName
  */
-function list() {
+function list(projectName) {
+    if (typeof projectName === 'string') {
+        listSchemas(projectName);
+    } else {
+        listGlobalSchemas();
+    }
+}
+
+/**
+ * List all project schemas.
+ * 
+ * @param {string} project 
+ * @param {object} options 
+ */
+function listSchemas(project, options) {
+    common.isSet(project, "No name or uuid specified");
+    rest.get("/api/v1/" + project + "/schemas").end(r => {
+        if (rest.check(r, 200, "Could not load schemas of project '" + project + "'")) {
+            var json = r.body;
+            var table = new Table({
+                head: ['UUID', 'Name', 'Version'],
+                colWidths: [34, 15, 10]
+            });
+
+            json.data.forEach((element) => {
+                table.push([element.uuid, element.name, element.version])
+            });
+            log("Project '" + project + "' schemas:");
+            log(table.toString());
+        }
+    });
+}
+
+
+function listGlobalSchemas() {
     rest.get("/api/v1/schemas").end(r => {
         if (rest.check(r, 200, "Could not list schemas")) {
 
@@ -202,11 +236,11 @@ function list() {
             json.data.forEach((element) => {
                 table.push([element.uuid, element.name, element.version])
             });
+            log("Gobal schemas:");
             log(table.toString());
         }
     });
 }
-
 
 /**
  * Try to locate the schema with the given name.

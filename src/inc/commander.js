@@ -17,7 +17,7 @@ Command.prototype.group = function (name) {
 }
 
 Command.prototype.padWidth = () => {
-    return 32;
+    return 39;
 }
 
 Command.prototype.commandHelp = function () {
@@ -46,7 +46,7 @@ Command.prototype.commandHelp = function () {
             // Padding
             var padded = pad("    " + name, maxNameLen + 2);
             padded = pad(padded + alias, 17);
-            padded = pad(padded + " " + args, 38) + desc;
+            padded = pad(padded + " " + args, 45) + desc;
             return padded
         }).join("\n");
         return "  " + grey(group + ":") + "\n\n" + info + "\n\n";

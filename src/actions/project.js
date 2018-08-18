@@ -48,57 +48,8 @@ function remove(name) {
   });
 }
 
-/**
- * List all project schemas.
- * 
- * @param {string} project 
- * @param {object} options 
- */
-function listSchemas(project, options) {
-  common.isSet(project, "No name or uuid specified");
-  rest.get("/api/v1/" + project + "/schemas").end(r => {
-    if (rest.check(r, 200, "Could not load schemas of project '" + project + "'")) {
-      var json = r.body;
-      var table = new Table({
-        head: ['UUID', 'Name', 'Version'],
-        colWidths: [34, 15, 10]
-      });
-
-      json.data.forEach((element) => {
-        table.push([element.uuid, element.name, element.version])
-      });
-      log("Project '" + project + "' schemas:");
-      log(table.toString());
-    }
-  });
-}
 
 
-/**
- * List all project microschemas.
- * 
- * @param {string} project 
- * @param {object} options 
- */
-function listMicroschemas(project, options) {
-  common.isSet(project, "No name or uuid specified");
-  rest.get("/api/v1/" + project + "/microschemas").end(r => {
-    if (rest.check(r, 200, "Could not load microschemas of project '" + project + "'")) {
-      var json = r.body;
-      var table = new Table({
-        head: ['UUID', 'Name', 'Version'],
-        colWidths: [34, 15, 8]
-      });
-
-      json.data.forEach((element) => {
-        table.push([element.uuid, element.name, element.version])
-      });
-      log("Project '" + project + "' microschemas:");
-      log(table.toString());
-    }
-
-  });
-}
 
 function linkSchema(schemaNameOrUuid, project, options) {
   common.isSet(schemaNameOrUuid, "No schema name or uuid specified");
@@ -187,5 +138,4 @@ function withIdFallback(env, action) {
   });
 }
 
-
-module.exports = { list, add, remove, listSchemas, listMicroschemas, linkSchema, linkMicroschema, unlinkMicroschema, unlinkSchema }
+module.exports = { list, add, remove, linkSchema, linkMicroschema, unlinkMicroschema, unlinkSchema }

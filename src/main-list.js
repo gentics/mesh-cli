@@ -79,18 +79,6 @@ program
     .description("List project microschemas")
     .action(microschema.list);
 
-program
-    .command("projectSchema [project]")
-    .alias("ps")
-    .description("List all project schemas.")
-    .action(project.listSchemas);
-
-program
-    .command("projectMicroschema [project]")
-    .alias("pms")
-    .description("List all project microschemas.")
-    .action(project.listMicroschemas);
-
 common.registerEnd();
 
 program.parse(process.argv);

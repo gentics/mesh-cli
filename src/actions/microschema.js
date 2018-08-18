@@ -11,6 +11,7 @@ const debug = common.debug;
 
 /**
  * Handle the add microschema command.
+ * 
  * @param {string} env 
  * @param {object} options 
  */
@@ -183,11 +184,20 @@ function get(name, options) {
 }
 
 
-
 /**
- * List microschema (globally)
+ * List microschemas (globally).
+ * 
+ * @param {string} projectName
  */
-function list() {
+function list(projectName) {
+    if (typeof projectName === 'string') {
+        listMicroschemas(projectName);
+    } else {
+        listGlobalMicroschemas();
+    }
+}
+
+function listGlobalMicroschemas() {
     rest.get("/api/v1/microschemas").end(r => {
         if (rest.check(r, 200, "Could not list microschemas")) {
 
@@ -200,8 +210,35 @@ function list() {
             json.data.forEach((element) => {
                 table.push([element.uuid, element.name, element.version])
             });
+            log("Gobal microschemas:");
             log(table.toString());
         }
+    });
+}
+
+/**
+ * List all project microschemas.
+ * 
+ * @param {string} project 
+ * @param {object} options 
+ */
+function listMicroschemas(project, options) {
+    common.isSet(project, "No name or uuid specified");
+    rest.get("/api/v1/" + project + "/microschemas").end(r => {
+        if (rest.check(r, 200, "Could not load microschemas of project '" + project + "'")) {
+            var json = r.body;
+            var table = new Table({
+                head: ['UUID', 'Name', 'Version'],
+                colWidths: [34, 15, 9]
+            });
+
+            json.data.forEach((element) => {
+                table.push([element.uuid, element.name, element.version])
+            });
+            log("Project '" + project + "' microschemas:");
+            log(table.toString());
+        }
+
     });
 }
 

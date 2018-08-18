@@ -63,10 +63,8 @@ program
   .group("User");
 
 program
-  .command("validate [file]")
+  .command("validate [type] [file]", "Validate the schema via stdin or file.")
   .alias("v")
-  .description("Validate the schema via stdin or file.")
-  .action(schema.validate)
   .group("Schema");
 
 program
