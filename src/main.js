@@ -81,20 +81,18 @@ program
   .command("key [name/uuid]")
   .alias("k")
   .description("Generate a new API key.")
-  //. Note that generating a new API key will invalidate the existing API key of the user.")
+  // Note that generating a new API key will invalidate the existing API key of the user.")
   .action(user.apiKey)
   .group("User");
 
 program
-  .command("link [project] [schema]")
-  .description("Link the schema with a project.")
-  .action(project.linkSchema)
+  .command("link [type] [project] [schema]", "Link the microschema with a project.")
+  .alias("ls")
   .group("Schema");
 
 program
-  .command("unlink [project] [schema]")
-  .description("Unlink the schema from a project.")
-  .action(project.unlinkSchema)
+  .command("unlink [type] [project] [schema]", "Unlink the microschema from a project.")
+  .alias("us")
   .group("Schema");
 
 program.on('--help', function () {
@@ -130,6 +128,7 @@ program
   .description("Reset the error state of the job.")
   .action(job.clearJob)
   .group("Administration");
+
 /*
 * useradd
 * userdel

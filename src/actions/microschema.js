@@ -231,4 +231,4 @@ function withIdFallback(name, action) {
     });
 }
 
-module.exports = { list, add, remove, get, update, validate }
+module.exports = { list, add, remove, get, update, validate, withIdFallback }

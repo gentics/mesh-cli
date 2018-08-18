@@ -8,6 +8,13 @@ const log = common.log;
 const error = common.error;
 const debug = common.debug;
 
+/**
+ * Invoke a POST request.
+ * 
+ * @param {string} path 
+ * @param {object} body 
+ * @param {boolean} noAuth 
+ */
 function post(path, body, noAuth) {
     var cfg = config.get();
     var headers = {
@@ -39,6 +46,11 @@ function login(username, password) {
     return post("/api/v1/auth/login", body, true);
 }
 
+/**
+ * Invoke a GET request.
+ * 
+ * @param {string} path 
+ */
 function get(path) {
     var cfg = config.get();
     if (!(cfg.auth && cfg.auth.key)) {
@@ -56,6 +68,11 @@ function get(path) {
         .send();
 }
 
+/**
+ * Invoke DELETE request.
+ * 
+ * @param {string} path 
+ */
 function del(path) {
     var cfg = config.get();
     var headers = {
@@ -72,9 +89,9 @@ function del(path) {
 /**
  * Assert that the response contains the expected code.
  * 
- * @param {*} r 
- * @param {*} expectedCode 
- * @param {*} message 
+ * @param {object} r 
+ * @param {integer} expectedCode 
+ * @param {string} message 
  */
 function check(r, expectedCode, message) {
     debug("Response code: " + r.code);
@@ -113,6 +130,11 @@ function assertCode(r, expectedCode) {
     }
     if (code == 404) {
         error("Error: The resource could not be found.");
+        error("Path: " + r.request.path);
+        return false;
+    }
+    if (code == 409) {
+        error("Error: Confllict detected: " + r.body.message);
         error("Path: " + r.request.path);
         return false;
     }

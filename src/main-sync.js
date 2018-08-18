@@ -26,6 +26,8 @@ program
     //the local bootstrap structure with the remote Gentics Mesh instance. You can use this command to setup initial project structure which you added to your local repository.
     .action(sync.push);
 
+common.registerEnd();
+
 program.parse(process.argv);
 
 var noSubCommand = program.args.length === 0;

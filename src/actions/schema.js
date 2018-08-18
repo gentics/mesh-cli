@@ -11,20 +11,22 @@ const debug = common.debug;
 
 /**
  * Handle the add schema command.
- * @param {string} env 
+ * 
+ * @param {string} path 
  * @param {object} options 
  */
-function add(env, options) {
+function add(path, options) {
     // 1. Check whether a filename was specified
-    if (env) {
-        if (!fs.existsSync(env)) {
-            error("Could not find file '" + env + "'");
+    if (path) {
+        if (!fs.existsSync(path)) {
+            error("Could not find file '" + path + "'");
             process.exit(1);
         } else {
-            var json = JSON.parse(fs.readFileSync(env, 'utf8'));
+            var json = JSON.parse(fs.readFileSync(path, 'utf8'));
             rest.post("/api/v1/schemas", json).end(r => {
                 if (rest.check(r, 201, "Could not create schema")) {
-                    log("Created schema '" + json.name + "'");
+                    var json = r.body;
+                    log("Created schema '" + json.name + "' UUID: " + json.uuid);
                 }
             });
         }
@@ -40,7 +42,8 @@ function add(env, options) {
             var json = JSON.parse(data);
             rest.post("/api/v1/schemas", json).end(r => {
                 if (rest.check(r, 201, "Could not create schema")) {
-                    log("Created schema '" + json.name + "'");
+                    var json =  r.body;
+                    log("Created schema '" + json.name + "' UUID: " + json.uuid);
                 }
             });
         });
@@ -230,4 +233,4 @@ function withIdFallback(name, action) {
     });
 }
 
-module.exports = { list, add, remove, get, update, validate }
+module.exports = { list, add, remove, get, update, validate, withIdFallback }

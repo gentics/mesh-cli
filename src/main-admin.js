@@ -13,7 +13,7 @@ configure.register();
 
 program
     .usage("admin [options] [command]");
-   
+
 program
     .command("status")
     .alias("s")
@@ -31,6 +31,8 @@ program
     .alias("b")
     .description("Trigger the server-side backup process")
     .action(admin.backup);
+
+common.registerEnd();
 
 program.parse(process.argv);
 

@@ -43,6 +43,8 @@ program
     .description("Remove the Gentics Mesh container")
     .action(docker.remove);
 
+common.registerEnd();
+
 program.parse(process.argv);
 
 var noSubCommand = program.args.length === 0;

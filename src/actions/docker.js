@@ -12,6 +12,11 @@ var docker = new Docker(DockerOptions);
 
 const CONTAINER_NAME = "gentics-mesh";
 
+/**
+ * Create or start a container.
+ * 
+ * @param {object} options
+ */
 function start(options) {
     debug("Options:", options);
     var port = parseInt(options.port) || 8080;
@@ -49,7 +54,7 @@ async function startDocker(tag, port, image) {
  */
 function remove() {
     docker.command('rm -f ' + CONTAINER_NAME).then(function (data) {
-        log("Removed docker container '" + NAME + "'");
+        log("Removed docker container '" + CONTAINER_NAME + "'");
     });
 }
 
@@ -62,12 +67,24 @@ function logs() {
     });
 }
 
+/**
+ * Restart the container.
+ * 
+ * @param {string} env 
+ * @param {object} options 
+ */
 function restart(env, options) {
     docker.command('restart ' + CONTAINER_NAME).then(function (data) {
         console.dir(data);
     });
 }
 
+/**
+ * Stop a running container.
+ * 
+ * @param {string} env 
+ * @param {object} options 
+ */
 function stop(env, options) {
     docker.command('stop ' + CONTAINER_NAME).then(function (data) {
         log('data = ', data);

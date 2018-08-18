@@ -73,6 +73,8 @@ program
     .description("Remove the tagfamily.")
     .action(tagfamily.remove);
 
+common.registerEnd();
+
 program.parse(process.argv);
 
 var noSubCommand = program.args.length === 0;

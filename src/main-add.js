@@ -68,7 +68,7 @@ program
     .description("Add a new group.")
     .action(group.add);
 
-
+common.registerEnd();
 
 program.parse(process.argv);
 

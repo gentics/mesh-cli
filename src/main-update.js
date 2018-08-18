@@ -34,6 +34,8 @@ program
     .description("Update schema via stdin or file.")
     .action(schema.update);
 
+common.registerEnd();
+
 program.parse(process.argv);
 
 var noSubCommand = program.args.length === 0;

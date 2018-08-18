@@ -82,8 +82,14 @@ program
 program
     .command("projectSchema [project]")
     .alias("ps")
-    .description("List all schemas.")
+    .description("List all project schemas.")
     .action(project.listSchemas);
+
+program
+    .command("projectMicroschema [project]")
+    .alias("pms")
+    .description("List all project microschemas.")
+    .action(project.listMicroschemas);
 
 common.registerEnd();
 
