@@ -3,10 +3,13 @@
 const Table = require('cli-table');
 const rest = require("../inc/rest");
 const common = require("../inc/common");
+const log = common.log;
+const error = common.error;
+const debug = common.debug;
 
 function add(env) {
     if (typeof env === 'undefined') {
-        console.error("No name specified");
+        error("No name specified");
         process.exit(1);
     }
     var project = null;
@@ -15,7 +18,7 @@ function add(env) {
     };
     rest.post("/api/v1/" + project + "/tagfamily", body).end(r => {
         if (rest.check(r, 201, "Could not create tagfamily '" + env + "' in project '" + project + "'")) {
-            console.log("Created tagfamily '" + r.body.uuid + "'");
+            log("Created tagfamily '" + r.body.uuid + "'");
         }
     });
 }
@@ -27,7 +30,7 @@ function get(project, tagfamily) {
     withIdFallback(project, tagfamily, id => {
         rest.get("/api/v1/" + project + "/tagFamilies/" + id).end(r => {
             if (rest.check(r, 200, "Could not load tagfamily '" + tagfamily + "' of project " + project)) {
-                console.log(JSON.stringify(r.body, null, 4));
+                log(JSON.stringify(r.body, null, 4));
             }
         });
     });
@@ -37,7 +40,7 @@ function remove(project, tagfamily) {
     withIdFallback(project, tagfamily, id => {
         rest.del("/api/v1/" + project + "/tagfamily/" + id).end(r => {
             if (rest.check(r, 204, "Could not delete tagfamily of project " + project)) {
-                console.log("Removed tag family '" + id + "'");
+                log("Removed tag family '" + id + "'");
             }
         });
     });
@@ -65,7 +68,7 @@ function listTagFamilies(project) {
             json.data.forEach((element) => {
                 table.push([element.uuid, element.name]);
             });
-            console.log(table.toString());
+            log(table.toString());
         }
     });
 }
@@ -83,7 +86,7 @@ function listTags(project, tagfamily) {
                 json.data.forEach((element) => {
                     table.push([element.uuid, element.name]);
                 });
-                console.log(table.toString());
+                log(table.toString());
             }
         });
     });
@@ -99,7 +102,7 @@ function withIdFallback(project, tagfamily, action) {
                 }
             });
             if (id == null) {
-                console.error("Could not find tag family '" + tagfamily + "'");
+                error("Could not find tag family '" + tagfamily + "'");
                 process.exit(1);
             } else {
                 action(id);

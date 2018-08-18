@@ -4,12 +4,14 @@
 
 const chalk = require('chalk');
 const clear = require('clear');
-const debug = require('debug');
 const program = require('commander');
 // Patch commander for nicer help
 require("./inc/commander");
 const config = require("./inc/config");
 const common = require("./inc/common");
+const log = common.log;
+const error = common.error;
+const debug = common.debug;
 
 const configure = require("./actions/configure");
 const user = require("./actions/user");
@@ -17,7 +19,6 @@ const schema = require("./actions/schema");
 const job = require("./actions/job");
 const role = require("./actions/role");
 const project = require("./actions/project");
-const log = console.log;
 
 common.register();
 configure.register();
@@ -136,6 +137,8 @@ program
 * groupmod
 * rolemod
 */
+
+common.registerEnd();
 
 
 program.parse(process.argv);

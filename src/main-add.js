@@ -38,22 +38,16 @@ program
 
 program
     .command("project [name]")
-    .alias("a")
+    .alias("p")
     .description("Add a new project.")
     .option("-s, --schema", "Use the given schema for the root node.")
     .action(project.add);
 
 program
     .command("schema [filename]")
-    .alias("a")
+    .alias("s")
     .description("Add a new schema via stdin or file.")
     .action(schema.add);
-
-program
-    .command("group [name]")
-    .alias("a")
-    .description("Add a new group.")
-    .action(group.add);
 
 program
     .command('user [name]')
@@ -67,6 +61,13 @@ program
     .alias("r")
     .description("Add a new role.")
     .action(role.add);
+
+program
+    .command("group [name]")
+    .alias("g")
+    .description("Add a new group.")
+    .action(group.add);
+
 
 
 program.parse(process.argv);

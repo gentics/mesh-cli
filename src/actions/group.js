@@ -1,9 +1,11 @@
 'use strict';
 
 const Table = require('cli-table');
-const debug = require('debug');
-const common = require("../inc/common");
 const rest = require("../inc/rest");
+const common = require("../inc/common");
+const log = common.log;
+const error = common.error;
+const debug = common.debug;
 
 function list() {
     rest.get("/api/v1/groups").end(r => {
@@ -24,7 +26,7 @@ function list() {
 
                 table.push([element.uuid, element.name, rolesStr]);
             });
-            console.log(table.toString());
+            log(table.toString());
         }
     });
 }
@@ -36,7 +38,7 @@ function add(name, options) {
     };
     rest.post("/api/v1/groups", body).end(r => {
         if (rest.check(r, 201, "Could not create group")) {
-            console.log("Created group '" + env + "'");
+            log("Created group '" + env + "'");
         }
     });
 }
@@ -46,7 +48,7 @@ function remove(name) {
     withIdFallback(name, id => {
         rest.del("/api/v1/groups/" + id).end(r => {
             if (rest.check(r, 204, "Could not remove group '" + id + "'")) {
-                console.log("Removed group '" + id + "'");
+                log("Removed group '" + id + "'");
             }
         });
     });
@@ -63,7 +65,7 @@ function withIdFallback(env, action) {
                 }
             });
             if (id == null) {
-                console.error("Could not find group '" + env + "'");
+                error("Could not find group '" + env + "'");
                 process.exit(1);
             } else {
                 action(id);

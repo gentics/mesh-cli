@@ -10,7 +10,7 @@ const error = common.error;
 const debug = common.debug;
 
 /**
- * Handle the add schema command.
+ * Handle the add microschema command.
  * @param {string} env 
  * @param {object} options 
  */
@@ -22,9 +22,9 @@ function add(env, options) {
             process.exit(1);
         } else {
             var json = JSON.parse(fs.readFileSync(env, 'utf8'));
-            rest.post("/api/v1/schemas", json).end(r => {
-                if (rest.check(r, 201, "Could not create schema")) {
-                    log("Created schema '" + json.name + "'");
+            rest.post("/api/v1/microschemas", json).end(r => {
+                if (rest.check(r, 201, "Could not create microschema")) {
+                    log("Created microschema '" + json.name + "'");
                 }
             });
         }
@@ -38,9 +38,9 @@ function add(env, options) {
         process.stdin.on('data', function (data) {
             handled = true;
             var json = JSON.parse(data);
-            rest.post("/api/v1/schemas", json).end(r => {
-                if (rest.check(r, 201, "Could not create schema")) {
-                    log("Created schema '" + json.name + "'");
+            rest.post("/api/v1/microschema", json).end(r => {
+                if (rest.check(r, 201, "Could not create microschema")) {
+                    log("Created microschema '" + json.name + "'");
                 }
             });
         });
@@ -56,9 +56,9 @@ function add(env, options) {
 }
 
 /**
- * Validate the schema.
+ * Validate the microschema.
  * 
- * @param {string} path Path to the schema
+ * @param {string} path Path to the microschema
  * @param {object} options 
  */
 function validate(path, options) {
@@ -69,8 +69,8 @@ function validate(path, options) {
         } else {
             var json = JSON.parse(fs.readFileSync(path, 'utf8'));
             rest.post("/api/v1/utilities/validateSchema", json).end(r => {
-                if (rest.check(r, 200, "Failed to validate schema")) {
-                    log("Validated schema '" + json.name + "'");
+                if (rest.check(r, 200, "Failed to validate microschema")) {
+                    log("Validated microschema '" + json.name + "'");
                 }
             });
         }
@@ -82,9 +82,9 @@ function validate(path, options) {
         process.stdin.on('data', function (data) {
             handled = true;
             var json = JSON.parse(data);
-            rest.post("/api/v1/utilities/validateSchema", json).end(r => {
-                if (rest.check(r, 200, "Could not validate schema")) {
-                    log("Validated schema. Msg: " + r.body.message);
+            rest.post("/api/v1/utilities/validateMicroschema", json).end(r => {
+                if (rest.check(r, 200, "Could not validate microschema")) {
+                    log("Validated microschema. Msg: " + r.body.message);
                 }
             });
         });
@@ -99,9 +99,9 @@ function validate(path, options) {
 }
 
 /**
- * Update schema.
+ * Update microschema.
  * 
- * @param {string} path Path to the schema
+ * @param {string} path Path to the microschema
  * @param {object} options 
  */
 function update(path, options) {
@@ -112,12 +112,12 @@ function update(path, options) {
         } else {
             var json = JSON.parse(fs.readFileSync(path, 'utf8'));
             if (!json.uuid) {
-                error("Schema uuid is missing.");
+                error("Microschema uuid is missing.");
                 process.exit(1);
             }
-            rest.post("/api/v1/schemas/" + json.uuid, json).end(r => {
-                if (rest.check(r, 201, "Could not update schema")) {
-                    log("Updated schema '" + json.name + "'");
+            rest.post("/api/v1/microschema/" + json.uuid, json).end(r => {
+                if (rest.check(r, 201, "Could not update microschema")) {
+                    log("Updated microschema '" + json.name + "'");
                 }
             });
         }
@@ -130,12 +130,12 @@ function update(path, options) {
             handled = true;
             var json = JSON.parse(data);
             if (!json.uuid) {
-                error("Schema uuid is missing.");
+                error("Microschema uuid is missing.");
                 process.exit(1);
             }
-            rest.post("/api/v1/schemas/" + json.uuid, json).end(r => {
-                if (rest.check(r, 200, "Could not update schema")) {
-                    log("Updated schema: '" + json.uuid + "' msg: " + r.body.message);
+            rest.post("/api/v1/microschemas/" + json.uuid, json).end(r => {
+                if (rest.check(r, 200, "Could not update microschema")) {
+                    log("Updated microschema: '" + json.uuid + "' msg: " + r.body.message);
                 }
             });
         });
@@ -150,31 +150,32 @@ function update(path, options) {
 }
 
 /**
- * Remove the schema.
+ * Remove the microschema.
  * 
  * @param {string} name 
  */
 function remove(name) {
     common.isSet(name, "No name or uuid specified.")
     withIdFallback(name, id => {
-        rest.del("/api/v1/schemas/" + id).end(r => {
-            if (rest.check(r, 204, "Could not remove schema " + id)) {
-                log("Schema '" + id + "' removed");
+        rest.del("/api/v1/microschemas/" + id).end(r => {
+            if (rest.check(r, 204, "Could not remove microschema " + id)) {
+                log("Microschema '" + id + "' removed");
             }
         });
     });
 }
 
 /**
- * Load the schema
+ * Load the microschema.
+ * 
  * @param {string} name 
  * @param {object} options 
  */
 function get(name, options) {
     common.isSet(name, "No name or uuid specified.")
     withIdFallback(name, id => {
-        rest.get("/api/v1/schemas/" + id).end(r => {
-            if (rest.check(r, 200, "Could not load schema")) {
+        rest.get("/api/v1/microschemas/" + id).end(r => {
+            if (rest.check(r, 200, "Could not load microschema")) {
                 log(JSON.stringify(r.body, null, 4));
             }
         });
@@ -184,11 +185,11 @@ function get(name, options) {
 
 
 /**
- * List schemas (globally)
+ * List microschema (globally)
  */
 function list() {
-    rest.get("/api/v1/schemas").end(r => {
-        if (rest.check(r, 200, "Could not list schemas")) {
+    rest.get("/api/v1/microschemas").end(r => {
+        if (rest.check(r, 200, "Could not list microschemas")) {
 
             var json = r.body;
             var table = new Table({
@@ -206,14 +207,14 @@ function list() {
 
 
 /**
- * Try to locate the schema with the given name.
+ * Try to locate the microschema with the given name.
  * 
  * @param {string} name 
  * @param {function} action 
  */
 function withIdFallback(name, action) {
-    rest.get("/api/v1/schemas").end(ur => {
-        if (rest.check(ur, 200, "Could not load schemas")) {
+    rest.get("/api/v1/microschemas").end(ur => {
+        if (rest.check(ur, 200, "Could not load microschemas")) {
             var id = null;
             ur.body.data.forEach(element => {
                 if (element.name == name || element.uuid == name) {
@@ -221,7 +222,7 @@ function withIdFallback(name, action) {
                 }
             });
             if (id == null) {
-                error("Did not find schema '" + name + "'");
+                error("Did not find microschema '" + name + "'");
                 process.exit(1);
             } else {
                 action(id);

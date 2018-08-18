@@ -14,6 +14,8 @@ const group = require("./actions/group");
 const project = require("./actions/project");
 const tagfamily = require("./actions/tagfamily");
 const schema = require("./actions/schema");
+const microschema = require("./actions/microschema");
+const branch = require("./actions/branch");
 
 const job = require("./actions/job");
 const plugin = require("./actions/plugin");
@@ -60,16 +62,30 @@ program
     .action(project.list);
 
 program
-    .command("schemas [project]")
+    .command("branch")
+    .alias("b")
+    .description("List project branches.")
+    .action(branch.list);
+
+program
+    .command("schema [project]")
     .alias("s")
     .description("List project schemas")
     .action(schema.list);
 
 program
-    .command("projectSchemas [project]")
+    .command("microschema [project]")
+    .alias("ms")
+    .description("List project microschemas")
+    .action(microschema.list);
+
+program
+    .command("projectSchema [project]")
     .alias("ps")
     .description("List all schemas.")
     .action(project.listSchemas);
+
+common.registerEnd();
 
 program.parse(process.argv);
 

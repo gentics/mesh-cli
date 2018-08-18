@@ -2,9 +2,13 @@
 
 const program = require('commander');
 const inquirer = require('inquirer');
-const debug = require("debug");
 const rest = require("../inc/rest");
 const config = require("../inc/config");
+const common = require("../inc/common");
+const log = common.log;
+const error = common.error;
+const debug = common.debug;
+
 const cfg = config.get();
 
 function configure() {
@@ -25,7 +29,7 @@ function checkEndpoint() {
   }]).then(answer => {
     var endpoint = answer.endpoint;
     if (endpoint === 'undefined' || endpoint == '') {
-      console.error("Invalid endpoint.");
+      error("Invalid endpoint.");
     } else {
       config.storeEndpoint(answer.endpoint);
     }
@@ -71,22 +75,24 @@ function promptKey() {
   }]).then(answers => {
     var key = answers.key;
     if (key === 'undefined' || key == "") {
-      log.error("Invalid key");
+      error("Invalid key");
     } else {
       config.storeKey(key);
+      log("key saved");
     }
   });
 }
 
 function register() {
   program
-    .command("configure", { noHelp: true })
+    .command("configure")
     .description("Configure the CLI")
     .action(configure);
 }
 
 /**
- * Login mesh and generate a new api token
+ * Login mesh and generate a new api token.
+ * 
  * @param {string} username 
  * @param {string} password 
  */
@@ -100,6 +106,7 @@ function gen(username, password) {
           rest.post("/api/v1/users/" + id + "/token").end(response => {
             if (rest.check(response, 201, "Could not generate API token")) {
               config.storeKey(response.body.token);
+              log("New key saved");
             }
           });
         }

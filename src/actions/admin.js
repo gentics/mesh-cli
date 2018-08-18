@@ -1,12 +1,15 @@
 'use strict';
 
-const common = require("../inc/common");
 const rest = require("../inc/rest");
+const common = require("../inc/common");
+const log = common.log;
+const error = common.error;
+const debug = common.debug;
 
 function status() {
     rest.get("/api/v1/admin/status").end(r => {
         if (rest.check(r, 200, "Could not get status")) {
-            console.log("Status: " + r.body.status);
+            log("Status: " + r.body.status);
         }
     });
 }
@@ -14,7 +17,7 @@ function status() {
 function indexSync(env, options) {
     rest.post("/api/v1/search/sync").end(r => {
         if (rest.check(r, 200, "Could not invoke index sync")) {
-            console.log("Invoked: " + r.body.message);
+            log("Invoked: " + r.body.message);
         }
     });
 }
@@ -22,7 +25,7 @@ function indexSync(env, options) {
 function backup(env, options) {
     rest.post("/api/v1/admin/backup").end(r => {
         if (rest.check(r, 200, "Could not invoke backup")) {
-            console.log("Invoked server side backup process.");
+            log("Invoked server side backup process.");
         }
     });
 }

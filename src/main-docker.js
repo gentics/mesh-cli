@@ -5,6 +5,8 @@ const program = require('commander');
 require("./inc/commander");
 
 const docker = require('./actions/docker');
+const configure = require("./actions/configure");
+const common = require("./inc/common");
 
 common.register();
 configure.register();
@@ -14,19 +16,32 @@ program
 
 program
     .command("start")
-    .description("Start Gentics Mesh using docker")
+    .description("Start a Gentics Mesh container")
     .option("-p, --port [port]", "Http port to be used")
+    .option("-t, --tag [tag]", "Tag / version to be used")
+    .option("-i, --image [image]", "Image to be used")
     .action(docker.start);
 
 program
     .command("stop")
-    .description("Stop a running Gentics Mesh docker instance")
+    .description("Stop a running Gentics Mesh container")
     .action(docker.stop);
 
 program
     .command("restart")
-    .description("Restart Gentics Mesh")
+    .description("Restart Gentics Mesh container")
     .action(docker.restart);
+
+program
+    .command("logs")
+    .description("Show the logs of the Gentics Mesh container")
+    .action(docker.logs);
+
+program
+    .command("remove")
+    .alias("rm")
+    .description("Remove the Gentics Mesh container")
+    .action(docker.remove);
 
 program.parse(process.argv);
 

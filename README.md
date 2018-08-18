@@ -103,3 +103,5 @@ mesh-cli configure
 * Add error on invalid token
 * Document sub commands
 * Add examples to sub commands
+* Publish to NPM
+* Implement Link/Unlink

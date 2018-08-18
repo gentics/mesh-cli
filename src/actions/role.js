@@ -2,9 +2,11 @@
 
 const program = require('commander');
 const Table = require('cli-table');
-const debug = require('debug');
 const rest = require("../inc/rest");
 const common = require("../inc/common");
+const log = common.log;
+const error = common.error;
+const debug = common.debug;
 
 function list() {
   rest.get("/api/v1/roles").end(r => {
@@ -24,7 +26,7 @@ function list() {
         var groupsStr = "[" + groups.join() + "]";
         table.push([element.uuid, element.name, groupsStr]);
       });
-      console.log(table.toString());
+      log(table.toString());
     }
   });
 }
@@ -32,7 +34,7 @@ function list() {
 
 function add(env) {
   if (typeof env === 'undefined') {
-    console.error("No name specified");
+    error("No name specified");
     process.exit(1);
   }
   var body = {
@@ -40,7 +42,7 @@ function add(env) {
   };
   rest.post("/api/v1/roles", body).end(r => {
     if (rest.check(r, 201, "Could not create role")) {
-      console.log("Created role '" + env + "'");
+      log("Created role '" + env + "'");
     }
   });
 }
@@ -50,7 +52,7 @@ function remove(name) {
   withIdFallback(name, id => {
     rest.del("/api/v1/roles/" + id).end(r => {
       if (rest.check(r, 204, "Could remove role '" + id + "'")) {
-        console.log("Removed role '" + id + "'");
+        log("Removed role '" + id + "'");
       }
     });
   });
@@ -61,7 +63,7 @@ function chmod(env) {
   var path = null;
   rest.post("/api/v1/roles/" + id + "/permissions/" + path).end(r => {
     if (rest.check(r, 200, "Could apply permissions")) {
-      console.log("Applied permission changes.");
+      log("Applied permission changes.");
     }
   });
 }
@@ -76,7 +78,7 @@ function withIdFallback(env, action) {
         }
       });
       if (id == null) {
-        console.error("Could not find role '" + env + "'");
+        error("Could not find role '" + env + "'");
         process.exit(1);
       } else {
         action(id);

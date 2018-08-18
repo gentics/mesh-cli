@@ -2,9 +2,11 @@
 
 const inquirer = require('inquirer');
 const Table = require('cli-table');
-const debug = require('debug')('app');
 const rest = require("../inc/rest");
 const common = require("../inc/common");
+const log = common.log;
+const error = common.error;
+const debug = common.debug;
 
 function list() {
     rest.get("/api/v1/users").end(r => {
@@ -24,7 +26,7 @@ function list() {
 
                 table.push([element.uuid, element.username, element.firstname || "-", element.lastname || "-", groupsStr]);
             });
-            console.log(table.toString());
+            log(table.toString());
         }
     });
 }
@@ -39,7 +41,7 @@ function get(name) {
     withIdFallback(name, id => {
         rest.get("/api/v1/users/" + id).end(r => {
             if (rest.check(r, 200, "Could not load '" + id + "'")) {
-                console.log(JSON.stringify(r.body, null, 4));
+                log(JSON.stringify(r.body, null, 4));
             }
         });
     });
@@ -76,7 +78,7 @@ function add(env, options) {
         };
         rest.post("/api/v1/users", body).end(r => {
             if (rest.check(r, 201, "Could not create user")) {
-                console.log("Created user '" + body.username + "'");
+                log("Created user '" + body.username + "'");
             }
         });
 
@@ -84,22 +86,33 @@ function add(env, options) {
 
 }
 
+/**
+ * Remove the user.
+ * 
+ * @param {string} name 
+ */
 function remove(name) {
     common.isSet(name, "No name or uuid specified");
 
     withIdFallback(name, id => {
         rest.del("/api/v1/users/" + id).end(r => {
             if (rest.check(r, 204, "Could not remove user " + name)) {
-                console.log("Removed user '" + id + "'");
+                log("Removed user '" + id + "'");
             }
         });
     });
 }
 
+/**
+ * Change the password of the user.
+ * 
+ * @param {string} env 
+ * @param {object} options 
+ */
 function passwd(env, options) {
     var questions = new Array();
 
-    if (typeof env === 'undefined') {
+    if (typeof env !== 'string') {
         questions.push({
             name: 'username',
             type: 'input',
@@ -123,7 +136,7 @@ function passwd(env, options) {
         withIdFallback(user, id => {
             rest.post("/api/v1/users/" + id, body).end(r => {
                 if (rest.check(r, 200, "Could change password for user '" + id + "'")) {
-                    console.log("Updated password of user '" + user + "'");
+                    log("Updated password of user '" + user + "'");
                 }
             });
         });
@@ -135,7 +148,7 @@ function apiKey(env, options) {
     withIdFallback(env, id => {
         rest.post("/api/v1/users/" + id + "/token").end(r => {
             if (rest.check(r, 200, "Could not generate token for user '" + id + "'")) {
-                console.log("Token: " + r.body.token);
+                log("Token: " + r.body.token);
             }
         });
     });
@@ -151,7 +164,7 @@ function withIdFallback(env, action) {
                 }
             });
             if (id == null) {
-                console.error("Did not find user '" + env + "'");
+                error("Did not find user '" + env + "'");
             } else {
                 action(id);
             }
@@ -159,4 +172,4 @@ function withIdFallback(env, action) {
     });
 }
 
-module.exports = { list, add, remove, get }
+module.exports = { list, add, remove, get, apiKey, passwd }
