@@ -2,7 +2,7 @@
 
 'use strict';
 
-
+const chalk = require('chalk');
 const clear = require('clear');
 const debug = require('debug');
 const program = require('commander');
@@ -28,27 +28,27 @@ program
   .group("Administration");
 
 program
-  .command("list", "List elements")
+  .command("list [type]", "List elements")
   .alias("l")
   .group("Element");
 
 program
-  .command("remove", "Remove element")
-  .alias("r")
+  .command("remove [type] [id]", "Remove element")
+  .alias("rm")
   .group("Element");
 
 program
-  .command("add", "Add element")
+  .command("add [type] [name]", "Add element")
   .alias("a")
   .group("Element");
 
 program
-  .command("get", "Get an element")
+  .command("get [type] [id]", "Get an element")
   .alias("g")
   .group("Element");
 
 program
-  .command("update", "Update an element")
+  .command("update [type] [id]", "Update an element")
   .alias("u")
   .group("Element");
 
@@ -97,12 +97,20 @@ program
   .group("Schema");
 
 program.on('--help', function () {
-  log('\n  Examples:');
-  log('');
-  log('    $ mesh-cli add project demo --schema folder');
-  log('    $ mesh-cli list projectSchemas');
-  log('    $ mesh-cli l p');
-  log('    $ mesh-cli link demo 09ac57542fde43ccac57542fdeb3ccf8');
+  var cyan = chalk.cyan;
+  var grey = chalk.grey;
+  log(grey('\n  Types:'));
+  log(grey('\n  -  ') + "user,group,role,project,schema,tagfamily,job,plugin");
+
+  log(grey('\n  Examples:'));
+  log(grey('\n  -  ') + "Add a new project named demo2 to the system\n");
+  log(cyan('    $ mesh-cli add project demo2 --schema folder'));
+  log(grey('\n  -  ') + "List all schemas that are linked to the demo project\n");
+  log(cyan('    $ mesh-cli list projectSchemas demo'));
+  log(grey('\n  -  ') + "Short form to list all projects\n");
+  log(cyan('    $ mesh-cli l p'));
+  log(grey('\n  -  ') + "Link the schema with the given uuid to the demo project\n");
+  log(cyan('    $ mesh-cli link demo 09ac57542fde43ccac57542fdeb3ccf8'));
   log('');
 });
 
