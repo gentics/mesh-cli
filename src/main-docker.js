@@ -1,29 +1,32 @@
 'use strict';
 
 const program = require('commander');
+// Patch commander for nicer help
+require("./inc/commander");
 
+const docker = require('./actions/docker');
+
+common.register();
+configure.register();
 
 program
-    .version('0.0.1')
-    .usage("docker [options] [command]")
-    .name("mesh-cli");
+    .usage("docker [options] [command]");
 
 program
     .command("start")
     .description("Start Gentics Mesh using docker")
     .option("-p, --port [port]", "Http port to be used")
-    .action(start);
+    .action(docker.start);
 
 program
     .command("stop")
     .description("Stop a running Gentics Mesh docker instance")
-    .action(stop);
+    .action(docker.stop);
 
 program
     .command("restart")
     .description("Restart Gentics Mesh")
-    .action(restart);
-
+    .action(docker.restart);
 
 program.parse(process.argv);
 

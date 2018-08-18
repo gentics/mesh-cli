@@ -3,7 +3,7 @@
 const program = require('commander');
 const Table = require('cli-table');
 const debug = require('debug');
-const rest = require("./rest");
+const rest = require("./inc/rest");
 const admin = require("./actions/admin");
 
 program

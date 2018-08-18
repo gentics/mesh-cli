@@ -1,6 +1,6 @@
 'use strict';
 
-const rest = require("../rest");
+const rest = require("../inc/rest");
 
 function pull(env, options) {
 

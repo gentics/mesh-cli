@@ -3,9 +3,8 @@
 const fs = require('fs');
 const program = require('commander');
 const Table = require('cli-table');
-const rest = require("../rest");
-const common = require("../common");
-
+const rest = require("../inc/rest");
+const common = require("../inc/common");
 
 
 /**
@@ -54,14 +53,62 @@ function add(env, options) {
     }
 }
 
-
-function update(env, options) {
-    if (env) {
-        if (!fs.existsSync(env)) {
-            console.error("Could not find file '" + env + "'");
+/**
+ * Validate the schema.
+ * 
+ * @param {string} path Path to the schema
+ * @param {object} options 
+ */
+function validate(path, options) {
+    if (path) {
+        if (!fs.existsSync(path)) {
+            console.error("Could not find file '" + path + "'");
             process.exit(1);
         } else {
-            var json = JSON.parse(fs.readFileSync(env, 'utf8'));
+            var json = JSON.parse(fs.readFileSync(path, 'utf8'));
+            rest.post("/api/v1/utilities/validateSchema", json).end(r => {
+                if (rest.check(r, 200, "Failed to validate schema")) {
+                    console.log("Validated schema '" + json.name + "'");
+                }
+            });
+        }
+    } else {
+        var handled = false;
+        process.stdin.resume();
+        process.stdin.setEncoding('utf8');
+
+        process.stdin.on('data', function (data) {
+            handled = true;
+            var json = JSON.parse(data);
+            rest.post("/api/v1/utilities/validateSchema", json).end(r => {
+                if (rest.check(r, 200, "Could not validate schema")) {
+                    console.log("Validated schema. Msg: " + r.body.message);
+                }
+            });
+        });
+        process.stdin.end();
+        setTimeout(() => {
+            if (!handled) {
+                console.error("No json found.");
+                process.exit(1);
+            }
+        }, 50);
+    }
+}
+
+/**
+ * Update schema.
+ * 
+ * @param {string} path Path to the schema
+ * @param {object} options 
+ */
+function update(path, options) {
+    if (path) {
+        if (!fs.existsSync(path)) {
+            console.error("Could not find file '" + path + "'");
+            process.exit(1);
+        } else {
+            var json = JSON.parse(fs.readFileSync(path, 'utf8'));
             if (!json.uuid) {
                 console.error("Schema uuid is missing.");
                 process.exit(1);
@@ -170,4 +217,4 @@ function withIdFallback(env, action) {
     });
 }
 
-module.exports = { list, add, remove, get, update }
+module.exports = { list, add, remove, get, update, validate }

@@ -3,8 +3,8 @@
 const inquirer = require('inquirer');
 const Table = require('cli-table');
 const debug = require('debug')('app');
-const rest = require("../rest");
-const common = require("../common");
+const rest = require("../inc/rest");
+const common = require("../inc/common");
 
 function list(env) {
     rest.get("/api/v1/users").end(r => {

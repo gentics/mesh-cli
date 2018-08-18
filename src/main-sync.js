@@ -1,13 +1,21 @@
 'use strict';
 
 const program = require('commander');
+// Patch commander for nicer help
+require("./inc/commander");
+
+const common = require("./inc/common");
+const sync = require("./inc/sync");
+
+const configure = require("./actions/configure");
+const common = require("./inc/common");
 
 
+common.register();
+configure.register();
 
 program
-    .version('1.0.0')
-    .usage("sync [options] [command]")
-    .name("mesh-cli");
+    .usage("sync [options] [command]");
 
 program
     .command("pull [name]")

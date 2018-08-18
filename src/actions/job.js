@@ -1,3 +1,8 @@
+'use strict';
+
+const Table = require('cli-table');
+const rest = require("../inc/rest");
+
 function clearJob(env, options) {
     var id = null;
     rest.delete("/api/v1/admin/jobs/" + id + "/error").end(r => {
@@ -7,7 +12,7 @@ function clearJob(env, options) {
     });
 }
 
-function listJobs() {
+function list() {
     rest.get("/api/v1/admin/jobs").end(r => {
         if (rest.check(r, 200, "Could not load jobs")) {
             var json = r.body;
@@ -23,3 +28,7 @@ function listJobs() {
         }
     });
 }
+
+
+
+module.exports = { list, clearJob }

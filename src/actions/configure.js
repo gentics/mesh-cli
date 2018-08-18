@@ -3,8 +3,8 @@
 const program = require('commander');
 const inquirer = require('inquirer');
 const debug = require("debug");
-const rest = require("../rest");
-const config = require("../config");
+const rest = require("../inc/rest");
+const config = require("../inc/config");
 const cfg = config.get();
 
 function configure() {

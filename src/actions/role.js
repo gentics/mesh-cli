@@ -3,8 +3,8 @@
 const program = require('commander');
 const Table = require('cli-table');
 const debug = require('debug');
-const rest = require("../rest");
-const common = require("../common");
+const rest = require("../inc/rest");
+const common = require("../inc/common");
 
 function list() {
     rest.get("/api/v1/roles").end(r => {

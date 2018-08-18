@@ -1,5 +1,8 @@
 'use strict';
 
+const common = require("../inc/common");
+const rest = require("../inc/rest");
+
 function status() {
     rest.get("/api/v1/admin/status").end(r => {
         if (rest.check(r, 200, "Could not get status")) {
@@ -23,3 +26,5 @@ function backup(env, options) {
         }
     });
 }
+
+module.exports = { status, backup, indexSync }

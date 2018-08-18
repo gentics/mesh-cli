@@ -1,8 +1,8 @@
 'use strict';
 
 const Table = require('cli-table');
-const rest = require("../rest");
-const common = require("../common");
+const rest = require("../inc/rest");
+const common = require("../inc/common");
 
 function add(env) {
     if (typeof env === 'undefined') {

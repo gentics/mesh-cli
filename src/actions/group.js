@@ -2,8 +2,8 @@
 
 const Table = require('cli-table');
 const debug = require('debug');
-const common = require("../common");
-const rest = require("../rest");
+const common = require("../inc/common");
+const rest = require("../inc/rest");
 
 function list() {
     rest.get("/api/v1/groups").end(r => {

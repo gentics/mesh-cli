@@ -1,7 +1,7 @@
 'use strict';
 
 const Table = require('cli-table');
-const rest = require("../rest");
+const rest = require("../inc/rest");
 
 function list() {
     rest.get("/api/v1/admin/plugins").end(r => {

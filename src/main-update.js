@@ -3,23 +3,25 @@
 'use strict';
 
 const program = require('commander');
+// Patch commander for nicer help
+require("./inc/commander");
+
+const configure = require("./actions/configure");
+const common = require("./inc/common");
 
 const project = require('./actions/project');
 const plugin = require('./actions/plugin');
 const user = require('./actions/user');
 const role = require('./actions/role');
+const schema = require('./actions/schema');
 const group = require('./actions/group');
 const tagfamily = require('./actions/tagfamily');
-const common = require("./common");
-
-
-program
-    .version('0.0.1')
-    .usage("update [options] [command]")
-    .name("mesh-cli");
 
 common.register();
+configure.register();
 
+program
+    .usage("update [options] [command]");
 
 program
     .command('user [name/uuid]')
