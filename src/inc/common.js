@@ -21,4 +21,11 @@ function register() {
         });
 }
 
-module.exports = { register }
+function isSet(value, message) {
+    if (typeof value !== 'string') {
+        console.error(message);
+        process.exit(1);
+    }
+}
+
+module.exports = { register, isSet }

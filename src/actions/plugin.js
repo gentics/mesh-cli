@@ -20,19 +20,19 @@ function list() {
     });
 }
 
-function install(env) {
-    var id = env;
+function install(pluginId) {
+    common.isSet(pluginId, "No pluginId specified");
     rest.post("/api/v1/admin/plugins").end(r => {
-        if (rest.check(r, 200, "Could not install plugin '" + id + "'")) {
-            console.log("Installed plugin '" + id + "'");
+        if (rest.check(r, 200, "Could not install plugin '" + pluginId + "'")) {
+            console.log("Installed plugin '" + pluginId + "'");
         }
     });
 }
 
-function uninstall(env) {
-    var id = env;
-    rest.delete("/api/v1/admin/plugins/" + id).end(r => {
-        if (rest.check(r, 200, "Could not uninstall plugin '" + id + "'")) {
+function uninstall(pluginId) {
+    common.isSet(pluginId, "No pluginId specified");
+    rest.delete("/api/v1/admin/plugins/" + pluginId).end(r => {
+        if (rest.check(r, 200, "Could not uninstall plugin '" + pluginId + "'")) {
             console.log("Plugin uninstalled");
         }
     });

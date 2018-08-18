@@ -29,11 +29,8 @@ function list() {
     });
 }
 
-function add(env, options) {
-    if (typeof env === 'undefined') {
-        console.error("No name specified");
-        process.exit(1);
-    }
+function add(name, options) {
+    common.isSet(name, "No name or uuid specified");
     var body = {
         name: env
     };
@@ -44,8 +41,9 @@ function add(env, options) {
     });
 }
 
-function remove(env) {
-    withIdFallback(env, id => {
+function remove(name) {
+    common.isSet(name, "No name or uuid specified");
+    withIdFallback(name, id => {
         rest.del("/api/v1/groups/" + id).end(r => {
             if (rest.check(r, 204, "Could not remove group '" + id + "'")) {
                 console.log("Removed group '" + id + "'");
@@ -53,7 +51,6 @@ function remove(env) {
         });
     });
 }
-
 
 
 function withIdFallback(env, action) {

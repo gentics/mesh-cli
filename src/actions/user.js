@@ -67,14 +67,12 @@ function add(env, options) {
 
 }
 
-function remove(env) {
-    if (typeof env === 'undefined') {
-        console.error("No name/uuid specified");
-        return;
-    }
-    withIdFallback(env, id => {
+function remove(name) {
+    common.isSet(name, "No name or uuid specified");
+
+    withIdFallback(name, id => {
         rest.del("/api/v1/users/" + id).end(r => {
-            if (rest.check(r, 204, "Could not remove user " + env)) {
+            if (rest.check(r, 204, "Could not remove user " + name)) {
                 console.log("Removed user '" + id + "'");
             }
         });

@@ -164,7 +164,7 @@ function remove(env) {
 
 
 function get(name, options) {
-    if (typeof name === 'undefined') {
+    if (typeof name === 'object') {
         console.error("No name specified");
         process.exit(1);
     }

@@ -54,6 +54,12 @@ program
     .description("Get the group.")
     .action(project.get);
 
+program
+    .command("tagfamily [project] [name]")
+    .alias("tf")
+    .description("Get the tagfamily.")
+    .action(tagfamily.get);
+
 program.parse(process.argv);
 
 var noSubCommand = program.args.length === 0;

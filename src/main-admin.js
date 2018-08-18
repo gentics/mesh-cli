@@ -1,16 +1,19 @@
 'use strict';
 
 const program = require('commander');
-const Table = require('cli-table');
-const debug = require('debug');
-const rest = require("./inc/rest");
+// Patch commander for nicer help
+require("./inc/commander");
+
 const admin = require("./actions/admin");
+const configure = require("./actions/configure");
+const common = require("./inc/common");
+
+common.register();
+configure.register();
 
 program
-    .version('1.0.0')
-    .usage("admin [options] [command]")
-    .name("mesh-cli");
-
+    .usage("admin [options] [command]");
+   
 program
     .command("status")
     .alias("s")

@@ -25,8 +25,8 @@ program
 
 program
     .command('user [name/uuid]')
-    .description("Remove the user.")
-    .action(user.remove);
+    .description("Update the user.")
+    .action(user.update);
 
 program
     .command("schema [filename]")

@@ -9,3 +9,6 @@ function pull(env, options) {
 function push() {
 
 }
+
+
+module.exports = { push, pull }

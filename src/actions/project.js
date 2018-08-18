@@ -23,12 +23,9 @@ function add(env, options) {
     });
   }
   
-  function remove(env) {
-    if (typeof env === 'undefined') {
-      console.error("No name specified");
-      process.exit(1);
-    }
-    withIdFallback(env, id => {
+  function remove(name) {
+    common.isSet(name, "No name or uuid specified");
+    withIdFallback(name, id => {
       rest.del("/api/v1/projects/" + id).end(r => {
         if (rest.check(r, 204, "Could not remove project " + id)) {
           console.log("Project '" + id + "' removed");
@@ -38,10 +35,7 @@ function add(env, options) {
   }
   
   function listSchemas(project, options) {
-    if (typeof project === 'undefined') {
-      console.error("No name specified");
-      process.exit(1);
-    }
+    common.isSet(project, "No name or uuid specified");
     rest.get("/api/v1/" + project + "/schemas").end(r => {
       if (rest.check(r, 200, "Could not load schemas of project '" + project + "'")) {
         var json = r.body;
@@ -60,14 +54,8 @@ function add(env, options) {
   }
   
   function linkSchema(project, schemaUuid, options) {
-    if (typeof project === 'undefined') {
-      console.error("No name specified");
-      process.exit(1);
-    }
-    if (typeof schemaUuid === 'undefined') {
-      console.error("No schemaUuid specified");
-      process.exit(1);
-    }
+    common.isSet(project, "No project name or uuid specified");
+    common.isSet(schemaUuid, "No schemaUuid or uuid specified");
     rest.post("/api/v1/" + project + "/schemas/" + schemaUuid).end(r => {
       if (rest.check(r, 200, "Could not link schema")) {
         console.log("Linked schema '" + schemaUuid + "' to project '" + project + "'");
@@ -76,14 +64,8 @@ function add(env, options) {
   }
   
   function unlinkSchema(project, schemaUuid, options) {
-    if (typeof project === 'undefined') {
-      console.error("No name specified");
-      process.exit(1);
-    }
-    if (typeof schemaUuid === 'undefined') {
-      console.error("No schemaUuid specified");
-      process.exit(1);
-    }
+    common.isSet(project, "No project name or uuid specified");
+    common.isSet(schemaUuid, "No schemaUuid or uuid specified");
     rest.del("/api/v1/" + project + "/schemas/" + schemaUuid).end(r => {
       if (rest.check(r, 204, "Could not unlink schema '" + schemaUuid + "'")) {
         console.log("Unlinked schema '" + schemaUuid + "' to project '" + project + "'");

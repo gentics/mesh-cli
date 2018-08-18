@@ -20,9 +20,21 @@ function add(env) {
     });
 }
 
-function remove(env) {
-    var project = null;
-    withIdFallback(env, id => {
+function get(project, tagfamily) {
+    common.isSet(project, "No project name specified");
+    common.isSet(tagfamily, "No tagfamily name or uuid specified");
+
+    withIdFallback(project, tagfamily, id => {
+        rest.get("/api/v1/" + project + "/tagFamilies/" + id).end(r => {
+            if (rest.check(r, 200, "Could not load tagfamily '" + tagfamily + "' of project " + project)) {
+                console.log(JSON.stringify(r.body, null, 4));
+            }
+        });
+    });
+}
+
+function remove(project, tagfamily) {
+    withIdFallback(project, tagfamily, id => {
         rest.del("/api/v1/" + project + "/tagfamily/" + id).end(r => {
             if (rest.check(r, 204, "Could not delete tagfamily of project " + project)) {
                 console.log("Removed tag family '" + id + "'");
@@ -31,10 +43,18 @@ function remove(env) {
     });
 }
 
-function list(env) {
-    var project = null;
-    var path = "/api/v1/" + project + "/tagfamiles";
-    rest.get(path).end(r => {
+function list(project, tagfamily) {
+    common.isSet(project, "No project name specified");
+
+    if (typeof tagfamily === 'string') {
+        return listTags(project, tagfamily);
+    } else {
+        return listTagFamilies(project);
+    }
+}
+
+function listTagFamilies(project) {
+    rest.get("/api/v1/" + project + "/tagFamilies").end(r => {
         if (rest.check(r, 200, "Could not load tagfamilies of project " + project)) {
             var json = r.body;
             var table = new Table({
@@ -50,17 +70,36 @@ function list(env) {
     });
 }
 
-function withIdFallback(env, action) {
-    rest.get("/api/v1/" + project + "/tagfamilies").end(ur => {
+function listTags(project, tagfamily) {
+    withIdFallback(project, tagfamily, id => {
+        rest.get("/api/v1/" + project + "/tagFamilies/" + id + "/tags").end(r => {
+            if (rest.check(r, 200, "Could not load tagfamilies of project " + project)) {
+                var json = r.body;
+                var table = new Table({
+                    head: ['UUID', 'Name'],
+                    colWidths: [34, 15]
+                });
+
+                json.data.forEach((element) => {
+                    table.push([element.uuid, element.name]);
+                });
+                console.log(table.toString());
+            }
+        });
+    });
+}
+
+function withIdFallback(project, tagfamily, action) {
+    rest.get("/api/v1/" + project + "/tagFamilies").end(ur => {
         if (rest.check(ur, 200, "Could not load tagfamilies of project " + project)) {
             var id = null;
             ur.body.data.forEach(element => {
-                if (element.name == env || element.uuid == env) {
+                if (element.name == tagfamily || element.uuid == tagfamily) {
                     id = element.uuid;
                 }
             });
             if (id == null) {
-                console.error("Could not find tag family '" + env + "'");
+                console.error("Could not find tag family '" + tagfamily + "'");
                 process.exit(1);
             } else {
                 action(id);
@@ -70,4 +109,4 @@ function withIdFallback(env, action) {
 }
 
 
-module.exports = { list, add, remove }
+module.exports = { list, add, remove, get }
