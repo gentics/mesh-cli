@@ -85,31 +85,11 @@ program
 
 program
   .command("link [type] [project] [schema]", "Link the microschema with a project.")
-  .alias("ls")
   .group("Schema");
 
 program
   .command("unlink [type] [project] [schema]", "Unlink the microschema from a project.")
-  .alias("us")
   .group("Schema");
-
-program.on('--help', function () {
-  var cyan = chalk.cyan;
-  var grey = chalk.grey;
-  log(grey('\n  Types:'));
-  log(grey('\n  -  ') + "user,group,role,project,schema,tagfamily,job,plugin");
-
-  log(grey('\n  Examples:'));
-  log(grey('\n  -  ') + "Add a new project named demo2 to the system\n");
-  log(cyan('    $ mesh-cli add project demo2 --schema folder'));
-  log(grey('\n  -  ') + "List all schemas that are linked to the demo project\n");
-  log(cyan('    $ mesh-cli list projectSchemas demo'));
-  log(grey('\n  -  ') + "Short form to list all projects\n");
-  log(cyan('    $ mesh-cli l p'));
-  log(grey('\n  -  ') + "Link the schema with the given uuid to the demo project\n");
-  log(cyan('    $ mesh-cli link demo 09ac57542fde43ccac57542fdeb3ccf8'));
-  log('');
-});
 
 program
   .command('sync', 'Sync specific commands')
@@ -126,6 +106,28 @@ program
   .description("Reset the error state of the job.")
   .action(job.clearJob)
   .group("Administration");
+
+program.on('--help', function () {
+  var cyan = chalk.cyan;
+  var grey = chalk.grey;
+  log(grey('\n  Types:'));
+  log(grey('\n  -  ') + "user,group,role,project,schema,microschema,tagfamily,job,plugin,branch");
+
+  log(grey('\n  Examples:'));
+  log(grey('\n  -  ') + "Add a new project named demo2 to the system\n");
+  log(cyan('    $ mesh-cli add project demo2 --schema folder'));
+  log(grey('\n  -  ') + "List all schemas that are linked to the demo project\n");
+  log(cyan('    $ mesh-cli list projectSchemas demo'));
+  log(grey('\n  -  ') + "Short form to list all projects\n");
+  log(cyan('    $ mesh-cli l p'));
+  log(grey('\n  -  ') + "Link the schema with the given uuid to the demo project\n");
+  log(cyan('    $ mesh-cli link schema demo 09ac57542fde43ccac57542fdeb3ccf8'));
+  log(grey('\n  -  ') + "Unlink the folder schema from the demo project\n");
+  log(cyan('    $ mesh-cli unlink schema demo folder'));
+  log('');
+});
+
+
 
 /*
 * useradd

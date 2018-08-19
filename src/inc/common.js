@@ -7,6 +7,7 @@ const chalk = require('chalk');
 function register() {
     program
         .name("mesh-cli")
+        //.version(require('./package.json').version)
         .version("1.0.0")
         .description("CLI which can be used to interact with a Gentics Mesh server.");
 

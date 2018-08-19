@@ -1,13 +1,34 @@
 {
   "name": "mesh-cli",
-  "version": "1.0.0",
+  "version": "1.0.0-RC3",
   "description": "Gentics Mesh CLI",
   "main": "main.js",
   "scripts": {
     "main": "node main.js"
   },
+  "bin": {
+    "mesh-cli": "./src/main.js",
+    "mesh-cli-docker": "./src/main-docker.js",
+    "mesh-cli-sync": "./src/main-sync.js",
+    "mesh-cli-list": "./src/main-list.js",
+    "mesh-cli-add": "./src/main-add.js",
+    "mesh-cli-get": "./src/main-get.js",
+    "mesh-cli-admin": "./src/main-admin.js",
+    "mesh-cli-validate": "./src/main-validate.js",
+    "mesh-cli-remove": "./src/main-remove.js",
+    "mesh-cli-update": "./src/main-update.js",
+    "mesh-cli-unlink": "./src/main-unlink.js",
+    "mesh-cli-link": "./src/main-link.js"
+  },
   "repository": "git@github.com:gentics/mesh-cli.git",
   "author": "Johannes Schüth <git@jotschi.de>",
+  "homepage": "https://github.com/gentics/mesh-cli",
+  "keywords": [
+    "CLI",
+    "Gentics Mesh",
+    "headless cms",
+    "Mesh CLI"
+  ],
   "license": "MIT",
   "dependencies": {
     "caporal": "^0.10.0",
