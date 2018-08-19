@@ -44,8 +44,8 @@ async function startDocker(tag, port, image) {
         } else {
             var dataDirName = "mesh-data";
             var absPath = path.resolve(dataDirName);
-            debug("Local dir: " + absPath);
             log("Storing data in " + absPath);
+            ensureDataDir(absPath);
             var cmd = 'run -p ' + port + ':8080 -v '+ absPath + ':/data -d  --name ' + CONTAINER_NAME + ' ' + image + ':' + tag;
             debug(cmd);
             var p = docker.command(cmd).then(data => {

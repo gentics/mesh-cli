@@ -17,6 +17,7 @@ const role = require('./actions/role');
 const group = require('./actions/group');
 
 const schema = require('./actions/schema');
+const microschema = require('./actions/microschema');
 const tagfamily = require('./actions/tagfamily');
 
 
@@ -27,46 +28,60 @@ program
     .usage("add [options] [command]");
 
 program
-    .command("plugin [path]")
+    .command("plugin <path>")
     .description("Install a plugin.")
-    .action(plugin.install);
+    .action(plugin.install)
+    .group("Element");
 
 program
-    .command('tagfamily [name]')
+    .command('tagfamily <name>')
     .description("Add a new tagfamily.")
-    .action(tagfamily.add);
+    .action(tagfamily.add)
+    .group("Element");
 
 program
-    .command("project [name]")
+    .command("project <name>")
     .alias("p")
     .description("Add a new project.")
-    .option("-s, --schema", "Use the given schema for the root node.")
-    .action(project.add);
+    .option("-s, --schema", "Use the given schema for the project root node.")
+    .action(project.add)
+    .group("Element");
 
 program
     .command("schema [filename]")
     .alias("s")
     .description("Add a new schema via stdin or file.")
-    .action(schema.add);
+    .action(schema.add)
+    .group("Element");
 
 program
-    .command('user [name]')
+    .command("microschema [filename]")
+    .alias("s")
+    .description("Add a new microschema via stdin or file.")
+    .action(microschema.add)
+    .group("Element");
+
+program
+    .command('user <name>')
     .alias("u")
     .option("-p, --pass [password]", "Password")
     .description("Add a new user.")
-    .action(user.add);
+    .action(user.add)
+    .group("Element");
 
 program
-    .command('role [name]')
+    .command('role <name>')
     .alias("r")
     .description("Add a new role.")
-    .action(role.add);
+    .action(role.add)
+    .group("Element");
 
 program
-    .command("group [name]")
+    .command("group <name>")
     .alias("g")
     .description("Add a new group.")
-    .action(group.add);
+    .action(group.add)
+    .group("Element");
 
 common.registerEnd();
 

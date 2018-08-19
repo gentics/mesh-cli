@@ -20,31 +20,36 @@ program
     .command("status")
     .alias("s")
     .description("Fetch the Gentics Mesh status")
-    .action(admin.status);
+    .action(admin.status)
+    .group("Administration");
 
 program
     .command("index")
     .alias("i")
     .description("Invoke the search index sync. (Requires admin perm)")
-    .action(admin.indexSync);
+    .action(admin.indexSync)
+    .group("Administration");
 
 program
     .command("clear")
     .alias("c")
     .description("Clear the  search index. Use index command to re-build it. (Requires admin perm)")
-    .action(admin.indexClear);
+    .action(admin.indexClear)
+    .group("Administration");
 
 program
     .command("backup")
     .alias("b")
     .description("Trigger the server-side backup process. (Requires admin perm)")
-    .action(admin.backup);
+    .action(admin.backup)
+    .group("Administration");
 
 program
     .command("restore")
     .alias("r")
     .description("Trigger the server-side restore process. (Requires admin perm)")
-    .action(admin.restore);
+    .action(admin.restore)
+    .group("Administration");
 
 common.registerEnd();
 

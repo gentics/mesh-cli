@@ -94,7 +94,6 @@ mesh-cli configure
 
 ## Open Tasks
 
-* Return error on unknown commands
 * Add branches, branching
 * Add linking schemas to branches
 * Add recursive options to delete
@@ -102,5 +101,3 @@ mesh-cli configure
 * Add language, branch option to node get
 * Document sub commands
 * Add examples to sub commands
-* Publish to NPM
-

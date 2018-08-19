@@ -28,56 +28,56 @@ program
     .usage("get [options] [command]");
 
 program
-    .command("schema [name]")
+    .command("schema <name>")
     .alias("s")
     .description("Get the schema.")
     .action(schema.get)
     .group("Element");
 
 program
-    .command("project [name]")
+    .command("project <name>")
     .alias("p")
     .description("Get the project.")
     .action(project.get)
     .group("Element");
 
 program
-    .command("user [name]")
+    .command("user <name>")
     .alias("u")
     .description("Get the user.")
     .action(user.get)
     .group("Element");
 
 program
-    .command("role [name]")
+    .command("role <name>")
     .alias("r")
     .description("Get the role.")
     .action(role.get)
     .group("Element");
 
 program
-    .command("group [name]")
+    .command("group <name>")
     .alias("g")
     .description("Get the group.")
     .action(project.get)
     .group("Element");
 
 program
-    .command("node [project] [path|id]")
+    .command("node <project> <path|id>")
     .alias("n")
     .description("Get the node.")
     .action(node.get)
     .group("Element");
 
 program
-    .command("tagfamily [project] [name]")
+    .command("tagfamily <project> <name>")
     .alias("tf")
     .description("Get the tagfamily.")
     .action(tagfamily.get)
     .group("Element");
 
 program
-    .command("plugin [name]")
+    .command("plugin <name>")
     .alias("pl")
     .description("Get the plugin.")
     .action(plugin.get)

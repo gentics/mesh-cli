@@ -18,13 +18,13 @@ program
     .usage("link [options] [command]");
 
 program
-    .command("schema [name] [project]")
+    .command("schema <name> <project>")
     .alias("s")
     .description("Link the schema.")
     .action(project.linkSchema);
 
 program
-    .command("microschema [name] [project]")
+    .command("microschema <name> <project>")
     .alias("ms")
     .description("Link the microschema.")
     .action(project.linkMicroschema);

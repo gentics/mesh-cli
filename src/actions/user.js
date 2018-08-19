@@ -2,6 +2,7 @@
 
 const inquirer = require('inquirer');
 const Table = require('cli-table');
+const group = require("../actions/group");
 const rest = require("../inc/rest");
 const common = require("../inc/common");
 const log = common.log;
@@ -70,8 +71,19 @@ function add(env, options) {
             type: 'password',
             message: 'Enter password'
         });
+        questions.push({
+            name: 'passwordConfirm',
+            type: 'password',
+            message: 'Confirm password'
+        });
     }
     inquirer.prompt(questions).then(answers => {
+        if (!options.pass) {
+            if (answers.password != answers.passwordConfirm) {
+                error("The passwords did not match.")
+                process.exit(1);
+            }
+        }
         var body = {
             username: env || answers.username,
             password: options.pass || answers.password
@@ -126,9 +138,21 @@ function passwd(env, options) {
             type: 'password',
             message: 'Enter password'
         });
+
+        questions.push({
+            name: 'passwordConfirm',
+            type: 'password',
+            message: 'Confirm password'
+        });
     }
 
     inquirer.prompt(questions).then(answers => {
+        if (!options.pass) {
+            if (answers.password != answers.passwordConfirm) {
+                error("The passwords did not match.")
+                process.exit(1);
+            }
+        }
         var body = {
             password: options.pass || answers.password
         };
@@ -143,8 +167,34 @@ function passwd(env, options) {
     });
 }
 
-function update() {
-    log("NOT IMPLEMENTED");
+function update(name, options) {
+    common.isSet(name, "No user name or uuid specified");
+    withIdFallback(name, uid => {
+        var remove = options.removeGroup;
+        var add = options.addGroup;
+        if (!(remove || add)) {
+            error("No option specified.")
+            process.exit(1);
+        }
+        if (remove) {
+            group.withIdFallback(remove, gid => {
+                rest.del("/api/v1/groups/" + gid + "/users/" + uid).end(r => {
+                    if (rest.check(r, 204, "Could not remove user '" + name + "' from group '" + remove + "'")) {
+                        log("Removed user '" + name + "' from group '" + remove + "'");
+                    }
+                });
+            });
+        }
+        if (add) {
+            group.withIdFallback(add, gid => {
+                rest.post("/api/v1/groups/" + gid + "/users/" + uid).end(r => {
+                    if (rest.check(r, 200, "Could not add user '" + name + "' to group '" + add + "'")) {
+                        log("Added user '" + name + "' to group '" + add + "'");
+                    }
+                });
+            });
+        }
+    });
 }
 
 function apiKey(env, options) {

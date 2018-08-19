@@ -85,4 +85,4 @@ function withIdFallback(env, action) {
     });
 }
 
-module.exports = { list, add, remove }
+module.exports = { list, add, remove, withIdFallback }

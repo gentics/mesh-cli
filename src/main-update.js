@@ -30,19 +30,40 @@ program
     .command('user [name/uuid]')
     .alias("u")
     .description("Update the user.")
-    .action(user.update);
+    .option("-g, --addGroup [group]", "Add user to group.")
+    .option("-G, --removeGroup [group]", "Remove user from group.")
+    .action(user.update)
+    .group("Element");
+
+program
+    .command('group [name/uuid]')
+    .alias("g")
+    .description("Update the group.")
+    .action(group.update)
+    .group("Element");
+
+program
+    .command('role [name/uuid]')
+    .alias("r")
+    .description("Update the role.")
+    .option("-g, --addGroup [group]", "Add role to group.")
+    .option("-G, --removeGroup [group]", "Remove role from group.")
+    .action(role.update)
+    .group("Element");
 
 program
     .command("schema [filename]")
     .alias("s")
     .description("Update schema via stdin or file.")
-    .action(schema.update);
+    .action(schema.update)
+    .group("Element");
 
 program
     .command("microschema [filename]")
     .alias("ms")
     .description("Update microschema via stdin or file.")
-    .action(microschema.update);
+    .action(microschema.update)
+    .group("Element");
 
 common.registerEnd();
 

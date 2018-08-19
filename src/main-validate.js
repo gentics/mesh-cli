@@ -22,13 +22,15 @@ program
     .command("schema [path]")
     .alias("s")
     .description("Validate schema.")
-    .action(schema.validate);
+    .action(schema.validate)
+    .group("Schema");
 
 program
     .command("microschema [path]")
     .alias("m")
     .description("Validate microschema.")
-    .action(microschema.validate);
+    .action(microschema.validate)
+    .group("Schema");
 
 common.registerEnd();
 

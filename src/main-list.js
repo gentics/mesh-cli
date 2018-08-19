@@ -50,7 +50,7 @@ program
     .group("Element");
 
 program
-    .command("tagfamily")
+    .command("tagfamily <project>")
     .alias("tf")
     .description("List all tag families.")
     .action(tagfamily.list)
@@ -64,7 +64,7 @@ program
     .group("Element");
 
 program
-    .command("branch")
+    .command("branch <project>")
     .alias("b")
     .description("List project branches.")
     .action(branch.list)
@@ -73,14 +73,14 @@ program
 program
     .command("schema [project]")
     .alias("s")
-    .description("List project schemas.")
+    .description(`List schemas. (globally or project schemas)`)
     .action(schema.list)
     .group("Schema");
 
 program
     .command("microschema [project]")
     .alias("ms")
-    .description("List project microschemas.")
+    .description(`List microschemas. (globally or project microschemas)`)
     .action(microschema.list)
     .group("Schema");
 

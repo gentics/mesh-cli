@@ -22,29 +22,34 @@ program
     .option("-p, --port [port]", "Http port to be used")
     .option("-t, --tag [tag]", "Tag / version to be used")
     .option("-i, --image [image]", "Image to be used")
-    .action(docker.start);
+    .action(docker.start)
+    .group("Docker");
 
 program
     .command("stop")
     .description("Stop a running Gentics Mesh container.")
-    .action(docker.stop);
+    .action(docker.stop)
+    .group("Docker");
 
 program
     .command("restart")
     .description("Restart the Gentics Mesh container.")
-    .action(docker.restart);
+    .action(docker.restart)
+    .group("Docker");
 
 program
     .command("logs")
     .alias("log")
     .description("Show the logs of the Gentics Mesh container.")
-    .action(docker.logs);
+    .action(docker.logs)
+    .group("Docker");
 
 program
     .command("remove")
     .alias("rm")
     .description("Remove the Gentics Mesh container.")
-    .action(docker.remove);
+    .action(docker.remove)
+    .group("Docker");
 
 common.registerEnd();
 

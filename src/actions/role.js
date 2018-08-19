@@ -3,6 +3,7 @@
 const program = require('commander');
 const Table = require('cli-table');
 const rest = require("../inc/rest");
+const group = require("../actions/group");
 const common = require("../inc/common");
 const log = common.log;
 const error = common.error;
@@ -28,6 +29,42 @@ function list() {
       });
       log(table.toString());
     }
+  });
+}
+
+function get() {
+  error("Not Implemented");
+  process.exit(1);
+}
+
+
+function update(name, options) {
+  common.isSet(name, "No role name or uuid specified");
+  withIdFallback(name, rid => {
+      var remove = options.removeGroup;
+      var add = options.addGroup;
+      if (!(remove || add)) {
+          error("No option specified.")
+          process.exit(1);
+      }
+      if (remove) {
+          group.withIdFallback(remove, gid => {
+              rest.del("/api/v1/groups/" + gid + "/roles/" + rid).end(r => {
+                  if (rest.check(r, 204, "Could not remove role '" + name + "' from group '" + remove + "'")) {
+                      log("Removed role '" + name + "' from group '" + remove + "'");
+                  }
+              });
+          });
+      }
+      if (add) {
+          group.withIdFallback(add, gid => {
+              rest.post("/api/v1/groups/" + gid + "/roles/" + rid).end(r => {
+                  if (rest.check(r, 200, "Could not add role '" + name + "' to group '" + add + "'")) {
+                      log("Added role '" + name + "' to group '" + add + "'");
+                  }
+              });
+          });
+      }
   });
 }
 
@@ -87,4 +124,4 @@ function withIdFallback(env, action) {
   });
 }
 
-module.exports = { list, add, remove }
+module.exports = { list, add, remove, get, update }

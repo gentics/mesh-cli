@@ -27,51 +27,60 @@ program
     .usage("remove [options] [command]");
 
 program
-    .command("user [name/uuid]")
+    .command("user <name/uuid>")
     .alias("u")
     .description("Remove the user.")
-    .action(user.remove);
+    .action(user.remove)
+    .group("Element");
 
 program
-    .command("role [name/uuid]")
+    .command("role <name/uuid>")
     .alias("r")
     .description("Remove the role.")
-    .action(role.remove);
+    .action(role.remove)
+    .group("Element");
 
 program
-    .command("group [name/uuid]")
+    .command("group <name/uuid>")
     .alias("g")
     .description("Remove the group.")
-    .action(group.remove);
+    .action(group.remove)
+    .group("Element");
 
 program
-    .command("plugin [id]")
+    .command("plugin <id>")
     .description("Uninstall a plugin")
-    .action(plugin.uninstall);
+    .action(plugin.uninstall)
+    .group("Element");
 
 program
     .command("project [project]")
     .alias("r")
     .description("Remove the project.")
-    .action(project.remove);
+    .action(project.remove)
+    .group("Element");
 
 program
-    .command("schema [name]")
+    .command("schema <name>")
     .alias("s")
     .description("Remove schema.")
-    .action(schema.remove);
+    .action(schema.remove)
+    .group("Element");
 
 program
-    .command("node [project] [path|uuid]")
+    .command("node <project> <path|uuid>")
     .alias("n")
+    .option("-r, --recursive", "Invoke recursive deletion")
     .description("Remove node.")
-    .action(node.remove);
+    .action(node.remove)
+    .group("Element");
 
 program
-    .command("tagfamily [name/uuid]")
+    .command("tagfamily <name/uuid>")
     .alias("tf")
     .description("Remove the tagfamily.")
-    .action(tagfamily.remove);
+    .action(tagfamily.remove)
+    .group("Element");
 
 common.registerEnd();
 
