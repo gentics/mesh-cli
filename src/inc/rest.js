@@ -1,7 +1,7 @@
 'use strict';
 
 const unirest = require('unirest');
-
+const chalk = require('chalk');
 const config = require("./config");
 const common = require("./common");
 const log = common.log;
@@ -22,10 +22,7 @@ function post(path, body, noAuth) {
         'Content-Type': 'application/json',
     }
     if (!noAuth) {
-        if (!(cfg.auth && cfg.auth.key)) {
-            error("No API key was specified");
-            process.exit(1);
-        }
+        keyMissingError(cfg);
         headers['Authorization'] = "Bearer " + cfg.auth.key;
     }
     var url = cfg.server.endpoint + path;
@@ -53,10 +50,8 @@ function login(username, password) {
  */
 function get(path) {
     var cfg = config.get();
-    if (!(cfg.auth && cfg.auth.key)) {
-        error("No API key was specified");
-        process.exit(1);
-    }
+    keyMissingError(cfg);
+
     var headers = {
         'Accept': 'application/json',
         'Authorization': "Bearer " + cfg.auth.key
@@ -75,6 +70,8 @@ function get(path) {
  */
 function del(path) {
     var cfg = config.get();
+    keyMissingError(cfg);
+
     var headers = {
         'Accept': 'application/json',
         'Authorization': "Bearer " + cfg.auth.key
@@ -158,5 +155,11 @@ function assertCode(r, expectedCode) {
     }
 }
 
+function keyMissingError(cfg) {
+    if (!(cfg.auth && cfg.auth.key)) {
+        error("No API key was specified. Please use the " + chalk.cyan("configure") + " command or the " + chalk.cyan("--key") + " option to specify a key.");
+        process.exit(1);
+    }
+}
 
 module.exports = { post, get, del, check, login }

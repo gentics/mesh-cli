@@ -12,7 +12,7 @@ function register(desc) {
         .description(desc);
 
     program
-        .option("-e, --endpoint [url]", "API endpoint.", "http://localhost:8080")
+        .option("-e, --endpoint [url]", "API endpoint. Default: http://localhost:8080")
         .option("-k, --key [key]", "API Key to be used")
         .option("-d, --debug", "Turn on debug logging");
 
