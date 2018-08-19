@@ -1,5 +1,7 @@
 'use strict';
 
+const fs = require('fs');
+const path = require('path');
 const dockerCLI = require('docker-cli-js');
 const common = require("../inc/common");
 const log = common.log;
@@ -40,13 +42,25 @@ async function startDocker(tag, port, image) {
                 log("Starting server...");
             });
         } else {
-            var p = docker.command('run -p ' + port + ':8080 -d --name ' + CONTAINER_NAME + ' ' + image + ':' + tag).then(data => {
+            var dataDirName = "mesh-data";
+            var absPath = path.resolve(dataDirName);
+            debug("Local dir: " + absPath);
+            log("Storing data in " + absPath);
+            var cmd = 'run -p ' + port + ':8080 -v '+ absPath + ':/data -d  --name ' + CONTAINER_NAME + ' ' + image + ':' + tag;
+            debug(cmd);
+            var p = docker.command(cmd).then(data => {
                 log("Starting.. " + data.containerId);
             });
         }
     });
 
     return p;
+}
+
+function ensureDataDir(dirName) {
+    if (!fs.existsSync(dirName)) {
+        fs.mkdirSync(dirName);
+    }
 }
 
 /**
@@ -75,7 +89,7 @@ function logs() {
  */
 function restart(env, options) {
     docker.command('restart ' + CONTAINER_NAME).then(function (data) {
-        console.dir(data);
+        console.log("Container restarted");
     });
 }
 
@@ -87,9 +101,8 @@ function restart(env, options) {
  */
 function stop(env, options) {
     docker.command('stop ' + CONTAINER_NAME).then(function (data) {
-        log('data = ', data);
+        log("Container stopped");
     });
-    process.exit();
 }
 
 

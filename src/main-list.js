@@ -22,64 +22,74 @@ const branch = require("./actions/branch");
 const job = require("./actions/job");
 const plugin = require("./actions/plugin");
 
-common.register();
+common.register("List various elements that have been stored.");
 configure.register();
 
 program
     .usage("list [options] [command]");
 
 program
-    .command("plugin")
-    .description("List installed plugins")
-    .action(plugin.list);
-
-program
     .command("user")
     .alias("u")
-    .description("List users")
-    .action(user.list);
+    .description("List users.")
+    .action(user.list)
+    .group("Element");
 
 program
     .command("role")
     .alias("r")
-    .description("List roles")
-    .action(role.list);
+    .description("List roles.")
+    .action(role.list)
+    .group("Element");
 
 program
     .command("group")
     .alias("g")
-    .description("List groups")
-    .action(group.list);
+    .description("List groups.")
+    .action(group.list)
+    .group("Element");
 
 program
     .command("tagfamily")
     .alias("tf")
     .description("List all tag families.")
-    .action(tagfamily.list);
+    .action(tagfamily.list)
+    .group("Element");
 
 program
     .command("project")
     .alias("p")
     .description("List projects.")
-    .action(project.list);
+    .action(project.list)
+    .group("Element");
 
 program
     .command("branch")
     .alias("b")
     .description("List project branches.")
-    .action(branch.list);
+    .action(branch.list)
+    .group("Element");
 
 program
     .command("schema [project]")
     .alias("s")
-    .description("List project schemas")
-    .action(schema.list);
+    .description("List project schemas.")
+    .action(schema.list)
+    .group("Schema");
 
 program
     .command("microschema [project]")
     .alias("ms")
-    .description("List project microschemas")
-    .action(microschema.list);
+    .description("List project microschemas.")
+    .action(microschema.list)
+    .group("Schema");
+
+program
+    .command("plugin")
+    .alias("pl")
+    .description("List installed plugins.")
+    .action(plugin.list)
+    .group("Element");
 
 common.registerEnd();
 

@@ -1,15 +1,15 @@
 'use strict';
 
 const program = require('commander');
-const debug = require("debug")("app");
+const debugLib = require("debug");
 const chalk = require('chalk');
 
-function register() {
+function register(desc) {
     program
         .name("mesh-cli")
         //.version(require('./package.json').version)
         .version("1.0.0")
-        .description("CLI which can be used to interact with a Gentics Mesh server.");
+        .description(desc);
 
     program
         .option("-e, --endpoint [url]", "API endpoint.", "http://localhost:8080")
@@ -19,7 +19,7 @@ function register() {
     program
         .on('option:debug', function () {
             log("DEBUG enabled");
-            debug.enable("app");
+            debugLib.enable("app");
         });
 }
 
@@ -55,6 +55,7 @@ function error(line) {
     console.error(chalk.red("Error: ") + line);
 }
 
+var debug = debugLib("app");
 
 module.exports = { register, isSet, registerEnd, log, error, debug }
 

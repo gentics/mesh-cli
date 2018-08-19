@@ -31,8 +31,14 @@ function list() {
     });
 }
 
+/**
+ * Add a new group.
+ * 
+ * @param {string} name 
+ * @param {object} options 
+ */
 function add(name, options) {
-    common.isSet(name, "No name or uuid specified");
+    common.isSet(name, "No name specified");
     var body = {
         name: env
     };
@@ -43,6 +49,11 @@ function add(name, options) {
     });
 }
 
+/**
+ * Remove the group.
+ * 
+ * @param {string} name 
+ */
 function remove(name) {
     common.isSet(name, "No name or uuid specified");
     withIdFallback(name, id => {

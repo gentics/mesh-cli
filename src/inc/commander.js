@@ -43,16 +43,30 @@ Command.prototype.commandHelp = function () {
             var args = cmd._args.map(e => '[' + e.name + ']').join(" ");
             var name = cmd.name();
             var desc = cmd.description();
+
             // Padding
-            var padded = pad("    " + name, maxNameLen + 2);
+            var padded = pad("    " + name, maxNameLen + 4);
             padded = pad(padded + alias, 17);
             padded = pad(padded + " " + args, 45) + desc;
-            return padded
+            var optionInfo = buildCmdOptions(cmd.options);
+            return padded + optionInfo;
         }).join("\n");
         return "  " + grey(group + ":") + "\n\n" + info + "\n\n";
     }).join("");
 
     return groupInfo;
+}
+
+function buildCmdOptions(options) {
+    var info = options.map(option => {
+        var padded = pad("    [cmd]   " + option.flags, 45);
+        padded += pad(option.description, 22);    
+        return chalk.dim(padded);
+    }).join("\n");
+    if (info.length) {
+        info = "    \n" + info +  "\n";
+    }
+    return info;
 }
 
 

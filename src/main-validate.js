@@ -12,7 +12,7 @@ const common = require("./inc/common");
 const schema = require("./actions/schema");
 const microschema = require("./actions/microschema");
 
-common.register();
+common.register("Validate a schema or microschema JSON file.");
 configure.register();
 
 program

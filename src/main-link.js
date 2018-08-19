@@ -11,7 +11,7 @@ const common = require("./inc/common");
 
 const project = require("./actions/project");
 
-common.register();
+common.register("Link schemas or microschemas to projects.");
 configure.register();
 
 program
@@ -25,7 +25,7 @@ program
 
 program
     .command("microschema [name] [project]")
-    .alias("m")
+    .alias("ms")
     .description("Link the microschema.")
     .action(project.linkMicroschema);
 

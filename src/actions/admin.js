@@ -22,12 +22,28 @@ function indexSync(env, options) {
     });
 }
 
+function indexClear(env, options) {
+    rest.post("/api/v1/search/clear").end(r => {
+        if (rest.check(r, 200, "Could not invoke index clear")) {
+            log("Invoked: " + r.body.message);
+        }
+    });
+}
+
 function backup(env, options) {
-    rest.post("/api/v1/admin/backup").end(r => {
+    rest.post("/api/v1/admin/graphdb/backup").end(r => {
         if (rest.check(r, 200, "Could not invoke backup")) {
             log("Invoked server side backup process.");
         }
     });
 }
 
-module.exports = { status, backup, indexSync }
+function restore(env, options) {
+    rest.post("/api/v1/admin/graphdb/restore").end(r => {
+        if (rest.check(r, 200, "Could not invoke restore")) {
+            log("Invoked server side restore process.");
+        }
+    });
+}
+
+module.exports = { status, backup, restore, indexClear, indexSync }

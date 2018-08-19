@@ -11,7 +11,7 @@ const sync = require("./actions/sync");
 const configure = require("./actions/configure");
 const common = require("./inc/common");
 
-common.register();
+common.register("Synchronize data between filesystem and remote server.");
 configure.register();
 
 program

@@ -21,7 +21,7 @@ const node = require("./actions/node");
 const job = require("./actions/job");
 const plugin = require("./actions/plugin");
 
-common.register();
+common.register("Load elements from the system.");
 configure.register();
 
 program
@@ -31,43 +31,57 @@ program
     .command("schema [name]")
     .alias("s")
     .description("Get the schema.")
-    .action(schema.get);
+    .action(schema.get)
+    .group("Element");
 
 program
     .command("project [name]")
     .alias("p")
     .description("Get the project.")
-    .action(project.get);
+    .action(project.get)
+    .group("Element");
 
 program
     .command("user [name]")
     .alias("u")
     .description("Get the user.")
-    .action(user.get);
+    .action(user.get)
+    .group("Element");
 
 program
     .command("role [name]")
     .alias("r")
     .description("Get the role.")
-    .action(role.get);
+    .action(role.get)
+    .group("Element");
 
 program
     .command("group [name]")
     .alias("g")
     .description("Get the group.")
-    .action(project.get);
+    .action(project.get)
+    .group("Element");
 
 program
     .command("node [project] [path|id]")
     .alias("n")
     .description("Get the node.")
-    .action(node.get);
+    .action(node.get)
+    .group("Element");
 
 program
     .command("tagfamily [project] [name]")
     .alias("tf")
     .description("Get the tagfamily.")
-    .action(tagfamily.get);
+    .action(tagfamily.get)
+    .group("Element");
+
+program
+    .command("plugin [name]")
+    .alias("pl")
+    .description("Get the plugin.")
+    .action(plugin.get)
+    .group("Element");
 
 common.registerEnd();
 

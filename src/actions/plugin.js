@@ -33,6 +33,15 @@ function install(pluginId) {
     });
 }
 
+function get(pluginId) {
+    common.isSet(pluginId, "No pluginId specified");
+    rest.get("/api/v1/admin/plugin/" + pluginId).end(r => {
+        if (rest.check(r, 200, "Could not load plugin with id '" + pluginId + "'")) {
+            log(JSON.stringify(r.body, null, 4));
+        }
+    });
+}
+
 function uninstall(pluginId) {
     common.isSet(pluginId, "No pluginId specified");
     rest.delete("/api/v1/admin/plugins/" + pluginId).end(r => {
@@ -43,4 +52,4 @@ function uninstall(pluginId) {
 }
 
 
-module.exports = { list, install, uninstall }
+module.exports = { list, install, uninstall, get }

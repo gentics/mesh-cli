@@ -20,7 +20,7 @@ const schema = require('./actions/schema');
 const tagfamily = require('./actions/tagfamily');
 
 
-common.register();
+common.register("Add new elements to Gentics Mesh.");
 configure.register();
 
 program
@@ -28,7 +28,7 @@ program
 
 program
     .command("plugin [path]")
-    .description("Install a plugin")
+    .description("Install a plugin.")
     .action(plugin.install);
 
 program

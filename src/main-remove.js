@@ -20,7 +20,7 @@ const node = require('./actions/node');
 const tagfamily = require('./actions/tagfamily');
 const schema = require('./actions/schema');
 
-common.register();
+common.register("Remove various elements.");
 configure.register();
 
 program

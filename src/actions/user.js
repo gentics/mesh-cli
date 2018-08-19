@@ -135,7 +135,7 @@ function passwd(env, options) {
         var user = env || answers.username;
         withIdFallback(user, id => {
             rest.post("/api/v1/users/" + id, body).end(r => {
-                if (rest.check(r, 200, "Could change password for user '" + id + "'")) {
+                if (rest.check(r, 200, "Could not change password for user '" + id + "'")) {
                     log("Updated password of user '" + user + "'");
                 }
             });
@@ -143,6 +143,9 @@ function passwd(env, options) {
     });
 }
 
+function update() {
+    log("NOT IMPLEMENTED");
+}
 
 function apiKey(env, options) {
     withIdFallback(env, id => {
@@ -172,4 +175,4 @@ function withIdFallback(env, action) {
     });
 }
 
-module.exports = { list, add, remove, get, apiKey, passwd }
+module.exports = { list, add, remove, get, update, apiKey, passwd }

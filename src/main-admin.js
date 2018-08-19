@@ -10,7 +10,7 @@ const admin = require("./actions/admin");
 const configure = require("./actions/configure");
 const common = require("./inc/common");
 
-common.register();
+common.register("CLI command for various administrative operations.");
 configure.register();
 
 program
@@ -25,14 +25,26 @@ program
 program
     .command("index")
     .alias("i")
-    .description("Invoke the search index sync")
+    .description("Invoke the search index sync. (Requires admin perm)")
     .action(admin.indexSync);
+
+program
+    .command("clear")
+    .alias("c")
+    .description("Clear the  search index. Use index command to re-build it. (Requires admin perm)")
+    .action(admin.indexClear);
 
 program
     .command("backup")
     .alias("b")
-    .description("Trigger the server-side backup process")
+    .description("Trigger the server-side backup process. (Requires admin perm)")
     .action(admin.backup);
+
+program
+    .command("restore")
+    .alias("r")
+    .description("Trigger the server-side restore process. (Requires admin perm)")
+    .action(admin.restore);
 
 common.registerEnd();
 
