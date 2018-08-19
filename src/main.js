@@ -93,11 +93,12 @@ program
   .command("unlink [type] [project] [schema]", "Unlink the microschema from a project.")
   .group("Schema");
 
+/*
 program
   .command('sync', 'Sync specific commands.')
   .alias("s")
   .group("Administration");
-
+*/
 program
   .command('admin', 'Administration specific commands.')
   .alias("a")

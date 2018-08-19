@@ -46,7 +46,6 @@ mesh-cli configure
   Administration:
 
     docker    | d                            Docker specific commands.
-    sync      | s                            Sync specific commands.
     admin     | a                            Administration specific commands.
     reset         [uuid]                     Reset the error state of the job.
 
