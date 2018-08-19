@@ -2,12 +2,16 @@
 
 'use strict';
 
+const chalk = require('chalk');
 const program = require('commander');
 // Patch commander for nicer help
 require("./inc/commander");
 
 const configure = require("./actions/configure");
 const common = require("./inc/common");
+const log = common.log;
+const error = common.error;
+const debug = common.debug;
 
 const project = require('./actions/project');
 const plugin = require('./actions/plugin');
@@ -81,6 +85,19 @@ program
     .description("Remove the tagfamily.")
     .action(tagfamily.remove)
     .group("Element");
+
+program.on('--help', function () {
+    var cyan = chalk.cyan;
+    var grey = chalk.grey;
+    log(grey('\n  Examples:'));
+
+    log(grey('\n  -  ') + "Remove the complete project demo2\n");
+    log(cyan('    $ mesh-cli remove project demo2'));
+
+    log(grey('\n  -  ') + "Remove the /vehicles node from the demo project\n");
+    log(cyan('    $ mesh-cli remove node demo "/vehicles" -r'));
+    log('');
+});
 
 common.registerEnd();
 

@@ -2,6 +2,7 @@
 
 'use strict';
 
+const chalk = require('chalk');
 const program = require('commander');
 // Patch commander for nicer help
 require("./inc/commander");
@@ -10,6 +11,9 @@ const sync = require("./actions/sync");
 
 const configure = require("./actions/configure");
 const common = require("./inc/common");
+const log = common.log;
+const error = common.error;
+const debug = common.debug;
 
 common.register("Synchronize data between filesystem and remote server.");
 configure.register();

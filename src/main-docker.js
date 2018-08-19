@@ -2,6 +2,7 @@
 
 'use strict';
 
+const chalk = require('chalk');
 const program = require('commander');
 // Patch commander for nicer help
 require("./inc/commander");
@@ -9,6 +10,9 @@ require("./inc/commander");
 const docker = require('./actions/docker');
 const configure = require("./actions/configure");
 const common = require("./inc/common");
+const log = common.log;
+const error = common.error;
+const debug = common.debug;
 
 common.register("Docker specific convenience commands.");
 configure.register();
@@ -47,9 +51,20 @@ program
 program
     .command("remove")
     .alias("rm")
-    .description("Remove the Gentics Mesh container.")
+    .description("Stop and remove the Gentics Mesh container. Local volume data will not be removed.")
     .action(docker.remove)
     .group("Docker");
+
+program.on('--help', function () {
+    var cyan = chalk.cyan;
+    var grey = chalk.grey;
+    log(grey('\n  Examples:'));
+
+    log(grey('\n  -  ') + "Start a Gentics Mesh container with version 0.24.0 on port 8888\n");
+    log(cyan('    $ mesh-cli docker start -t 0.24.0 -p 8888'));
+
+    log('');
+});
 
 common.registerEnd();
 

@@ -2,12 +2,16 @@
 
 'use strict';
 
+const chalk = require('chalk');
 const program = require('commander');
 // Patch commander for nicer help
 require("./inc/commander");
 
 const configure = require("./actions/configure");
 const common = require("./inc/common");
+const log = common.log;
+const error = common.error;
+const debug = common.debug;
 
 const user = require("./actions/user");
 const role = require("./actions/role");

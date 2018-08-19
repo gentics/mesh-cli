@@ -2,12 +2,16 @@
 
 'use strict';
 
+const chalk = require('chalk');
 const program = require('commander');
 // Patch commander for nicer help
 require("./inc/commander");
 
 const configure = require("./actions/configure");
 const common = require("./inc/common");
+const log = common.log;
+const error = common.error;
+const debug = common.debug;
 
 const user = require("./actions/user");
 const role = require("./actions/role");
@@ -90,6 +94,20 @@ program
     .description("List installed plugins.")
     .action(plugin.list)
     .group("Element");
+
+program.on('--help', function () {
+    var cyan = chalk.cyan;
+    var grey = chalk.grey;
+    log(grey('\n  Examples:'));
+
+    log(grey('\n  -  ') + "List all schemas in the system\n");
+    log(cyan('    $ mesh-cli list schema'));
+
+    log(grey('\n  -  ') + "List all schemas that are linked to the demo project\n");
+    log(cyan('    $ mesh-cli list schema demo'));
+
+    log('');
+});
 
 common.registerEnd();
 

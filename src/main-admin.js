@@ -2,6 +2,7 @@
 
 'use strict';
 
+const chalk = require('chalk');
 const program = require('commander');
 // Patch commander for nicer help
 require("./inc/commander");
@@ -9,6 +10,9 @@ require("./inc/commander");
 const admin = require("./actions/admin");
 const configure = require("./actions/configure");
 const common = require("./inc/common");
+const log = common.log;
+const error = common.error;
+const debug = common.debug;
 
 common.register("CLI command for various administrative operations.");
 configure.register();
@@ -19,7 +23,7 @@ program
 program
     .command("status")
     .alias("s")
-    .description("Fetch the Gentics Mesh status")
+    .description("Fetch the Gentics Mesh server status.")
     .action(admin.status)
     .group("Administration");
 

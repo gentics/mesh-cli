@@ -2,12 +2,16 @@
 
 'use strict';
 
+const chalk = require('chalk');
 const program = require('commander');
 // Patch commander for nicer help
 require("./inc/commander");
 
 const configure = require("./actions/configure");
 const common = require("./inc/common");
+const log = common.log;
+const error = common.error;
+const debug = common.debug;
 
 const project = require('./actions/project');
 const plugin = require('./actions/plugin');
@@ -82,6 +86,19 @@ program
     .description("Add a new group.")
     .action(group.add)
     .group("Element");
+
+program.on('--help', function () {
+    var cyan = chalk.cyan;
+    var grey = chalk.grey;
+    log(grey('\n  Examples:'));
+
+    log(grey('\n  -  ') + "Add a new project called demo2\n");
+    log(cyan('    $ mesh-cli add project demo2'));
+
+    log(grey('\n  -  ') + "Add a new user\n");
+    log(cyan('    $ mesh-cli add user dummyuser'));
+    log('');
+});
 
 common.registerEnd();
 
