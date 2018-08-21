@@ -24,7 +24,7 @@ mesh-cli configure
 
 ```
 
-  Usage: mesh-cli [options] [command]
+  Usage: mesh [options] [command]
 
     CLI which can be used to interact with a Gentics Mesh server.
     Use the configure command to setup the CLI.
@@ -43,9 +43,18 @@ mesh-cli configure
     configure                                Configure the CLI
     help          [cmd]                      display help for [cmd]
 
-  Administration:
+  Docker:
 
     docker    | d                            Docker specific commands.
+    start                                    Start the Gentics Mesh server.    
+    [cmd]   -p, --port [port]                Http port to be used  
+    [cmd]   -t, --tag [tag]                  Tag / version to be used
+    [cmd]   -i, --image [image]              Image to be used      
+
+    stop                                     Stop the Gentics Mesh server.
+
+  Administration:
+
     admin     | a                            Administration specific commands.
     reset         [uuid]                     Reset the error state of the job.
 
@@ -84,23 +93,23 @@ mesh-cli configure
 
   -  Add a new project named demo2 to the system
 
-    $ mesh-cli add project demo2 --schema folder
+    $ mesh add project demo2 --schema folder
 
   -  List all schemas that are linked to the demo project
 
-    $ mesh-cli list projectSchemas demo
+    $ mesh list projectSchemas demo
 
   -  Short form to list all projects
 
-    $ mesh-cli l p
+    $ mesh l p
 
   -  Link the schema with the given uuid to the demo project
 
-    $ mesh-cli link schema demo 09ac57542fde43ccac57542fdeb3ccf8
+    $ mesh link schema demo 09ac57542fde43ccac57542fdeb3ccf8
 
   -  Unlink the folder schema from the demo project
 
-    $ mesh-cli unlink schema demo folder
+    $ mesh unlink schema demo folder
 
 ```
 

@@ -6,7 +6,7 @@ const chalk = require('chalk');
 
 function register(desc) {
     program
-        .name("mesh-cli")
+        .name("mesh")
         //.version(require('./package.json').version)
         .version("1.0.0")
         .description(desc);

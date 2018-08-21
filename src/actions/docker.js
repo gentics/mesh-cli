@@ -22,8 +22,11 @@ const CONTAINER_NAME = "gentics-mesh";
 function start(options) {
     debug("Options:", options);
     var port = parseInt(options.port) || 8080;
+    debug("Port:" + port);
     var tag = options.tag || "latest";
+    debug("Tag:" + tag);
     var image = options.image || "gentics/mesh";
+    debug("Image: " + image);
     startDocker(tag, port, image);
 }
 
@@ -46,7 +49,7 @@ async function startDocker(tag, port, image) {
             var absPath = path.resolve(dataDirName);
             log("Storing data in " + absPath);
             ensureDataDir(absPath);
-            var cmd = 'run -p ' + port + ':8080 -v '+ absPath + ':/data -d  --name ' + CONTAINER_NAME + ' ' + image + ':' + tag;
+            var cmd = 'run -p ' + port + ':8080 -v ' + absPath + ':/data -d  --name ' + CONTAINER_NAME + ' ' + image + ':' + tag;
             debug(cmd);
             var p = docker.command(cmd).then(data => {
                 log("Starting.. " + data.containerId);

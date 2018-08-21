@@ -61,7 +61,7 @@ program.on('--help', function () {
     log(grey('\n  Examples:'));
 
     log(grey('\n  -  ') + "Start a Gentics Mesh container with version 0.24.0 on port 8888\n");
-    log(cyan('    $ mesh-cli docker start -t 0.24.0 -p 8888'));
+    log(cyan('    $ mesh docker start -t 0.24.0 -p 8888'));
 
     log('');
 });

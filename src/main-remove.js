@@ -92,10 +92,10 @@ program.on('--help', function () {
     log(grey('\n  Examples:'));
 
     log(grey('\n  -  ') + "Remove the complete project demo2\n");
-    log(cyan('    $ mesh-cli remove project demo2'));
+    log(cyan('    $ mesh remove project demo2'));
 
     log(grey('\n  -  ') + "Remove the /vehicles node from the demo project\n");
-    log(cyan('    $ mesh-cli remove node demo "/vehicles" -r'));
+    log(cyan('    $ mesh remove node demo "/vehicles" -r'));
     log('');
 });
 

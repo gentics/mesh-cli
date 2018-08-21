@@ -93,10 +93,10 @@ program.on('--help', function () {
     log(grey('\n  Examples:'));
 
     log(grey('\n  -  ') + "Add a new project called demo2\n");
-    log(cyan('    $ mesh-cli add project demo2'));
+    log(cyan('    $ mesh add project demo2'));
 
     log(grey('\n  -  ') + "Add a new user\n");
-    log(cyan('    $ mesh-cli add user dummyuser'));
+    log(cyan('    $ mesh add user dummyuser'));
     log('');
 });
 

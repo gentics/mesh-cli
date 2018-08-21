@@ -101,10 +101,10 @@ program.on('--help', function () {
     log(grey('\n  Examples:'));
 
     log(grey('\n  -  ') + "List all schemas in the system\n");
-    log(cyan('    $ mesh-cli list schema'));
+    log(cyan('    $ mesh list schema'));
 
     log(grey('\n  -  ') + "List all schemas that are linked to the demo project\n");
-    log(cyan('    $ mesh-cli list schema demo'));
+    log(cyan('    $ mesh list schema demo'));
 
     log('');
 });

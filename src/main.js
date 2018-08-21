@@ -18,17 +18,33 @@ const schema = require("./actions/schema");
 const job = require("./actions/job");
 const role = require("./actions/role");
 const project = require("./actions/project");
+const docker = require("./actions/docker");
 
 common.register(
-`  CLI which can be used to interact with a Gentics Mesh server.
-    Use the ` + chalk.grey("configure") +  ` command to setup the CLI.
+  `  CLI which can be used to interact with a Gentics Mesh server.
+    Use the ` + chalk.grey("configure") + ` command to setup the CLI.
 `);
 configure.register();
 
 program
   .command('docker', 'Docker specific commands.')
   .alias("d")
-  .group("Administration");
+  .group("Docker");
+
+program
+  .command("start")
+  .description("Start the Gentics Mesh server.")
+  .option("-p, --port [port]", "Http port to be used")
+  .option("-t, --tag [tag]", "Tag / version to be used")
+  .option("-i, --image [image]", "Image to be used")
+  .action(docker.start)
+  .group("Docker");
+
+program
+  .command("stop")
+  .description("Stop the Gentics Mesh server.")
+  .action(docker.stop)
+  .group("Docker");
 
 program
   .command("list [type]", "List elements.")
@@ -117,21 +133,21 @@ program.on('--help', function () {
   log(grey('\n  -  ') + "user,group,role,project,schema,microschema,tagfamily,job,plugin,branch");
 
   log(grey('\n  Examples:'));
-  
+
   log(grey('\n  -  ') + "Add a new project named demo2 to the system\n");
-  log(cyan('    $ mesh-cli add project demo2 --schema folder'));
-  
+  log(cyan('    $ mesh add project demo2 --schema folder'));
+
   log(grey('\n  -  ') + "List all schemas that are linked to the demo project\n");
-  log(cyan('    $ mesh-cli list projectSchemas demo'));
-  
+  log(cyan('    $ mesh list projectSchemas demo'));
+
   log(grey('\n  -  ') + "Short form to list all projects\n");
-  log(cyan('    $ mesh-cli l p'));
-  
+  log(cyan('    $ mesh l p'));
+
   log(grey('\n  -  ') + "Link the schema with the given uuid to the demo project\n");
-  log(cyan('    $ mesh-cli link schema demo 09ac57542fde43ccac57542fdeb3ccf8'));
-  
+  log(cyan('    $ mesh link schema demo 09ac57542fde43ccac57542fdeb3ccf8'));
+
   log(grey('\n  -  ') + "Unlink the folder schema from the demo project\n");
-  log(cyan('    $ mesh-cli unlink schema demo folder'));
+  log(cyan('    $ mesh unlink schema demo folder'));
   log('');
 });
 
