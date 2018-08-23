@@ -12,6 +12,7 @@ const log = common.log;
 const error = common.error;
 const debug = common.debug;
 
+const fs = require("./fs/fuse");
 const configure = require("./actions/configure");
 const user = require("./actions/user");
 const schema = require("./actions/schema");
@@ -109,6 +110,13 @@ program
   .command("unlink [type] [project] [schema]", "Unlink the microschema from a project.")
   .group("Schema");
 
+program
+  .command("fs [path]")
+  .description("Mount the mesh instance into the given folder")
+  .action(fs.mount)
+  .group("FS");
+
+
 /*
 program
   .command('sync', 'Sync specific commands.')
@@ -152,14 +160,6 @@ program.on('--help', function () {
 });
 
 
-
-/*
-* useradd
-* userdel
-* usermod
-* groupmod
-* rolemod
-*/
 
 common.registerEnd();
 

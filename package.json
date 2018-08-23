@@ -37,9 +37,11 @@
     "commander": "^2.17.1",
     "debug": "^3.1.0",
     "docker-cli-js": "^2.4.0",
+    "fuse-bindings": "^2.11.2",
     "home-config": "^0.1.0",
     "inquirer": "^6.1.0",
     "minimalist": "^1.0.0",
+    "stackjs": "^0.1.0",
     "unirest": "^0.5.1"
   }
 }
