@@ -12,7 +12,7 @@ npm install mesh-cli -g
 ## Configuration
 
 ```
-mesh-cli configure
+mesh configure
 
 ? Endpoint http://localhost:8080
 ? Generate a new API key? Yes
