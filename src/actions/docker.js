@@ -3,6 +3,8 @@
 const fs = require('fs');
 const path = require('path');
 const dockerCLI = require('docker-cli-js');
+const rest = require("../inc/rest");
+const chalk = require('chalk');
 const common = require("../inc/common");
 const log = common.log;
 const error = common.error;
@@ -19,7 +21,7 @@ const CONTAINER_NAME = "gentics-mesh";
  * 
  * @param {object} options
  */
-function start(options) {
+async function start(options) {
     debug("Options:", options);
     var port = parseInt(options.port) || 8080;
     debug("Port:" + port);
@@ -27,7 +29,20 @@ function start(options) {
     debug("Tag:" + tag);
     var image = options.image || "gentics/mesh";
     debug("Image: " + image);
-    startDocker(tag, port, image);
+    await startDocker(tag, port, image).then(waitForDocker);
+}
+
+function waitForDocker() {
+    return rest.get("/api/v1/admin/status", true).end(r => {
+        var ready = r.code == 200 && r.body && r.body.status == "READY";
+        var status = r.code == 200 && r.body && r.body.status || "UNKNOWN";
+        if (ready) {
+            log("Status: " + chalk.green(status));
+        } else {
+            setTimeout(waitForDocker, 2000);
+            log("Status: " + chalk.yellow(status));
+        }
+    });
 }
 
 /**
@@ -38,12 +53,12 @@ function start(options) {
  * @param {string} image
  */
 async function startDocker(tag, port, image) {
-    log("Starting Gentics Mesh...");
     var p = docker.command("ps -a -f name=" + CONTAINER_NAME).then(data => {
         if (data.containerList.length == 1) {
             var e = docker.command('start ' + CONTAINER_NAME).then(data => {
-                log("Starting server...");
+                log("Starting Gentics Mesh...");
             });
+            return e;
         } else {
             var dataDirName = "mesh-data";
             var absPath = path.resolve(dataDirName);

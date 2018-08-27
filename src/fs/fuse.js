@@ -26,8 +26,11 @@ function resolve(path) {
 }
 
 function mount(mountPath, options) {
+  if (process.platform != 'linux') {
+    error("Currently only linux is supported for mesh filesystem.");
+    process.exit(10);
+  }
 
-  //var mountPath = process.platform !== 'win32' ? 'test' : 'M:\\'
 
   fuse.mount(mountPath, {
     readdir: function (path, cb) {

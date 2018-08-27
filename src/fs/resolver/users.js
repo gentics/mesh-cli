@@ -37,9 +37,13 @@ function withIdFallback(env, action) {
             });
             if (id == null) {
                 error("Did not find user '" + env + "'");
+                action(null);
             } else {
                 action(id);
             }
+        } else {
+            debug("Calling action with null");
+            action(null);
         }
     });
 }
@@ -61,15 +65,20 @@ function resolveUser(stack) {
             },
             read: (cb, fd, buf, len, pos) => {
                 withIdFallback(segment, id => {
-                    rest.get("/api/v1/users/" + id).end(r => {
-                        if (r.code == 200) {
-                            var json = JSON.stringify(r.body, null, 4);
-                            buf.write(json);
-                            cb(json.length);
-                        } else {
-                            cb(0);
-                        }
-                    });
+                    if (id == null) {
+                        cb(0);
+                    } else {
+                        rest.get("/api/v1/users/" + id).end(r => {
+                            if (r.code == 200) {
+                                var json = JSON.stringify(r.body, null, 4);
+                                buf.write(json);
+                                cb(json.length);
+                            } else {
+                                debug("Request failed:" + r.code);
+                                cb(0);
+                            }
+                        });
+                    }
                 });
             }
         }

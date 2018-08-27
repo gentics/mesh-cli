@@ -60,6 +60,8 @@ function list(path, cb) {
         names.push(element.username || element.name || element.uuid);
       });
       cb(null, names);
+    } else {
+      cb(null);
     }
   });
 }

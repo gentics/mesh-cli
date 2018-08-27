@@ -48,14 +48,17 @@ function login(username, password) {
  * 
  * @param {string} path 
  */
-function get(path) {
+function get(path, noAuth = false) {
     var cfg = config.get();
-    keyMissingError(cfg);
 
     var headers = {
-        'Accept': 'application/json',
-        'Authorization': "Bearer " + cfg.auth.key
+        'Accept': 'application/json'
     }
+    if (!noAuth) {
+        keyMissingError(cfg);
+        headers['Authorization'] = "Bearer " + cfg.auth.key;
+    }
+
     var url = cfg.server.endpoint + path;
     debug("GET " + url);
     return unirest.get(url)
@@ -95,6 +98,10 @@ function check(r, expectedCode, message) {
     if (r.body) {
         debug("Response:", r.body);
     }
+    if (r.error && r.error.code == "ECONNREFUSED") {
+        error("Could not connect to server: " + r.error.address + ":" + r.error.port);
+        return false;
+    }
     if (r.error) {
         var info = "";
         if (r.body && r.body.message) {
@@ -114,6 +121,7 @@ function check(r, expectedCode, message) {
 
 function assertCode(r, expectedCode) {
     var code = r.code;
+    debug("Asserting code: " + code + " - Expecting: " + expectedCode);
 
     if (code == 401) {
         error("Error: You are not authorized. Maybe the API token is invalid.");
