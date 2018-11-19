@@ -236,7 +236,7 @@ function listGlobalSchemas() {
             json.data.forEach((element) => {
                 table.push([element.uuid, element.name, element.version])
             });
-            log("Gobal schemas:");
+            log("Global schemas:");
             log(table.toString());
         }
     });
