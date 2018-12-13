@@ -21,10 +21,6 @@ const templates = {
   }
 }
 
-const creators = R.map(template => (
-  name => create(template.name, name)
-), templates)
-
 async function create(params) {
   const { templateName, appName, url } = await readParams(params);
   const template = templates[templateName];
@@ -58,7 +54,7 @@ async function readParams(params) {
       default: 'mesh-app'
     },
     {
-      message: 'Please enter the URL to your Mesh instance',
+      message: 'Please enter the URL to your Gentics Mesh instance',
       name: 'url',
       type: 'input',
       default: 'https://demo.getmesh.io'
@@ -138,6 +134,4 @@ Have fun with Gentics Mesh!`)
   
 }
 
-module.exports = Object.assign({
-  create
-}, creators);
+module.exports = {create}
