@@ -19,6 +19,7 @@ const job = require("./actions/job");
 const role = require("./actions/role");
 const project = require("./actions/project");
 const docker = require("./actions/docker");
+const create = require("./actions/create");
 
 common.register(
   `  CLI which can be used to interact with a Gentics Mesh server.
@@ -125,6 +126,12 @@ program
   .description("Reset the error state of the job.")
   .action(job.clearJob)
   .group("Administration");
+
+program
+  .command("create")
+  .description("Create a new frontend app.")
+  .action(create.create)
+  .group("Create")
 
 program.on('--help', function () {
   var cyan = chalk.cyan;
