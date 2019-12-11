@@ -1,6 +1,6 @@
 {
   "name": "mesh-cli",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Gentics Mesh CLI",
   "main": "main.js",
   "scripts": {
@@ -44,6 +44,6 @@
     "inquirer": "^6.1.0",
     "minimalist": "^1.0.0",
     "ramda": "^0.26.0",
-    "unirest": "^0.5.1"
+    "unirest": "^0.6.0"
   }
 }

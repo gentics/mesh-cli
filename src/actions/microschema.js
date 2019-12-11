@@ -210,7 +210,7 @@ function listGlobalMicroschemas() {
             json.data.forEach((element) => {
                 table.push([element.uuid, element.name, element.version])
             });
-            log("Gobal microschemas:");
+            log("Global microschemas:");
             log(table.toString());
         }
     });

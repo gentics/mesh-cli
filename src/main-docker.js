@@ -60,8 +60,8 @@ program.on('--help', function () {
     var grey = chalk.grey;
     log(grey('\n  Examples:'));
 
-    log(grey('\n  -  ') + "Start a Gentics Mesh container with version 0.24.0 on port 8888\n");
-    log(cyan('    $ mesh docker start -t 0.24.0 -p 8888'));
+    log(grey('\n  -  ') + "Start a Gentics Mesh container with version 0.27.0 on port 8888\n");
+    log(cyan('    $ mesh docker start -t 0.27.0 -p 8888'));
 
     log('');
 });

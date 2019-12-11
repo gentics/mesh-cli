@@ -45,11 +45,10 @@ async function startDocker(tag, port, image) {
                 log("Starting server...");
             });
         } else {
-            var dataDirName = "mesh-data";
-            var absPath = path.resolve(dataDirName);
-            log("Storing data in " + absPath);
-            ensureDataDir(absPath);
-            var cmd = 'run -p ' + port + ':8080 -v ' + absPath + ':/data -d  --name ' + CONTAINER_NAME + ' ' + image + ':' + tag;
+            var dataVol = ' -v mesh-data:/graphdb ';
+            var uploadVol = ' -v mesh-keystore:/keystore ';
+            var uploadVol = ' -v mesh-uploads:/uploads ';
+            var cmd = 'run -p ' + port + ':8080 ' + dataVol + uploadVol + ' -d --name ' + CONTAINER_NAME + ' ' + image + ':' + tag;
             debug(cmd);
             var p = docker.command(cmd).then(data => {
                 log("Starting.. " + data.containerId);
@@ -60,17 +59,14 @@ async function startDocker(tag, port, image) {
     return p;
 }
 
-function ensureDataDir(dirName) {
-    if (!fs.existsSync(dirName)) {
-        fs.mkdirSync(dirName);
-    }
-}
+
 
 /**
  * Remove the container.
  */
 function remove() {
     docker.command('rm -f ' + CONTAINER_NAME).then(function (data) {
+        //TODO remove volumes
         log("Removed docker container '" + CONTAINER_NAME + "'");
     });
 }
