@@ -1,3 +1,7 @@
+# PROJECT ARCHIVED
+
+This project has been archived and will no longer be maintained.
+
 # Gentics Mesh CLI
 
 ## Installation
