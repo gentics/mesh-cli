@@ -1,6 +1,6 @@
 {
   "name": "mesh-cli",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Gentics Mesh CLI",
   "main": "main.js",
   "scripts": {
